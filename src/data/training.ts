@@ -58,6 +58,7 @@ export type Course = {
   instructorProfile?: InstructorProfile;
   modules: Module[];
   project: string;
+  image?: string;
   rating?: number;
   reviewsCount?: number;
   enrolledCount?: string;
@@ -105,6 +106,7 @@ export const courses: Course[] = [
     title: "Java Full Stack Development",
     shortTitle: "Java Full Stack",
     category: "Software Development",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
     level: "Intermediate",
     duration: "24 weeks",
     format: "Live online",
@@ -116,6 +118,16 @@ export const courses: Course[] = [
     prerequisites: ["Basic programming fundamentals (any language)","Understanding of HTML and CSS","Familiarity with command line tools","A laptop with minimum 8GB RAM"],
     outcomes: ["Land a Full Stack Java Developer role (avg. ₹6-12 LPA fresher)","Build a portfolio with 5+ production-level projects","Receive placement support with 200+ partner companies","Get a verified GuideSoft IT Professional Certificate","Access alumni network of 15,000+ placed developers"],
     instructor: "Rajesh Kumar Sharma",
+    instructorProfile: {
+      name: "Rajesh Kumar Sharma",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+      bio: "Rajesh Kumar Sharma is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.8,
     reviewsCount: 3847,
     enrolledCount: "18,500+",
@@ -131,6 +143,7 @@ export const courses: Course[] = [
     title: "Python Full Stack & Generative AI Engineering",
     shortTitle: "Python & GenAI",
     category: "Data & AI",
+    image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&q=80",
     level: "Intermediate",
     duration: "20 weeks",
     format: "Live online",
@@ -142,6 +155,16 @@ export const courses: Course[] = [
     prerequisites: ["Basic programming knowledge (any language)","High school level mathematics","Curiosity about AI and machine learning","Laptop with 16GB RAM recommended for local LLM inference"],
     outcomes: ["Land AI/ML Engineer roles (avg. ₹12-25 LPA)","Build production GenAI applications and agents","Work with cutting-edge LLM technologies","Get verified as a GuideSoft Certified AI Engineer","Access exclusive GenAI job placement network"],
     instructor: "Dr. Kavitha Subramaniam",
+    instructorProfile: {
+      name: "Dr. Kavitha Subramaniam",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+      bio: "Dr. Kavitha Subramaniam is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.9,
     reviewsCount: 2943,
     enrolledCount: "14,200+",
@@ -157,6 +180,7 @@ export const courses: Course[] = [
     title: "AWS Cloud & DevOps Engineering",
     shortTitle: "AWS Cloud & DevOps",
     category: "Cloud & DevOps",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
     level: "Intermediate",
     duration: "18 weeks",
     format: "Live online",
@@ -168,6 +192,16 @@ export const courses: Course[] = [
     prerequisites: ["Basic Linux/command line familiarity","Understanding of networking concepts (TCP/IP, DNS, HTTP)","Any programming experience helpful but not mandatory"],
     outcomes: ["Pass AWS Solutions Architect Associate (SAA-C03) exam","Land Cloud/DevOps Engineer roles (avg. ₹8-18 LPA)","Build a cloud portfolio with enterprise-grade projects","Get GuideSoft Certified Cloud & DevOps Engineer credential"],
     instructor: "Ramana Murthy Vangala",
+    instructorProfile: {
+      name: "Ramana Murthy Vangala",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80",
+      bio: "Ramana Murthy Vangala is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.8,
     reviewsCount: 2156,
     enrolledCount: "11,800+",
@@ -183,6 +217,7 @@ export const courses: Course[] = [
     title: "Data Science & Machine Learning",
     shortTitle: "Data Science & ML",
     category: "Data & AI",
+    image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&q=80",
     level: "Beginner",
     duration: "20 weeks",
     format: "Live online",
@@ -194,6 +229,16 @@ export const courses: Course[] = [
     prerequisites: ["No prior programming experience required","Basic algebra and statistics helpful","Eagerness to work with data"],
     outcomes: ["Land Data Analyst or Junior Data Scientist roles (avg. ₹6-14 LPA)","Build a portfolio of 8+ data science projects","Get hands-on experience with Indian industry datasets","Receive GuideSoft Certified Data Scientist credential"],
     instructor: "Pradeep Ganguly",
+    instructorProfile: {
+      name: "Pradeep Ganguly",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80",
+      bio: "Pradeep Ganguly is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.7,
     reviewsCount: 3214,
     enrolledCount: "22,400+",
@@ -209,6 +254,7 @@ export const courses: Course[] = [
     title: "Selenium & API Testing Automation (SDET)",
     shortTitle: "SDET & Test Automation",
     category: "Testing",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
     level: "Intermediate",
     duration: "16 weeks",
     format: "Live online",
@@ -220,6 +266,16 @@ export const courses: Course[] = [
     prerequisites: ["Basic Java or Python programming knowledge","Understanding of web technologies (HTML, CSS, HTTP)","Familiarity with software testing concepts"],
     outcomes: ["Land SDET or QA Automation Engineer roles (avg. ₹5-12 LPA)","Build complete test automation frameworks used in production","Get certified as GuideSoft QA Automation Specialist","Work with the industry's most in-demand testing tools"],
     instructor: "Narasimha Rao Paluri",
+    instructorProfile: {
+      name: "Narasimha Rao Paluri",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
+      bio: "Narasimha Rao Paluri is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.8,
     reviewsCount: 1892,
     enrolledCount: "9,800+",
@@ -235,6 +291,7 @@ export const courses: Course[] = [
     title: "React & Next.js Frontend Development",
     shortTitle: "React & Next.js",
     category: "Software Development",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
     level: "Beginner",
     duration: "14 weeks",
     format: "Live online",
@@ -246,6 +303,16 @@ export const courses: Course[] = [
     prerequisites: ["Understanding of HTML, CSS, and JavaScript basics","Completion of GuideSoft HTML/CSS Fundamentals (or equivalent)","A laptop capable of running Node.js 18+"],
     outcomes: ["Land Frontend Developer or React Engineer roles (avg. ₹5-10 LPA)","Build 5+ production-deployed portfolio projects","Master the most in-demand frontend stack in the Indian job market","Get GuideSoft Certified Frontend Developer credential"],
     instructor: "Swathi Rao Pulluru",
+    instructorProfile: {
+      name: "Swathi Rao Pulluru",
+      role: "Senior Engineering Manager",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+      bio: "Swathi Rao Pulluru is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
+      rating: 4.8,
+      studentsTaught: "15,000+",
+      coursesCount: 3
+    },
     rating: 4.8,
     reviewsCount: 2876,
     enrolledCount: "16,300+",
