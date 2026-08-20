@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
+import { MobileBottomNav } from "../components/mobile-bottom-nav";
 import { Toaster } from "../components/ui/sonner";
 import { site } from "../data/site";
 import { setupContentProtection } from "../lib/content-protection";
@@ -164,10 +165,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SiteHeader />
-      <main>
+      <main className="pb-20 lg:pb-0">
         <Outlet />
       </main>
       <SiteFooter />
+      <MobileBottomNav />
       <Toaster richColors position="bottom-right" />
     </QueryClientProvider>
   );

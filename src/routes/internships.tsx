@@ -17,6 +17,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { AnimatedSection } from "@/components/animated-section";
+import { StaggerContainer, staggerItem } from "@/components/stagger-container";
 import { CtaBand } from "@/components/cta-band";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Section, SectionHeading } from "@/components/section";
@@ -248,186 +250,189 @@ function Internships() {
         title="Internship Enquiry"
       />
       {/* HERO */}
-      <section className="relative border-b border-border overflow-hidden">
-        <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl"
-          >
-            <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
-              6 Programmes · Next Batch: September 2025
-            </Badge>
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Internships that build <span className="text-gradient">real portfolios</span>
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-              GuideSoft IT internships are 4–8 week guided project programmes with real industry
-              mentors. You build production-quality deliverables, get a verified certificate, and
-              earn a completion bonus — not a participation trophy.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted-foreground">
-              {[
-                { icon: Clock, v: "4–8 weeks" },
-                { icon: Laptop, v: "100% Online" },
-                { icon: Zap, v: "Completion Bonus" },
-                { icon: GraduationCap, v: "Verified Certificate" },
-              ].map((s) => (
-                <span key={s.v} className="flex items-center gap-1.5">
-                  <s.icon className="h-4 w-4 text-primary" />
-                  {s.v}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <AnimatedSection direction="down">
+        <section className="relative border-b border-border overflow-hidden">
+          <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-3xl"
+            >
+              <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
+                6 Programmes · Next Batch: September 2025
+              </Badge>
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                Internships that build <span className="text-gradient">real portfolios</span>
+              </h1>
+              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                GuideSoft IT internships are 4–8 week guided project programmes with real industry
+                mentors. You build production-quality deliverables, get a verified certificate, and
+                earn a completion bonus — not a participation trophy.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted-foreground">
+                {[
+                  { icon: Clock, v: "4–8 weeks" },
+                  { icon: Laptop, v: "100% Online" },
+                  { icon: Zap, v: "Completion Bonus" },
+                  { icon: GraduationCap, v: "Verified Certificate" },
+                ].map((s) => (
+                  <span key={s.v} className="flex items-center gap-1.5">
+                    <s.icon className="h-4 w-4 text-primary" />
+                    {s.v}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </AnimatedSection>
 
       {/* BENEFITS */}
-      <Section className="bg-surface/30">
-        <SectionHeading
-          eyebrow="Programme Benefits"
-          title="What you get from every internship"
-          centered
-        />
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {programBenefits.map((b, i) => {
-            const Icon = b.icon;
-            return (
-              <motion.div
-                key={b.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={i}
-                className="surface-panel rounded-2xl p-5 flex gap-4"
-              >
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Icon className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground text-sm">{b.title}</h3>
-                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </Section>
+      <AnimatedSection direction="left">
+        <Section className="bg-surface/30">
+          <SectionHeading
+            eyebrow="Programme Benefits"
+            title="What you get from every internship"
+            centered
+          />
+          <StaggerContainer className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {programBenefits.map((b, i) => {
+              const Icon = b.icon;
+              return (
+                <motion.div
+                  key={b.title}
+                  variants={staggerItem}
+                  className="surface-panel rounded-2xl p-5 flex gap-4"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground text-sm">{b.title}</h3>
+                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </StaggerContainer>
+        </Section>
+      </AnimatedSection>
 
       {/* INTERNSHIP CARDS */}
-      <Section>
-        <SectionHeading eyebrow="Open Programmes" title="Choose your internship track" />
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
-          {internships.map((item, i) => (
-            <motion.article
-              key={item.slug}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-all duration-300 hover:shadow-elevated"
-            >
-              <div className="relative h-44 overflow-hidden">
-                <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-                <div className="absolute bottom-3 left-4 flex gap-2">
-                  <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
-                    {item.category}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs">
-                    {item.duration}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <h2 className="font-display text-lg font-semibold text-foreground">{item.title}</h2>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                  {item.description}
-                </p>
-
-                <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Laptop className="h-3.5 w-3.5 text-primary" />
-                    {item.mode}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Users className="h-3.5 w-3.5 text-primary" />
-                    {item.seats}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Calendar className="h-3.5 w-3.5 text-primary" />
-                    Next: {item.nextBatch}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Award className="h-3.5 w-3.5 text-primary" />
-                    {item.stipend}
+      <AnimatedSection direction="up">
+        <Section>
+          <SectionHeading eyebrow="Open Programmes" title="Choose your internship track" />
+          <StaggerContainer className="mt-10 grid gap-8 lg:grid-cols-2">
+            {internships.map((item, i) => (
+              <motion.article
+                key={item.slug}
+                variants={staggerItem}
+                className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-all duration-300 hover:shadow-elevated"
+              >
+                <div className="relative h-44 overflow-hidden">
+                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                  <div className="absolute bottom-3 left-4 flex gap-2">
+                    <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
+                      {item.category}
+                    </Badge>
+                    <Badge variant="secondary" className="text-xs">
+                      {item.duration}
+                    </Badge>
                   </div>
                 </div>
 
-                <div className="mt-4">
-                  <p className="text-xs font-semibold text-foreground mb-2">You'll deliver</p>
-                  <ul className="space-y-1.5">
-                    {item.deliverables.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-xs text-muted-foreground">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-xs font-semibold text-foreground mb-2">Skills</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.skills.map((s) => (
-                      <Badge key={s} variant="secondary" className="text-xs">
-                        {s}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-border">
-                  <p className="text-xs text-muted-foreground mb-1">
-                    <strong className="text-foreground">Mentor:</strong> {item.mentor}
+                <div className="p-6">
+                  <h2 className="font-display text-lg font-semibold text-foreground">
+                    {item.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {item.description}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    <strong className="text-foreground">Eligibility:</strong> {item.eligibility}
-                  </p>
-                </div>
 
-                <div className="mt-5">
-                  <Button
-                    id={`internship-apply-${item.slug}`}
-                    className="w-full rounded-xl"
-                    onClick={() => setEnquiryOpen(true)}
-                  >
-                    Apply for This Internship
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Laptop className="h-3.5 w-3.5 text-primary" />
+                      {item.mode}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Users className="h-3.5 w-3.5 text-primary" />
+                      {item.seats}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Calendar className="h-3.5 w-3.5 text-primary" />
+                      Next: {item.nextBatch}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Award className="h-3.5 w-3.5 text-primary" />
+                      {item.stipend}
+                    </div>
+                  </div>
 
-        <div className="mt-12 surface-panel rounded-2xl p-8 text-center">
-          <MapPin className="mx-auto h-8 w-8 text-primary mb-3" />
-          <h2 className="font-display text-xl font-semibold">Batch limited to 10–20 students</h2>
-          <p className="mt-2 text-sm text-muted-foreground max-w-lg mx-auto">
-            All internship cohorts are strictly capped to ensure mentors can give meaningful
-            individual attention. Applications close 2 weeks before each batch start date.
-          </p>
-          <Button asChild variant="outline" size="lg" className="mt-6 rounded-xl">
-            <Link to="/contact">Contact Us for Custom Batches</Link>
-          </Button>
-        </div>
-      </Section>
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold text-foreground mb-2">You'll deliver</p>
+                    <ul className="space-y-1.5">
+                      {item.deliverables.map((d) => (
+                        <li
+                          key={d}
+                          className="flex items-start gap-2 text-xs text-muted-foreground"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold text-foreground mb-2">Skills</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {item.skills.map((s) => (
+                        <Badge key={s} variant="secondary" className="text-xs">
+                          {s}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-xs text-muted-foreground mb-1">
+                      <strong className="text-foreground">Mentor:</strong> {item.mentor}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      <strong className="text-foreground">Eligibility:</strong> {item.eligibility}
+                    </p>
+                  </div>
+
+                  <div className="mt-5">
+                    <Button
+                      id={`internship-apply-${item.slug}`}
+                      className="w-full rounded-xl"
+                      onClick={() => setEnquiryOpen(true)}
+                    >
+                      Apply for This Internship
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </StaggerContainer>
+
+          <div className="mt-12 surface-panel rounded-2xl p-8 text-center">
+            <MapPin className="mx-auto h-8 w-8 text-primary mb-3" />
+            <h2 className="font-display text-xl font-semibold">Batch limited to 10–20 students</h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-lg mx-auto">
+              All internship cohorts are strictly capped to ensure mentors can give meaningful
+              individual attention. Applications close 2 weeks before each batch start date.
+            </p>
+            <Button asChild variant="outline" size="lg" className="mt-6 rounded-xl">
+              <Link to="/contact">Contact Us for Custom Batches</Link>
+            </Button>
+          </div>
+        </Section>
+      </AnimatedSection>
 
       <CtaBand />
     </div>

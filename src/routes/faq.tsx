@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, MessageCircle, Search } from "lucide-react";
 
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Section, SectionHeading } from "@/components/section";
@@ -172,129 +173,133 @@ function FAQ() {
         title="General Enquiry"
       />
       {/* HERO */}
-      <section className="border-b border-border bg-surface/20">
-        <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
-              {faqs.length} Questions Answered
-            </Badge>
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Frequently Asked <span className="text-gradient">Questions</span>
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
-              Everything you want to know about GuideSoft IT courses, fees, placements, and
-              certifications — answered honestly.
-            </p>
+      <AnimatedSection direction="down">
+        <section className="border-b border-border bg-surface/20">
+          <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8 text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
+                {faqs.length} Questions Answered
+              </Badge>
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+                Frequently Asked <span className="text-gradient">Questions</span>
+              </h1>
+              <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
+                Everything you want to know about GuideSoft IT courses, fees, placements, and
+                certifications — answered honestly.
+              </p>
 
-            {/* Search */}
-            <div className="mt-8 relative max-w-md mx-auto">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="faq-search"
-                placeholder="Search questions…"
-                className="pl-10 rounded-xl"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <Section>
-        {/* Category tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-surface border border-border text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* FAQ Accordion */}
-        <div className="max-w-3xl space-y-3">
-          {filtered.length === 0 && (
-            <p className="text-muted-foreground text-center py-12">
-              No questions match your search. Try different keywords.
-            </p>
-          )}
-          {filtered.map((faq, i) => {
-            const isOpen = openIndex === i;
-            return (
-              <motion.div
-                key={`${faq.q}-${i}`}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
-                className="surface-panel rounded-xl overflow-hidden"
-              >
-                <button
-                  className="w-full flex items-start justify-between gap-4 px-5 py-4 text-left hover:bg-surface/50 transition-colors"
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                >
-                  <div className="flex items-start gap-3">
-                    <Badge variant="secondary" className="shrink-0 text-xs mt-0.5">
-                      {faq.category}
-                    </Badge>
-                    <span className="font-medium text-foreground text-sm">{faq.q}</span>
-                  </div>
-                  {isOpen ? (
-                    <ChevronUp className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground mt-0.5" />
-                  )}
-                </button>
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      <div className="px-5 pb-5 border-t border-border pt-4">
-                        <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Still have questions */}
-        <div className="mt-16 max-w-3xl surface-panel rounded-2xl p-8 text-center">
-          <MessageCircle className="mx-auto h-8 w-8 text-primary mb-3" />
-          <h2 className="font-display text-xl font-semibold text-foreground">
-            Still have questions?
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Our counsellors respond within 2 hours (Mon–Sat, 9 AM – 7 PM IST).
-          </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <Button
-              id="faq-enquiry-btn"
-              className="rounded-xl"
-              onClick={() => setEnquiryOpen(true)}
-            >
-              Send an Enquiry
-            </Button>
-            <Button variant="outline" className="rounded-xl" asChild>
-              <a href={`mailto:${site.email}`}>Email {site.email}</a>
-            </Button>
+              {/* Search */}
+              <div className="mt-8 relative max-w-md mx-auto">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="faq-search"
+                  placeholder="Search questions…"
+                  className="pl-10 rounded-xl"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </motion.div>
           </div>
-        </div>
-      </Section>
+        </section>
+      </AnimatedSection>
+
+      <AnimatedSection direction="up">
+        <Section>
+          {/* Category tabs */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  activeCategory === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-surface border border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* FAQ Accordion */}
+          <div className="max-w-3xl space-y-3">
+            {filtered.length === 0 && (
+              <p className="text-muted-foreground text-center py-12">
+                No questions match your search. Try different keywords.
+              </p>
+            )}
+            {filtered.map((faq, i) => {
+              const isOpen = openIndex === i;
+              return (
+                <motion.div
+                  key={`${faq.q}-${i}`}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="surface-panel rounded-xl overflow-hidden"
+                >
+                  <button
+                    className="w-full flex items-start justify-between gap-4 px-5 py-4 text-left hover:bg-surface/50 transition-colors"
+                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-start gap-3">
+                      <Badge variant="secondary" className="shrink-0 text-xs mt-0.5">
+                        {faq.category}
+                      </Badge>
+                      <span className="font-medium text-foreground text-sm">{faq.q}</span>
+                    </div>
+                    {isOpen ? (
+                      <ChevronUp className="h-4 w-4 shrink-0 text-primary mt-0.5" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground mt-0.5" />
+                    )}
+                  </button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <div className="px-5 pb-5 border-t border-border pt-4">
+                          <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Still have questions */}
+          <div className="mt-16 max-w-3xl surface-panel rounded-2xl p-8 text-center">
+            <MessageCircle className="mx-auto h-8 w-8 text-primary mb-3" />
+            <h2 className="font-display text-xl font-semibold text-foreground">
+              Still have questions?
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Our counsellors respond within 2 hours (Mon–Sat, 9 AM – 7 PM IST).
+            </p>
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              <Button
+                id="faq-enquiry-btn"
+                className="rounded-xl"
+                onClick={() => setEnquiryOpen(true)}
+              >
+                Send an Enquiry
+              </Button>
+              <Button variant="outline" className="rounded-xl" asChild>
+                <a href={`mailto:${site.email}`}>Email {site.email}</a>
+              </Button>
+            </div>
+          </div>
+        </Section>
+      </AnimatedSection>
 
       <CtaBand />
     </div>

@@ -20,6 +20,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { AnimatedSection } from "@/components/animated-section";
+import { StaggerContainer, staggerItem } from "@/components/stagger-container";
 import { CtaBand } from "@/components/cta-band";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Section, SectionHeading } from "@/components/section";
@@ -462,251 +464,255 @@ function LearningPaths() {
         title="Learning Path Counselling"
       />
       {/* HERO */}
-      <section className="relative border-b border-border overflow-hidden">
-        <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
-              5 Career Paths · 24–44 Weeks
-            </Badge>
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Choose your path. <span className="text-gradient">We'll get you there.</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              GuideSoft IT's structured learning paths map your journey from where you are today to
-              the specific engineering role you want — with the right courses, in the right
-              sequence, with real placement support.
-            </p>
-            <div className="mt-6 flex justify-center gap-6 text-sm text-muted-foreground">
-              {[
-                { icon: GraduationCap, v: "5 Paths" },
-                { icon: Target, v: "Job-Focused" },
-                { icon: TrendingUp, v: "Industry-Aligned" },
-                { icon: Star, v: "Mentor-Guided" },
-              ].map((s) => (
-                <div key={s.v} className="flex items-center gap-1.5">
-                  <s.icon className="h-4 w-4 text-primary" />
-                  <span>{s.v}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <AnimatedSection direction="down">
+        <section className="relative border-b border-border overflow-hidden">
+          <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
+                5 Career Paths · 24–44 Weeks
+              </Badge>
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                Choose your path. <span className="text-gradient">We'll get you there.</span>
+              </h1>
+              <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+                GuideSoft IT's structured learning paths map your journey from where you are today
+                to the specific engineering role you want — with the right courses, in the right
+                sequence, with real placement support.
+              </p>
+              <div className="mt-6 flex justify-center gap-6 text-sm text-muted-foreground">
+                {[
+                  { icon: GraduationCap, v: "5 Paths" },
+                  { icon: Target, v: "Job-Focused" },
+                  { icon: TrendingUp, v: "Industry-Aligned" },
+                  { icon: Star, v: "Mentor-Guided" },
+                ].map((s) => (
+                  <div key={s.v} className="flex items-center gap-1.5">
+                    <s.icon className="h-4 w-4 text-primary" />
+                    <span>{s.v}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </AnimatedSection>
 
       {/* PATHS */}
-      <Section>
-        <div className="space-y-12">
-          {paths.map((path, idx) => {
-            const Icon = path.icon;
-            return (
-              <motion.div
-                key={path.id}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={idx}
-                className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-all duration-300"
-              >
-                {/* Header */}
-                <div className="p-6 border-b border-border">
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                        <Icon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
-                            {path.badge}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            {path.level}
-                          </Badge>
+      <AnimatedSection direction="left">
+        <Section>
+          <StaggerContainer className="space-y-12">
+            {paths.map((path, idx) => {
+              const Icon = path.icon;
+              return (
+                <motion.div
+                  key={path.id}
+                  variants={staggerItem}
+                  className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-all duration-300"
+                >
+                  {/* Header */}
+                  <div className="p-6 border-b border-border">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                          <Icon className="h-6 w-6 text-primary" />
                         </div>
-                        <h2 className="font-display text-xl font-bold text-foreground">
-                          {path.title}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">{path.subtitle}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-6 text-center">
-                      <div>
-                        <p className="text-xs text-muted-foreground">Duration</p>
-                        <p className="font-semibold text-foreground text-sm">{path.duration}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Salary Range</p>
-                        <p className="font-semibold text-gradient text-sm">{path.salary}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-3xl">
-                    {path.description}
-                  </p>
-                </div>
-
-                {/* Stages */}
-                <div className="p-6">
-                  <p className="text-xs font-semibold text-foreground mb-4 flex items-center gap-1.5">
-                    <BookOpen className="h-3.5 w-3.5 text-primary" />
-                    Learning Stages
-                  </p>
-                  <div className="overflow-x-auto">
-                    <div className="flex gap-3 min-w-max pb-2">
-                      {path.stages.map((stage, si) => (
-                        <div key={stage.name} className="flex items-start gap-2">
-                          <div className="bg-surface border border-border rounded-xl p-3 w-52">
-                            <div className="flex items-center justify-between mb-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {si + 1}
-                              </Badge>
-                              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {stage.weeks}
-                              </span>
-                            </div>
-                            <p className="text-xs font-semibold text-foreground mb-2">
-                              {stage.name}
-                            </p>
-                            <ul className="space-y-1">
-                              {stage.courses.map((c) => (
-                                <li
-                                  key={c}
-                                  className="text-xs text-muted-foreground flex items-start gap-1.5"
-                                >
-                                  <CheckCircle2 className="h-3 w-3 text-primary shrink-0 mt-0.5" />
-                                  {c}
-                                </li>
-                              ))}
-                            </ul>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
+                              {path.badge}
+                            </Badge>
+                            <Badge variant="secondary" className="text-xs">
+                              {path.level}
+                            </Badge>
                           </div>
-                          {si < path.stages.length - 1 && (
-                            <ArrowRight className="h-4 w-4 text-muted-foreground mt-6 shrink-0" />
-                          )}
+                          <h2 className="font-display text-xl font-bold text-foreground">
+                            {path.title}
+                          </h2>
+                          <p className="text-sm text-muted-foreground">{path.subtitle}</p>
                         </div>
-                      ))}
+                      </div>
+                      <div className="flex gap-6 text-center">
+                        <div>
+                          <p className="text-xs text-muted-foreground">Duration</p>
+                          <p className="font-semibold text-foreground text-sm">{path.duration}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Salary Range</p>
+                          <p className="font-semibold text-gradient text-sm">{path.salary}</p>
+                        </div>
+                      </div>
                     </div>
+                    <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-3xl">
+                      {path.description}
+                    </p>
                   </div>
 
-                  <div className="mt-6 grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs font-semibold text-foreground mb-2">
-                        You'll be able to
-                      </p>
-                      <ul className="space-y-1.5">
-                        {path.outcomes.map((o) => (
-                          <li
-                            key={o}
-                            className="flex items-center gap-2 text-xs text-muted-foreground"
-                          >
-                            <Zap className="h-3 w-3 text-primary shrink-0" />
-                            {o}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-foreground mb-2">
-                        Placed at companies like
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {path.hiresAt.map((c) => (
-                          <Badge key={c} variant="outline" className="text-xs">
-                            {c}
-                          </Badge>
+                  {/* Stages */}
+                  <div className="p-6">
+                    <p className="text-xs font-semibold text-foreground mb-4 flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5 text-primary" />
+                      Learning Stages
+                    </p>
+                    <div className="overflow-x-auto">
+                      <div className="flex gap-3 min-w-max pb-2">
+                        {path.stages.map((stage, si) => (
+                          <div key={stage.name} className="flex items-start gap-2">
+                            <div className="bg-surface border border-border rounded-xl p-3 w-52">
+                              <div className="flex items-center justify-between mb-2">
+                                <Badge variant="secondary" className="text-xs">
+                                  {si + 1}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {stage.weeks}
+                                </span>
+                              </div>
+                              <p className="text-xs font-semibold text-foreground mb-2">
+                                {stage.name}
+                              </p>
+                              <ul className="space-y-1">
+                                {stage.courses.map((c) => (
+                                  <li
+                                    key={c}
+                                    className="text-xs text-muted-foreground flex items-start gap-1.5"
+                                  >
+                                    <CheckCircle2 className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                                    {c}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            {si < path.stages.length - 1 && (
+                              <ArrowRight className="h-4 w-4 text-muted-foreground mt-6 shrink-0" />
+                            )}
+                          </div>
                         ))}
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mt-6 flex gap-3">
-                    <Button
-                      id={`path-enquire-${path.id}`}
-                      className="rounded-xl"
-                      onClick={() => setEnquiryOpen(true)}
-                    >
-                      Enquire About This Path
-                    </Button>
-                    <Button asChild variant="outline" className="rounded-xl">
-                      <Link to="/courses">See Individual Courses</Link>
-                    </Button>
+                    <div className="mt-6 grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs font-semibold text-foreground mb-2">
+                          You'll be able to
+                        </p>
+                        <ul className="space-y-1.5">
+                          {path.outcomes.map((o) => (
+                            <li
+                              key={o}
+                              className="flex items-center gap-2 text-xs text-muted-foreground"
+                            >
+                              <Zap className="h-3 w-3 text-primary shrink-0" />
+                              {o}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-foreground mb-2">
+                          Placed at companies like
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {path.hiresAt.map((c) => (
+                            <Badge key={c} variant="outline" className="text-xs">
+                              {c}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 flex gap-3">
+                      <Button
+                        id={`path-enquire-${path.id}`}
+                        className="rounded-xl"
+                        onClick={() => setEnquiryOpen(true)}
+                      >
+                        Enquire About This Path
+                      </Button>
+                      <Button asChild variant="outline" className="rounded-xl">
+                        <Link to="/courses">See Individual Courses</Link>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </Section>
+                </motion.div>
+              );
+            })}
+          </StaggerContainer>
+        </Section>
+      </AnimatedSection>
 
       {/* COMPARISON */}
-      <Section className="bg-surface/30">
-        <SectionHeading
-          eyebrow="Quick Comparison"
-          title="Not sure which path to choose?"
-          centered
-        />
-        <p className="text-center text-muted-foreground text-sm mt-2 mb-10">
-          Here's a side-by-side view of our most popular individual courses. Book a free career
-          counselling session for personalised guidance.
-        </p>
-        <div className="overflow-x-auto rounded-2xl border border-border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-surface/50">
-                <th className="py-3 px-4 text-left text-xs text-muted-foreground font-medium">
-                  Feature
-                </th>
-                <th className="py-3 px-4 text-center text-xs text-primary font-medium">
-                  Java Full Stack
-                </th>
-                <th className="py-3 px-4 text-center text-xs text-primary font-medium">
-                  Python & GenAI
-                </th>
-                <th className="py-3 px-4 text-center text-xs text-primary font-medium">
-                  AWS DevOps
-                </th>
-                <th className="py-3 px-4 text-center text-xs text-primary font-medium">SDET</th>
-                <th className="py-3 px-4 text-center text-xs text-primary font-medium">
-                  React Frontend
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {comparisonMatrix.map((row, i) => (
-                <tr key={row.feature} className={i % 2 === 0 ? "bg-background" : "bg-surface/30"}>
-                  <td className="py-3 px-4 font-medium text-foreground text-xs">{row.feature}</td>
-                  <td className="py-3 px-4 text-center text-xs text-muted-foreground">
-                    {row.java}
-                  </td>
-                  <td className="py-3 px-4 text-center text-xs text-muted-foreground">
-                    {row.python}
-                  </td>
-                  <td className="py-3 px-4 text-center text-xs text-muted-foreground">{row.aws}</td>
-                  <td className="py-3 px-4 text-center text-xs text-muted-foreground">
-                    {row.testing}
-                  </td>
-                  <td className="py-3 px-4 text-center text-xs text-muted-foreground">
-                    {row.frontend}
-                  </td>
+      <AnimatedSection direction="right">
+        <Section className="bg-surface/30">
+          <SectionHeading
+            eyebrow="Quick Comparison"
+            title="Not sure which path to choose?"
+            centered
+          />
+          <p className="text-center text-muted-foreground text-sm mt-2 mb-10">
+            Here's a side-by-side view of our most popular individual courses. Book a free career
+            counselling session for personalised guidance.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-border">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-surface/50">
+                  <th className="py-3 px-4 text-left text-xs text-muted-foreground font-medium">
+                    Feature
+                  </th>
+                  <th className="py-3 px-4 text-center text-xs text-primary font-medium">
+                    Java Full Stack
+                  </th>
+                  <th className="py-3 px-4 text-center text-xs text-primary font-medium">
+                    Python & GenAI
+                  </th>
+                  <th className="py-3 px-4 text-center text-xs text-primary font-medium">
+                    AWS DevOps
+                  </th>
+                  <th className="py-3 px-4 text-center text-xs text-primary font-medium">SDET</th>
+                  <th className="py-3 px-4 text-center text-xs text-primary font-medium">
+                    React Frontend
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-8 text-center">
-          <Button
-            id="path-counselling-btn"
-            size="lg"
-            className="rounded-xl"
-            onClick={() => setEnquiryOpen(true)}
-          >
-            Get Free Personalised Recommendation
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </Section>
+              </thead>
+              <tbody>
+                {comparisonMatrix.map((row, i) => (
+                  <tr key={row.feature} className={i % 2 === 0 ? "bg-background" : "bg-surface/30"}>
+                    <td className="py-3 px-4 font-medium text-foreground text-xs">{row.feature}</td>
+                    <td className="py-3 px-4 text-center text-xs text-muted-foreground">
+                      {row.java}
+                    </td>
+                    <td className="py-3 px-4 text-center text-xs text-muted-foreground">
+                      {row.python}
+                    </td>
+                    <td className="py-3 px-4 text-center text-xs text-muted-foreground">
+                      {row.aws}
+                    </td>
+                    <td className="py-3 px-4 text-center text-xs text-muted-foreground">
+                      {row.testing}
+                    </td>
+                    <td className="py-3 px-4 text-center text-xs text-muted-foreground">
+                      {row.frontend}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-8 text-center">
+            <Button
+              id="path-counselling-btn"
+              size="lg"
+              className="rounded-xl"
+              onClick={() => setEnquiryOpen(true)}
+            >
+              Get Free Personalised Recommendation
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </Section>
+      </AnimatedSection>
 
       <CtaBand />
     </div>
