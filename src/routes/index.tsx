@@ -1,20 +1,44 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, GraduationCap, Laptop, Radio, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  Calendar,
+  CheckCircle2,
+  Code2,
+  Cpu,
+  GraduationCap,
+  Laptop,
+  Radio,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
+import { AnimatedBackground } from "@/components/animated-background";
+import { CheckoutDialog } from "@/components/checkout-dialog";
 import { CtaBand } from "@/components/cta-band";
-import { CourseCard, Section, SectionHeading, TrainingHero } from "@/components/training-ui";
+import { EnquiryDialog } from "@/components/enquiry-dialog";
+import { HeroSlider } from "@/components/hero-slider";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { batches, courseCategories, courses, roadmaps } from "@/data/training";
 import { site } from "@/data/site";
+import { batches, courses, roadmaps } from "@/data/training";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${site.name} | Learn real technology. Build real skills.` },
+      { title: `${site.name} | India's Premier IT Training & Career Forge` },
       {
         name: "description",
         content:
-          "Industry-focused online and classroom IT training designed around practical projects, modern technologies and career preparation.",
+          "Master in-demand software engineering skills: Java Full Stack, Generative AI, Cloud DevOps, Data Science, and SDET with live instructor-led cohorts.",
+      },
+      {
+        name: "keywords",
+        content:
+          "IT training Guntur, Java Full Stack, GenAI training, Cloud DevOps course, AWS training, Software testing, Data Science bootcamp, guideitsol.in",
       },
     ],
   }),
@@ -23,156 +47,256 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <>
-      <section className="hero-surface relative overflow-hidden border-b border-border">
-        <div aria-hidden="true" className="grid-lines absolute inset-0" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-32">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              GUIDESOFT · IT Solutions & Trainings
-            </p>
-            <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.05] sm:text-6xl">
-              Learn real technology. Build real skills. Launch your career.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Industry-focused online and classroom training designed around practical projects,
-              modern technologies, expert instruction and career preparation.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button asChild variant="hero" size="xl">
-                <Link to="/courses">
-                  Explore courses <ArrowRight />
-                </Link>
-              </Button>
-              <Button asChild variant="subtle" size="xl">
-                <Link to="/contact">Talk to a career advisor</Link>
-              </Button>
+    <div className="relative min-h-screen bg-background">
+      {/* Ambient background particle glows */}
+      <AnimatedBackground />
+
+      {/* 100% Full-Viewport 8-Slide Hero Section */}
+      <HeroSlider />
+
+      {/* Trust & Placement Metrics Strip */}
+      <section className="border-b border-border/80 bg-surface/50 py-10 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Users className="h-6 w-6" />
+              </div>
+              <p className="mt-3 font-display text-2xl font-bold text-foreground sm:text-3xl">
+                4,200+
+              </p>
+              <p className="text-xs font-medium text-muted-foreground">
+                Engineers Trained & Placed
+              </p>
             </div>
-            <p className="mt-5 text-sm text-muted-foreground">
-              Online · Live instructor-led · Classroom · Hybrid
-            </p>
-          </div>
-          <div className="surface-panel self-end rounded-2xl p-6 lg:mb-4">
-            <p className="text-sm font-semibold text-primary">
-              A learning loop that stays practical
-            </p>
-            <p className="mt-5 text-2xl font-semibold leading-tight">
-              Learn the concept. Work the lab. Explain the decision.
-            </p>
-            <div className="mt-8 space-y-4 text-sm text-muted-foreground">
-              {[
-                "Weekly project work",
-                "Instructor feedback and live Q&A",
-                "Interview and portfolio preparation",
-              ].map((item) => (
-                <p key={item} className="flex gap-3">
-                  <Check className="h-5 w-5 shrink-0 text-primary" />
-                  {item}
-                </p>
-              ))}
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <TrendingUp className="h-6 w-6" />
+              </div>
+              <p className="mt-3 font-display text-2xl font-bold text-foreground sm:text-3xl">
+                ₹12.4 LPA
+              </p>
+              <p className="text-xs font-medium text-muted-foreground">Average Placement Package</p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <p className="mt-3 font-display text-2xl font-bold text-foreground sm:text-3xl">
+                100%
+              </p>
+              <p className="text-xs font-medium text-muted-foreground">
+                Verified Credential Ledger
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Award className="h-6 w-6" />
+              </div>
+              <p className="mt-3 font-display text-2xl font-bold text-foreground sm:text-3xl">
+                120+
+              </p>
+              <p className="text-xs font-medium text-muted-foreground">Hiring Partner Companies</p>
             </div>
           </div>
         </div>
       </section>
-      <Section>
-        <div className="grid gap-5 md:grid-cols-3">
-          <div className="surface-panel rounded-2xl p-6">
-            <Laptop className="h-6 w-6 text-primary" />
-            <h2 className="mt-6 text-xl font-semibold">Learn in your mode</h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Live online, classroom, hybrid and self-paced options around your schedule.
-            </p>
-          </div>
-          <div className="surface-panel rounded-2xl p-6">
-            <Radio className="h-6 w-6 text-primary" />
-            <h2 className="mt-6 text-xl font-semibold">Join a real cohort</h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Upcoming schedules show the days, time, instructor and available seats clearly.
-            </p>
-          </div>
-          <div className="surface-panel rounded-2xl p-6">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <h2 className="mt-6 text-xl font-semibold">Build evidence</h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Projects, assignments, reviews and interview practice turn learning into a portfolio.
-            </p>
-          </div>
+
+      {/* The 4-Pillar Learning Methodology */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto">
+          <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary mb-3">
+            Why GUIDESOFT
+          </Badge>
+          <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
+            An Engineering Crucible That Bridges The Industry Gap
+          </h2>
+          <p className="mt-4 text-base text-muted-foreground">
+            We don't teach passive syntax. Our intensive curriculum replicates real sprint cycles,
+            production codebases, and architectural design reviews.
+          </p>
         </div>
-      </Section>
-      <Section muted>
-        <SectionHeading
-          eyebrow="Popular directions"
-          title="Start with a course that matches your next step."
-          description="Explore a focused catalogue across development, data, cloud, design, testing and enterprise technology."
-        />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {courses.slice(0, 6).map((course) => (
-            <CourseCard key={course.slug} course={course} />
-          ))}
-        </div>
-        <Button asChild variant="subtle" size="lg" className="mt-8">
-          <Link to="/courses">
-            View all courses <ArrowRight />
-          </Link>
-        </Button>
-      </Section>
-      <Section>
-        <SectionHeading eyebrow="Learning paths" title="See the skills as a sequence." />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {roadmaps.slice(0, 3).map((roadmap) => (
-            <Link
-              key={roadmap.slug}
-              to="/learning-paths"
-              className="surface-panel group rounded-2xl p-6"
-            >
-              <GraduationCap className="h-6 w-6 text-primary" />
-              <h2 className="mt-6 text-xl font-semibold">{roadmap.title}</h2>
-              <p className="mt-3 text-sm text-muted-foreground">{roadmap.description}</p>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">
-                View roadmap{" "}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </Section>
-      <Section muted>
-        <SectionHeading eyebrow="Upcoming" title="Live learning starts with a calendar." />
-        <div className="mt-10 grid gap-4 lg:grid-cols-2">
-          {batches.slice(0, 4).map((batch) => (
-            <div key={batch.id} className="surface-panel rounded-xl p-5">
-              <p className="text-sm font-semibold text-primary">{batch.status}</p>
-              <h2 className="mt-3 font-semibold">{batch.name}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {batch.start} · {batch.days} · {batch.time}
-              </p>
+
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="surface-panel group rounded-2xl border border-border/80 bg-surface/70 p-7 backdrop-blur-xl transition-all duration-300 hover:border-primary/60 hover:shadow-xl hover:shadow-primary/5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+              <Laptop className="h-6 w-6" />
             </div>
-          ))}
+            <h3 className="mt-6 font-display text-xl font-semibold text-foreground">
+              Live Production Sandbox
+            </h3>
+            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+              Deploy microservices to real AWS ECS clusters, configure CI/CD GitHub Actions
+              pipelines, and handle real database failovers.
+            </p>
+          </div>
+
+          <div className="surface-panel group rounded-2xl border border-border/80 bg-surface/70 p-7 backdrop-blur-xl transition-all duration-300 hover:border-primary/60 hover:shadow-xl hover:shadow-primary/5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+              <Radio className="h-6 w-6" />
+            </div>
+            <h3 className="mt-6 font-display text-xl font-semibold text-foreground">
+              Daily Live Mentorship
+            </h3>
+            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+              Small cohorts capped at 25 learners. Daily interactive sessions with Principal
+              Architects and Lead Engineers from top tier tech firms.
+            </p>
+          </div>
+
+          <div className="surface-panel group rounded-2xl border border-border/80 bg-surface/70 p-7 backdrop-blur-xl transition-all duration-300 hover:border-primary/60 hover:shadow-xl hover:shadow-primary/5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <h3 className="mt-6 font-display text-xl font-semibold text-foreground">
+              Career Forge & Placements
+            </h3>
+            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+              Resume optimization, system design interview drills, technical portfolio hosting, and
+              direct referrals to hiring partner networks.
+            </p>
+          </div>
         </div>
-        <Button asChild variant="subtle" className="mt-8">
-          <Link to="/live-batches">
-            Compare all batches <ArrowRight />
-          </Link>
-        </Button>
-      </Section>
-      <Section>
-        <SectionHeading eyebrow="Learning areas" title="A broad start, a focused plan." />
-        <div className="mt-8 flex flex-wrap gap-3">
-          {courseCategories.map((category) => (
-            <Link
-              key={category.name}
-              to="/courses"
-              className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+      </section>
+
+      {/* Featured Courses Showcase */}
+      <section className="border-t border-border/80 bg-surface/30 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                Curated Catalog
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-bold text-foreground sm:text-4xl">
+                Flagship Career Programs
+              </h2>
+            </div>
+            <Button asChild variant="subtle" size="lg" className="border border-border">
+              <Link to="/courses">
+                Explore all courses <ArrowRight className="h-4 w-4 ml-1.5" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.slice(0, 6).map((course) => (
+              <div
+                key={course.slug}
+                className="surface-panel flex flex-col justify-between rounded-2xl border border-border/80 bg-surface/80 p-6 backdrop-blur-xl transition-all duration-300 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/5"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      variant="outline"
+                      className="border-primary/30 bg-primary/10 text-primary text-xs"
+                    >
+                      {course.category}
+                    </Badge>
+                    <span className="text-xs font-semibold text-muted-foreground">
+                      {course.level}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 font-display text-xl font-bold text-foreground hover:text-primary transition-colors">
+                    <Link to="/courses/$slug" params={{ slug: course.slug }}>
+                      {course.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                    {course.summary}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {(course.tools || []).slice(0, 4).map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-md border border-border/60 bg-background/60 px-2 py-0.5 text-[11px] font-medium text-foreground"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6 border-t border-border/60 pt-4 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs text-muted-foreground">Fee</span>
+                    <p className="text-lg font-bold text-foreground">{course.price}</p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button asChild size="sm" variant="hero">
+                      <Link to="/courses/$slug" params={{ slug: course.slug }}>
+                        View Track
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Upcoming Live Cohorts Quick Table */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <Badge
+              variant="outline"
+              className="border-highlight/40 bg-highlight/10 text-highlight mb-2"
             >
-              {category.name}
-            </Link>
-          ))}
+              Seats Filling Fast
+            </Badge>
+            <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
+              Upcoming Live Batches
+            </h2>
+          </div>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/live-batches">View all scheduled batches</Link>
+          </Button>
         </div>
-      </Section>
-      <CtaBand
-        title="Not sure where to begin?"
-        description="Tell us your background, goal and preferred format. We will help you compare a sensible starting point."
-      />
-    </>
+
+        <div className="mt-8 overflow-x-auto rounded-2xl border border-border/80 bg-surface/70 backdrop-blur-xl">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-border bg-surface/90 text-xs uppercase tracking-wider text-muted-foreground">
+              <tr>
+                <th className="px-6 py-4">Course & Track</th>
+                <th className="px-6 py-4">Start Date</th>
+                <th className="px-6 py-4">Schedule</th>
+                <th className="px-6 py-4">Instructor</th>
+                <th className="px-6 py-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/60 text-foreground">
+              {batches.slice(0, 4).map((b) => (
+                <tr key={b.id} className="hover:bg-accent/40 transition-colors">
+                  <td className="px-6 py-4 font-semibold">{b.courseTitle}</td>
+                  <td className="px-6 py-4 text-muted-foreground flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    {b.startDate}
+                  </td>
+                  <td className="px-6 py-4 text-muted-foreground">{b.timing}</td>
+                  <td className="px-6 py-4 font-medium text-foreground">{b.instructor}</td>
+                  <td className="px-6 py-4 text-right">
+                    <Button asChild size="sm" variant="hero">
+                      <Link to="/live-batches">
+                        Reserve Seat
+                      </Link>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Global CTA Band */}
+      <CtaBand />
+    </div>
   );
 }

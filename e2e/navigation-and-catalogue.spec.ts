@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Navigation & Course Catalogue", () => {
   test("loads homepage with navigation links and main CTAs", async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
 
     await expect(page.locator("header")).toBeVisible();
     await expect(page.getByRole("link", { name: "Courses", exact: true })).toBeVisible();
@@ -12,6 +12,12 @@ test.describe("Navigation & Course Catalogue", () => {
 
     const heroHeading = page.locator("h1");
     await expect(heroHeading).toBeVisible();
+
+    // Verify 8 slide carousel controls
+    const nextBtn = page.locator('button[aria-label="Next Slide"]');
+    await expect(nextBtn).toBeVisible();
+    await nextBtn.click();
+    await expect(page.getByRole("heading", { name: "Python, GenAI & Agentic Systems" })).toBeVisible();
   });
 
   test("searches and filters courses in the catalogue", async ({ page }) => {
