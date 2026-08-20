@@ -20,6 +20,33 @@ test.describe("Navigation & Course Catalogue", () => {
     await expect(page.getByRole("heading", { name: "Python, GenAI & Agentic Systems" })).toBeVisible();
   });
 
+  test("toggles dark and light mode theme seamlessly", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
+
+    const themeToggle = page.locator("#theme-toggle-btn");
+    await expect(themeToggle).toBeVisible();
+
+    // Click theme toggle to switch mode
+    await themeToggle.click();
+    const htmlElement = page.locator("html");
+    await expect(htmlElement).toHaveClass(/light|dark/);
+  });
+
+  test("opens command palette search dialog and queries courses", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const searchBtn = page.locator("#header-search-btn");
+    await expect(searchBtn).toBeVisible();
+    await searchBtn.click();
+
+    const searchInput = page.locator("#course-search-input");
+    await expect(searchInput).toBeVisible({ timeout: 10000 });
+    await searchInput.fill("DevOps");
+    await expect(page.getByText("AWS Cloud & DevOps").first()).toBeVisible();
+  });
+
   test("searches and filters courses in the catalogue", async ({ page }) => {
     await page.goto("/courses");
     await page.waitForLoadState("domcontentloaded");
@@ -41,11 +68,11 @@ test.describe("Navigation & Course Catalogue", () => {
     await page.goto("/courses/java-full-stack-development");
     await page.waitForLoadState("domcontentloaded");
 
-    await expect(page.getByRole("heading", { name: "Java Full Stack Development" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Download Full Syllabus PDF" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Java Full Stack Development", exact: true })).toBeVisible();
+    await expect(page.locator("#download-syllabus-btn")).toBeVisible();
 
     // Verify curriculum accordion is present
-    await expect(page.getByText("A week-by-week path to useful work.")).toBeVisible();
+    await expect(page.getByText("Detailed Syllabus Breakdown")).toBeVisible();
     await expect(page.getByText("Java Core & OOP")).toBeVisible();
   });
 });

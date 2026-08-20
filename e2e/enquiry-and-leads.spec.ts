@@ -28,7 +28,7 @@ test.describe("Enquiry & Lead Capture Workflows", () => {
     await page.goto("/courses/java-full-stack-development");
     await page.waitForLoadState("networkidle");
 
-    const askAdvisorBtn = page.getByRole("button", { name: "Ask Counsellor Questions" });
+    const askAdvisorBtn = page.getByRole("button", { name: "Ask Counsellor Questions" }).first();
     await expect(askAdvisorBtn).toBeVisible();
     await askAdvisorBtn.click();
 

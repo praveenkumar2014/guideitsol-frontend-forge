@@ -16,6 +16,29 @@ export type Module = {
   project?: string;
 };
 
+export type InstructorProfile = {
+  name: string;
+  role: string;
+  organization: string;
+  avatar: string;
+  bio: string;
+  rating: number;
+  studentsTaught: string;
+  coursesCount: number;
+};
+
+export type CourseReview = {
+  id: string;
+  studentName: string;
+  role: string;
+  company: string;
+  avatar?: string;
+  rating: number;
+  date: string;
+  content: string;
+  verified: boolean;
+};
+
 export type Course = {
   slug: string;
   title: string;
@@ -32,8 +55,16 @@ export type Course = {
   prerequisites: string[];
   outcomes: string[];
   instructor: string;
+  instructorProfile?: InstructorProfile;
   modules: Module[];
   project: string;
+  rating?: number;
+  reviewsCount?: number;
+  enrolledCount?: string;
+  credentialType?: "Professional Certificate" | "Specialization" | "MasterTrack Pathway";
+  partnerName?: string;
+  skillsLearned?: string[];
+  reviews?: CourseReview[];
 };
 
 const standardLessons: Lesson[] = [
