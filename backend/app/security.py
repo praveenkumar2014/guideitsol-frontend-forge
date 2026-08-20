@@ -75,17 +75,27 @@ def _b64url_decode(data: str) -> bytes:
     return base64.urlsafe_b64decode(data + padding)
 
 
-async def verify_supabase_token(token: str | None) -> dict[str, Any]:
-    """Verify a Supabase-issued JWT and return its payload.
+async def verify_supabase_token(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    """Verify a Supabase-issued JWT from the Authorization header.
 
-    Raises 401 for missing, malformed, expired or untrusted tokens.
+    Reads `Authorization: Bearer <token>` (the standard the Supabase client
+    sends) and returns the verified payload. Raises 401 for missing, malformed,
+    expired or untrusted tokens.
     """
+    token = ""
+    if authorization:
+        token = authorization
+        if authorization.lower().startswith("bearer "):
+            token = authorization[7:].strip()
     if not token:
         raise HTTPException(status_code=401, detail="Authentication required")
     settings = get_settings()
     if not settings.supabase_url:
         raise HTTPException(status_code=503, detail="Authentication is not configured on this server")
-    unverified = jwt.decode(token, options={"verify_signature": False})
+    try:
+        unverified = jwt.decode(token, options={"verify_signature": False})
+    except jwt.PyJWTError as exc:
+        raise HTTPException(status_code=401, detail="Invalid or expired authentication token") from exc
     kid = unverified.get("kid")
     keys = await _get_jwks()
     matching = [key for key in keys if key.get("kid") == kid]

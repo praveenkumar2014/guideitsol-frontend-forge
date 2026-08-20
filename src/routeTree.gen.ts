@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as CareerCenterRouteImport } from './routes/career-center'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -19,16 +21,26 @@ import { Route as InstructorsRouteImport } from './routes/instructors'
 import { Route as InternshipsRouteImport } from './routes/internships'
 import { Route as LearningPathsRouteImport } from './routes/learning-paths'
 import { Route as LiveBatchesRouteImport } from './routes/live-batches'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MobileAppsRouteImport } from './routes/mobile-apps'
+import { Route as PaymentReturnRouteImport } from './routes/payment-return'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StudentDashboardRouteImport } from './routes/student-dashboard'
 import { Route as WebDevelopmentRouteImport } from './routes/web-development'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminBatchesRouteImport } from './routes/admin/batches'
+import { Route as AdminCertificatesRouteImport } from './routes/admin/certificates'
+import { Route as AdminLeadsRouteImport } from './routes/admin/leads'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as CoursePlayerSlugRouteImport } from './routes/course-player/$slug'
 import { Route as CoursesSlugRouteImport } from './routes/courses/$slug'
+import { Route as ResourcesSlugRouteImport } from './routes/resources/$slug'
 import { Route as VerifyCertificateIdRouteImport } from './routes/verify/$certificateId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,9 +53,19 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CareerCenterRoute = CareerCenterRouteImport.update({
   id: '/career-center',
   path: '/career-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -81,9 +103,19 @@ const LiveBatchesRoute = LiveBatchesRouteImport.update({
   path: '/live-batches',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MobileAppsRoute = MobileAppsRouteImport.update({
   id: '/mobile-apps',
   path: '/mobile-apps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentReturnRoute = PaymentReturnRouteImport.update({
+  id: '/payment-return',
+  path: '/payment-return',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -106,6 +138,11 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student-dashboard',
   path: '/student-dashboard',
@@ -121,6 +158,36 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBatchesRoute = AdminBatchesRouteImport.update({
+  id: '/admin/batches',
+  path: '/admin/batches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
+  id: '/admin/certificates',
+  path: '/admin/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/admin/orders',
+  path: '/admin/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursePlayerSlugRoute = CoursePlayerSlugRouteImport.update({
   id: '/course-player/$slug',
   path: '/course-player/$slug',
@@ -131,6 +198,11 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CoursesRoute,
 } as any)
+const ResourcesSlugRoute = ResourcesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ResourcesRoute,
+} as any)
 const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
   id: '/verify/$certificateId',
   path: '/verify/$certificateId',
@@ -140,7 +212,9 @@ const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/career-center': typeof CareerCenterRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/faq': typeof FaqRoute
@@ -148,22 +222,34 @@ export interface FileRoutesByFullPath {
   '/internships': typeof InternshipsRoute
   '/learning-paths': typeof LearningPathsRoute
   '/live-batches': typeof LiveBatchesRoute
+  '/login': typeof LoginRoute
   '/mobile-apps': typeof MobileAppsRoute
+  '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
   '/projects': typeof ProjectsRoute
-  '/resources': typeof ResourcesRoute
+  '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/admin/batches': typeof AdminBatchesRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/career-center': typeof CareerCenterRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/faq': typeof FaqRoute
@@ -171,23 +257,35 @@ export interface FileRoutesByTo {
   '/internships': typeof InternshipsRoute
   '/learning-paths': typeof LearningPathsRoute
   '/live-batches': typeof LiveBatchesRoute
+  '/login': typeof LoginRoute
   '/mobile-apps': typeof MobileAppsRoute
+  '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
   '/projects': typeof ProjectsRoute
-  '/resources': typeof ResourcesRoute
+  '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/admin/batches': typeof AdminBatchesRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/career-center': typeof CareerCenterRoute
+  '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/courses': typeof CoursesRouteWithChildren
   '/faq': typeof FaqRoute
@@ -195,24 +293,36 @@ export interface FileRoutesById {
   '/internships': typeof InternshipsRoute
   '/learning-paths': typeof LearningPathsRoute
   '/live-batches': typeof LiveBatchesRoute
+  '/login': typeof LoginRoute
   '/mobile-apps': typeof MobileAppsRoute
+  '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
   '/projects': typeof ProjectsRoute
-  '/resources': typeof ResourcesRoute
+  '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/admin/batches': typeof AdminBatchesRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/account'
     | '/career-center'
+    | '/checkout'
     | '/contact'
     | '/courses'
     | '/faq'
@@ -220,22 +330,34 @@ export interface FileRouteTypes {
     | '/internships'
     | '/learning-paths'
     | '/live-batches'
+    | '/login'
     | '/mobile-apps'
+    | '/payment-return'
     | '/pricing'
     | '/projects'
     | '/resources'
     | '/services'
+    | '/signup'
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/admin/batches'
+    | '/admin/certificates'
+    | '/admin/leads'
+    | '/admin/login'
+    | '/admin/orders'
     | '/course-player/$slug'
     | '/courses/$slug'
+    | '/resources/$slug'
     | '/verify/$certificateId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/account'
     | '/career-center'
+    | '/checkout'
     | '/contact'
     | '/courses'
     | '/faq'
@@ -243,22 +365,34 @@ export interface FileRouteTypes {
     | '/internships'
     | '/learning-paths'
     | '/live-batches'
+    | '/login'
     | '/mobile-apps'
+    | '/payment-return'
     | '/pricing'
     | '/projects'
     | '/resources'
     | '/services'
+    | '/signup'
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/admin/batches'
+    | '/admin/certificates'
+    | '/admin/leads'
+    | '/admin/login'
+    | '/admin/orders'
     | '/course-player/$slug'
     | '/courses/$slug'
+    | '/resources/$slug'
     | '/verify/$certificateId'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/account'
     | '/career-center'
+    | '/checkout'
     | '/contact'
     | '/courses'
     | '/faq'
@@ -266,23 +400,35 @@ export interface FileRouteTypes {
     | '/internships'
     | '/learning-paths'
     | '/live-batches'
+    | '/login'
     | '/mobile-apps'
+    | '/payment-return'
     | '/pricing'
     | '/projects'
     | '/resources'
     | '/services'
+    | '/signup'
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/admin/batches'
+    | '/admin/certificates'
+    | '/admin/leads'
+    | '/admin/login'
+    | '/admin/orders'
     | '/course-player/$slug'
     | '/courses/$slug'
+    | '/resources/$slug'
     | '/verify/$certificateId'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AccountRoute: typeof AccountRoute
   CareerCenterRoute: typeof CareerCenterRoute
+  CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   CoursesRoute: typeof CoursesRouteWithChildren
   FaqRoute: typeof FaqRoute
@@ -290,16 +436,25 @@ export interface RootRouteChildren {
   InternshipsRoute: typeof InternshipsRoute
   LearningPathsRoute: typeof LearningPathsRoute
   LiveBatchesRoute: typeof LiveBatchesRoute
+  LoginRoute: typeof LoginRoute
   MobileAppsRoute: typeof MobileAppsRoute
+  PaymentReturnRoute: typeof PaymentReturnRoute
   PricingRoute: typeof PricingRoute
   ProjectsRoute: typeof ProjectsRoute
-  ResourcesRoute: typeof ResourcesRoute
+  ResourcesRoute: typeof ResourcesRouteWithChildren
   ServicesRoute: typeof ServicesRoute
+  SignupRoute: typeof SignupRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
   WebDevelopmentRoute: typeof WebDevelopmentRoute
   WorkRoute: typeof WorkRoute
+  AdminBatchesRoute: typeof AdminBatchesRoute
+  AdminCertificatesRoute: typeof AdminCertificatesRoute
+  AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
   CoursePlayerSlugRoute: typeof CoursePlayerSlugRoute
   VerifyCertificateIdRoute: typeof VerifyCertificateIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -318,11 +473,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/career-center': {
       id: '/career-center'
       path: '/career-center'
       fullPath: '/career-center'
       preLoaderRoute: typeof CareerCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -374,11 +543,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveBatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mobile-apps': {
       id: '/mobile-apps'
       path: '/mobile-apps'
       fullPath: '/mobile-apps'
       preLoaderRoute: typeof MobileAppsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-return': {
+      id: '/payment-return'
+      path: '/payment-return'
+      fullPath: '/payment-return'
+      preLoaderRoute: typeof PaymentReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -409,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student-dashboard': {
       id: '/student-dashboard'
       path: '/student-dashboard'
@@ -430,6 +620,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/batches': {
+      id: '/admin/batches'
+      path: '/admin/batches'
+      fullPath: '/admin/batches'
+      preLoaderRoute: typeof AdminBatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/certificates': {
+      id: '/admin/certificates'
+      path: '/admin/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AdminCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/admin/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/course-player/$slug': {
       id: '/course-player/$slug'
       path: '/course-player/$slug'
@@ -443,6 +675,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/courses/$slug'
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof CoursesRoute
+    }
+    '/resources/$slug': {
+      id: '/resources/$slug'
+      path: '/$slug'
+      fullPath: '/resources/$slug'
+      preLoaderRoute: typeof ResourcesSlugRouteImport
+      parentRoute: typeof ResourcesRoute
     }
     '/verify/$certificateId': {
       id: '/verify/$certificateId'
@@ -465,10 +704,24 @@ const CoursesRouteChildren: CoursesRouteChildren = {
 const CoursesRouteWithChildren =
   CoursesRoute._addFileChildren(CoursesRouteChildren)
 
+interface ResourcesRouteChildren {
+  ResourcesSlugRoute: typeof ResourcesSlugRoute
+}
+
+const ResourcesRouteChildren: ResourcesRouteChildren = {
+  ResourcesSlugRoute: ResourcesSlugRoute,
+}
+
+const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
+  ResourcesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AccountRoute: AccountRoute,
   CareerCenterRoute: CareerCenterRoute,
+  CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   CoursesRoute: CoursesRouteWithChildren,
   FaqRoute: FaqRoute,
@@ -476,16 +729,25 @@ const rootRouteChildren: RootRouteChildren = {
   InternshipsRoute: InternshipsRoute,
   LearningPathsRoute: LearningPathsRoute,
   LiveBatchesRoute: LiveBatchesRoute,
+  LoginRoute: LoginRoute,
   MobileAppsRoute: MobileAppsRoute,
+  PaymentReturnRoute: PaymentReturnRoute,
   PricingRoute: PricingRoute,
   ProjectsRoute: ProjectsRoute,
-  ResourcesRoute: ResourcesRoute,
+  ResourcesRoute: ResourcesRouteWithChildren,
   ServicesRoute: ServicesRoute,
+  SignupRoute: SignupRoute,
   StudentDashboardRoute: StudentDashboardRoute,
   WebDevelopmentRoute: WebDevelopmentRoute,
   WorkRoute: WorkRoute,
+  AdminBatchesRoute: AdminBatchesRoute,
+  AdminCertificatesRoute: AdminCertificatesRoute,
+  AdminLeadsRoute: AdminLeadsRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
   CoursePlayerSlugRoute: CoursePlayerSlugRoute,
   VerifyCertificateIdRoute: VerifyCertificateIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

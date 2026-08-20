@@ -52,7 +52,7 @@ function Internships() {
                 ))}
               </div>
               <Button asChild variant="subtle" className="mt-7">
-                <Link to="/contact">
+                <Link to="/contact" search={{ source: `internship:${item.slug}` }}>
                   Ask about eligibility <ArrowRight />
                 </Link>
               </Button>

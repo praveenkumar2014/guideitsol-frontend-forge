@@ -62,9 +62,18 @@ function LiveBatches() {
                 <div className="lg:text-right">
                   <p className="text-sm font-semibold text-primary">{batch.status}</p>
                   <p className="mt-1 font-display text-xl font-semibold">{batch.price}</p>
-                  <Button asChild variant="hero" className="mt-4">
-                    <Link to="/contact">Ask about batch</Link>
-                  </Button>
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row lg:flex-col lg:items-end">
+                    <Button asChild variant="hero">
+                      <Link to="/checkout" search={{ batch: batch.id }}>
+                        Enrol online
+                      </Link>
+                    </Button>
+                    <Button asChild variant="subtle">
+                      <Link to="/contact" search={{ course: batch.courseSlug, batch: batch.id }}>
+                        Ask about batch
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </article>
             );

@@ -3,11 +3,10 @@ import hashlib
 import hmac
 import json
 from datetime import datetime, timezone
-from types import SimpleNamespace
-
 import pytest
 from fastapi import HTTPException
 
+import app.main as main
 from app.main import app
 from app.settings import get_settings
 
@@ -171,7 +170,17 @@ def test_create_payment_order_success(client, mock_supabase, monkeypatch):
     async def fake_post(url, headers=None, json=None):
         return FakeResponse()
 
-    monkeypatch.setattr("app.main.httpx.AsyncClient", lambda timeout=20: SimpleNamespace(post=fake_post))
+    class FakeAsyncClient:
+        def __init__(self, timeout=20):
+            self.post = fake_post
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+    monkeypatch.setattr("app.main.httpx.AsyncClient", FakeAsyncClient)
 
     response = client.post(
         "/api/payments/orders",
@@ -317,6 +326,69 @@ def test_admin_delete_lead(client, mock_supabase):
     assert mock_supabase.calls[-1]["method"] == "DELETE"
 
 
+def test_admin_list_orders(client, mock_supabase):
+    mock_supabase.results["GET"] = [
+        {"order_id": "gs_1", "customer_name": "Priya", "status": "success"},
+        {"order_id": "gs_2", "customer_name": "Rahul", "status": "pending"},
+    ]
+    response = client.get("/api/admin/orders", headers={"X-Admin-Key": get_settings().admin_api_key})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["total"] == 2
+    assert body["items"][0]["order_id"] == "gs_1"
+
+
+def test_admin_list_orders_requires_key(client):
+    assert client.get("/api/admin/orders").status_code == 401
+
+
+def test_admin_list_batches(client, mock_supabase):
+    mock_supabase.results["GET"] = [{"id": "java-aug-26", "name": "Java Cohort"}]
+    response = client.get("/api/admin/batches", headers={"X-Admin-Key": get_settings().admin_api_key})
+    assert response.status_code == 200
+    assert response.json()[0]["id"] == "java-aug-26"
+
+
+def test_admin_update_batch(client, mock_supabase):
+    mock_supabase.results["PATCH"] = [{"id": "java-aug-26", "available": 9}]
+    response = client.patch(
+        "/api/admin/batches/java-aug-26",
+        json={"available": 9, "status": "Limited seats"},
+        headers={"X-Admin-Key": get_settings().admin_api_key},
+    )
+    assert response.status_code == 200
+    assert mock_supabase.calls[-1]["path"] == "batches?id=eq.java-aug-26"
+
+
+def test_admin_issue_certificate(client, mock_supabase):
+    mock_supabase.results["POST"] = [{"id": "GS-2026-ABCD", "status": "issued"}]
+    response = client.post(
+        "/api/admin/certificates",
+        json={
+            "learner_name": "Test Learner",
+            "course_title": "Java Full Stack Development",
+            "course_slug": "java-full-stack-development",
+            "issued_on": "2026-08-20",
+        },
+        headers={"X-Admin-Key": get_settings().admin_api_key},
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body["id"].startswith("GS-2026-")
+    assert mock_supabase.calls[-1]["path"] == "certificates"
+
+
+def test_admin_list_certificates_requires_key(client):
+    assert client.get("/api/admin/certificates").status_code == 401
+
+
+def test_admin_list_enrolments(client, mock_supabase):
+    mock_supabase.results["GET"] = [{"id": "e1", "user_email": "a@b.com", "status": "active"}]
+    response = client.get("/api/admin/enrolments", headers={"X-Admin-Key": get_settings().admin_api_key})
+    assert response.status_code == 200
+    assert response.json()[0]["user_email"] == "a@b.com"
+
+
 # ---------------------------------------------------------------------------
 # Learner workspace
 # ---------------------------------------------------------------------------
@@ -327,28 +399,33 @@ def test_learner_me_unauthenticated(client):
     assert response.status_code == 401
 
 
-def test_learner_me_authenticated(client, mock_supabase, monkeypatch):
-    async def fake_verify(token):
+def test_learner_me_authenticated(client, mock_supabase):
+    async def fake_verify(authorization: str | None = None):
         return {"sub": "user-123", "email": "learner@example.com", "user_metadata": {"name": "Priya"}}
 
-    monkeypatch.setattr("app.main.verify_supabase_token", fake_verify)
-    mock_supabase.results["GET"] = []
-    response = client.get("/api/learner/me", headers={"Authorization": "Bearer any"})
+    app.dependency_overrides[main.verify_supabase_token] = fake_verify
+    try:
+        response = client.get("/api/learner/me", headers={"Authorization": "Bearer any"})
+    finally:
+        app.dependency_overrides.clear()
     assert response.status_code == 200
     assert response.json()["email"] == "learner@example.com"
     assert response.json()["name"] == "Priya"
 
 
-def test_learner_progress_save(client, mock_supabase, monkeypatch):
-    async def fake_verify(token):
+def test_learner_progress_save(client, mock_supabase):
+    async def fake_verify(authorization: str | None = None):
         return {"sub": "user-123"}
 
-    monkeypatch.setattr("app.main.verify_supabase_token", fake_verify)
-    response = client.post(
-        "/api/learner/progress",
-        json={"course_slug": "java-full-stack-development", "module_index": 1, "lesson_index": 0, "completed": True},
-        headers={"Authorization": "Bearer any"},
-    )
+    app.dependency_overrides[main.verify_supabase_token] = fake_verify
+    try:
+        response = client.post(
+            "/api/learner/progress",
+            json={"course_slug": "java-full-stack-development", "module_index": 1, "lesson_index": 0, "completed": True},
+            headers={"Authorization": "Bearer any"},
+        )
+    finally:
+        app.dependency_overrides.clear()
     assert response.status_code == 200
     call = mock_supabase.calls[-1]
     assert call["method"] == "POST"
@@ -358,7 +435,6 @@ def test_learner_progress_save(client, mock_supabase, monkeypatch):
 
 
 def test_verify_token_rejects_garbage():
-    import app.main as main
     from app.security import verify_supabase_token
 
     async def go():

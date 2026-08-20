@@ -32,9 +32,34 @@ def _reset_settings():
     settings_module.get_settings.cache_clear()
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiters():
+    """Rate limiters are module-level singletons keyed by client IP; the
+    TestClient presents as a single IP, so state must not leak between tests."""
+    from app.security import lead_limiter, order_limiter
+
+    lead_limiter._hits.clear()
+    order_limiter._hits.clear()
+    yield
+    lead_limiter._hits.clear()
+    order_limiter._hits.clear()
+
+
 @pytest.fixture()
 def client():
     return TestClient(main.app)
+
+
+@pytest.fixture()
+def settings_env(monkeypatch):
+    """Temporarily override pydantic-settings env values and refresh the cache."""
+
+    def apply(**values):
+        for key, value in values.items():
+            monkeypatch.setenv(key, value)
+        settings_module.get_settings.cache_clear()
+
+    return apply
 
 
 @pytest.fixture()
@@ -46,6 +71,9 @@ def mock_supabase(monkeypatch):
 
     async def handler(method: str, path: str, payload: Any | None = None, query: str | None = None) -> Any:
         calls.append({"method": method, "path": path, "payload": payload, "query": query})
+        if method == "GET" and query and "select=count" in query:
+            rows = result_by_method.get("GET") or []
+            return [{"count": len(rows)}]
         return result_by_method.get(method)
 
     monkeypatch.setattr(main, "supabase_request", handler)

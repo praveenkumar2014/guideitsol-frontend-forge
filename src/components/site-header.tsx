@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Menu, X } from "lucide-react";
+import { BookOpen, Menu, Moon, Sun, UserRound, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { nav, site } from "@/data/site";
+import { useAuth } from "@/lib/auth";
+import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import logoLight from "../logolight.svg?url";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -34,10 +38,19 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <Button asChild variant="hero" size="lg">
-            <Link to="/courses">
-              <BookOpen /> Explore courses
+        <div className="hidden items-center gap-2 lg:flex">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <Button asChild variant={user ? "subtle" : "hero"} size="lg">
+            <Link to={user ? "/account" : "/login"}>
+              <UserRound />
+              {user ? "My account" : "Sign in"}
             </Link>
           </Button>
         </div>
@@ -73,10 +86,20 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Button asChild variant="hero" size="lg" className="mt-2">
-            <Link to="/courses" onClick={() => setOpen(false)}>
-              Explore courses
+          <Button
+            asChild
+            variant={user ? "subtle" : "hero"}
+            size="lg"
+            className="mt-2"
+          >
+            <Link to={user ? "/account" : "/login"} onClick={() => setOpen(false)}>
+              <UserRound />
+              {user ? "My account" : "Sign in"}
             </Link>
+          </Button>
+          <Button variant="ghost" size="lg" onClick={toggleTheme} className="mt-1">
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? "Light theme" : "Dark theme"}
           </Button>
         </nav>
       </div>

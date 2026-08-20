@@ -264,26 +264,35 @@ async def cashfree_webhook(
     )
 
     if payment_status == "success":
-        record = (updated or existing or [{}])[0]
+        # The PATCH response is a PostgREST representation and may not carry the
+        # customer columns, so build the enrolment from the stored order row.
+        record = (existing or updated or [{}])[0]
+        customer_email = record.get("customer_email") or ""
+        customer_name = record.get("customer_name") or "there"
+        batch_id = record.get("batch_id")
+        course_slug = record.get("course_slug") or "course"
         await supabase_request(
             "POST",
             "enrolments",
             {
-                "user_email": record.get("customer_email"),
-                "batch_id": record.get("batch_id"),
-                "course_slug": record.get("course_slug"),
+                "user_email": customer_email,
+                "batch_id": batch_id,
+                "course_slug": course_slug,
                 "payment_order_id": order_id,
                 "amount": record.get("amount"),
                 "status": "active",
             },
         )
-        send_payment_receipt(
-            record.get("customer_email", ""),
-            record.get("customer_name", "there"),
-            order_id,
-            record.get("course_slug", "your course"),
-            f"₹{record.get('amount', 0)}",
+        await supabase_request(
+            "POST",
+            "notifications",
+            {
+                "user_email": customer_email,
+                "title": "Enrolment confirmed",
+                "body": f"Your enrolment for {course_slug} is active. Your batch coordinator will share the class link before the first session.",
+            },
         )
+        send_payment_receipt(customer_email, customer_name, order_id, course_slug, f"₹{record.get('amount', 0)}")
     return {"status": "accepted"}
 
 
@@ -438,3 +447,114 @@ async def admin_update_lead(
 @app.delete("/api/admin/leads/{lead_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def admin_delete_lead(lead_id: str, _: None = Depends(require_admin_key)) -> None:
     await supabase_request("DELETE", f"leads?id=eq.{lead_id}")
+
+
+@app.get("/api/admin/orders")
+async def admin_list_orders(
+    _: None = Depends(require_admin_key),
+    search: str | None = None,
+    order_status: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
+) -> dict[str, Any]:
+    page = max(page, 1)
+    page_size = min(max(page_size, 1), 100)
+    offset = (page - 1) * page_size
+    filters = []
+    if order_status:
+        filters.append(f"status=eq.{order_status}")
+    filters.append("order=created_at.desc")
+    filters.append(f"range={offset}.{offset + page_size - 1}")
+    rows = await supabase_request("GET", "payment_orders", query="&".join(filters) + "&select=*")
+    items = rows or []
+    if search:
+        needle = search.lower()
+        items = [
+            row
+            for row in items
+            if needle in (row.get("order_id") or "").lower()
+            or needle in (row.get("customer_name") or "").lower()
+            or needle in (row.get("customer_email") or "").lower()
+        ]
+    total_result = await supabase_request(
+        "GET", "payment_orders", query="select=count" + (f"&status=eq.{order_status}" if order_status else "")
+    )
+    total = total_result[0].get("count", 0) if total_result else len(items)
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+@app.get("/api/admin/batches")
+async def admin_list_batches(_: None = Depends(require_admin_key)) -> Any:
+    return await supabase_request(
+        "GET", "batches", query="select=*,courses(title)&order=start_date.asc"
+    )
+
+
+@app.patch("/api/admin/batches/{batch_id}")
+async def admin_update_batch(
+    batch_id: str,
+    body: dict[str, Any],
+    _: None = Depends(require_admin_key),
+) -> Any:
+    allowed = {"name", "start_date", "end_date", "days", "time", "seats", "available", "mode", "instructor", "status", "price"}
+    updates = {key: value for key, value in body.items() if key in allowed}
+    if not updates:
+        raise HTTPException(status_code=422, detail="No updatable fields provided")
+    result = await supabase_request(
+        "PATCH",
+        f"batches?id=eq.{batch_id}",
+        {**updates, "updated_at": datetime.now(timezone.utc).isoformat()},
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Batch not found")
+    return result[0]
+
+
+@app.get("/api/admin/certificates")
+async def admin_list_certificates(_: None = Depends(require_admin_key)) -> Any:
+    return await supabase_request(
+        "GET", "certificates", query="select=*&order=issued_on.desc&limit=200"
+    )
+
+
+class CertificateIssue(BaseModel):
+    learner_name: str = Field(min_length=2, max_length=160)
+    course_title: str = Field(min_length=2, max_length=200)
+    course_slug: str | None = Field(default=None, max_length=160)
+    issued_on: str = Field(min_length=10, max_length=10)
+
+
+@app.post("/api/admin/certificates", status_code=status.HTTP_201_CREATED)
+async def admin_issue_certificate(
+    certificate: CertificateIssue,
+    _: None = Depends(require_admin_key),
+) -> Any:
+    certificate_id = f"GS-{datetime.now(timezone.utc).strftime('%Y')}-{uuid.uuid4().hex[:4].upper()}"
+    created = await supabase_request(
+        "POST",
+        "certificates",
+        {
+            "id": certificate_id,
+            "learner_name": certificate.learner_name,
+            "course_title": certificate.course_title,
+            "course_slug": certificate.course_slug,
+            "issued_on": certificate.issued_on,
+            "status": "issued",
+        },
+    )
+    record = created[0] if isinstance(created, list) and created else {}
+    return {"id": certificate_id, **record}
+
+
+@app.delete("/api/admin/certificates/{certificate_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def admin_delete_certificate(
+    certificate_id: str, _: None = Depends(require_admin_key)
+) -> None:
+    await supabase_request("DELETE", f"certificates?id=eq.{certificate_id}")
+
+
+@app.get("/api/admin/enrolments")
+async def admin_list_enrolments(_: None = Depends(require_admin_key)) -> Any:
+    return await supabase_request(
+        "GET", "enrolments", query="select=*,batches(name,status),courses(title)&order=enrolled_at.desc&limit=200"
+    )

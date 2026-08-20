@@ -39,7 +39,7 @@ function CourseDetail() {
         description={course.overview}
       >
         <Button asChild variant="hero" size="xl">
-          <Link to="/contact">
+          <Link to="/contact" search={{ course: course.slug }}>
             Talk to a course advisor <ArrowRight />
           </Link>
         </Button>
@@ -94,7 +94,9 @@ function CourseDetail() {
             <p className="mt-4 font-display text-3xl font-semibold">{course.price}</p>
             <p className="mt-2 text-sm text-muted-foreground">Course fee · batch dates vary</p>
             <Button asChild variant="hero" size="xl" className="mt-7 w-full">
-              <Link to="/contact">Request enrolment details</Link>
+              <Link to="/contact" search={{ course: course.slug }}>
+                Request enrolment details
+              </Link>
             </Button>
             <ul className="mt-7 space-y-3 text-sm">
               {course.outcomes.slice(0, 5).map((outcome) => (
@@ -153,7 +155,7 @@ function CourseDetail() {
                   </p>
                 </div>
                 <Button asChild variant="subtle">
-                  <Link to="/contact">
+                  <Link to="/contact" search={{ course: course.slug, batch: batch.id }}>
                     Ask about this batch <ChevronDown className="rotate-[-90deg]" />
                   </Link>
                 </Button>

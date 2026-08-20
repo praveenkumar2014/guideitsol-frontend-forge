@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 import { Section, SectionHeading, TrainingHero } from "@/components/training-ui";
@@ -39,9 +39,13 @@ function Resources() {
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {article.excerpt}
               </p>
-              <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold">
+              <Link
+                to="/resources/$slug"
+                params={{ slug: article.slug }}
+                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold"
+              >
                 Read article <ArrowUpRight className="h-4 w-4" />
-              </span>
+              </Link>
             </article>
           ))}
         </div>

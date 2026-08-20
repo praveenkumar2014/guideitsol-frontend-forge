@@ -1085,6 +1085,13 @@ export const articles = [
     date: "12 Aug 2026",
     excerpt:
       "A calm way to compare prerequisites, format, practice time and the kind of work you want to do next.",
+    body: [
+      "Choosing a first course feels like a big decision, but it becomes manageable when you compare a few practical things instead of trying to predict the future.",
+      "Start with prerequisites. If a course expects fundamentals you do not have yet, the first few weeks will feel like a slog. A good course tells you exactly what it assumes and points you to a quick self-check.",
+      "Compare format honestly. Live classes are great for discipline and doubt-clearing; recorded ones give you schedule freedom. Ask which you can sustain for the duration, not which feels nicer today.",
+      "Count practice time. The learning happens between classes — exercises, assignments and projects. A course with three hours of class and no structured practice will teach you less than one with two hours of class and a real project.",
+      "Finally, look at the kind of work you want next. Talk to people already doing that work and ask what they actually use. Courses should serve that answer, not the other way around.",
+    ],
   },
   {
     slug: "what-makes-a-useful-portfolio-project",
@@ -1093,6 +1100,13 @@ export const articles = [
     date: "06 Aug 2026",
     excerpt:
       "A project becomes evidence when you can explain the decisions, trade-offs and results behind it.",
+    body: [
+      "A portfolio project is evidence of how you work, not just what you can build. The difference shows up in an interview within the first few minutes.",
+      "The best projects have a clear problem. A to-do app demonstrates syntax; a small tool that solves an annoyance you actually had demonstrates judgement. Solve something real, even if it is tiny.",
+      "Document the decisions. Why this database? Why this architecture? What did you try first and why did you change it? Interviewers love honest trade-off stories because that is what real engineering looks like.",
+      "Make the results observable. A README with setup steps, a live link and a short explanation of what works and what you would improve are worth more than a wall of code.",
+      "Keep it small and finished. Two complete projects you can defend beat five half-finished ones. Finished means deployed, tested and explained.",
+    ],
   },
   {
     slug: "getting-started-with-api-testing",
@@ -1100,6 +1114,13 @@ export const articles = [
     category: "Testing",
     date: "28 Jul 2026",
     excerpt: "Understand requests, assertions and the questions a good API check should answer.",
+    body: [
+      "API testing starts with the simplest mental model: an API is a contract. You send a request, you get a response, and the test checks the response honours the contract.",
+      "Learn to inspect a request properly. The method, the headers, the body and the URL together determine the behaviour. Change one and the result can change completely.",
+      "Write assertions that ask real questions. Does the status code match the outcome? Is the response shape correct? Are the values sensible? A test that only checks for a 200 misses most of the contract.",
+      "Cover the interesting cases: missing parameters, wrong types, unauthenticated access and boundary values. These are where real APIs fail.",
+      "Then automate. The same checks you run by hand should run in a pipeline, because regressions show up long after the happy path stops being interesting.",
+    ],
   },
   {
     slug: "a-better-way-to-learn-cloud",
@@ -1108,6 +1129,13 @@ export const articles = [
     date: "19 Jul 2026",
     excerpt:
       "Start with systems and constraints, then add services. The vocabulary sticks when the why is clear.",
+    body: [
+      "Cloud learning often starts with a list of services and ends in confusion. A better order is to start with the problem: what does an application need to run, scale and recover?",
+      "Every cloud service exists to answer a constraint. Computing is about where code runs, storage about where data lives, networking about who can reach what. Map services to constraints and they stop being a list.",
+      "Build a small end-to-end system. Deploy a simple app, give it a database, add a load balancer and watch what breaks. The failures teach the architecture better than any diagram.",
+      "Use the free tiers ruthlessly. Almost every provider gives you enough to build something real, and the billing alerts teach you the cost model safely.",
+      "Finally, learn the shared vocabulary — regions, availability, durability, latency — because the words transfer between providers even when the buttons do not.",
+    ],
   },
 ] as const;
 
