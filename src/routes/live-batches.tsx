@@ -106,7 +106,12 @@ function LiveBatches() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="hero" size="sm" onClick={() => handleCheckout(batch)}>
+                    <Button
+                      id={`enrol-batch-${batch.id}`}
+                      variant="hero"
+                      size="sm"
+                      onClick={() => handleCheckout(batch)}
+                    >
                       <CreditCard className="mr-1.5 h-3.5 w-3.5" /> Enrol Online
                     </Button>
                     <Button variant="subtle" size="sm" onClick={() => handleEnquiry(batch)}>

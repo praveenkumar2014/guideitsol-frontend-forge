@@ -122,6 +122,28 @@ export function loginWithCredentials(
   return user;
 }
 
+export function loginWithGoogle(): UserProfile {
+  const googleUser: UserProfile = {
+    id: `usr_google_${Date.now()}`,
+    name: "Google Verified Learner",
+    email: "learner@gmail.com",
+    role: "learner",
+    avatar:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+    title: "Google Authenticated Member",
+    badge: "Google Verified",
+    enrolledTrack: "Java Full Stack & Cloud Architecture",
+    progress: 45,
+    permissions: TEST_ACCOUNTS.learner.permissions,
+  };
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(googleUser));
+    window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: googleUser }));
+  }
+  return googleUser;
+}
+
 export function logout(): void {
   if (typeof window !== "undefined") {
     localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -150,6 +172,7 @@ export function useAuth() {
     role: user?.role,
     loginAs,
     loginWithCredentials,
+    loginWithGoogle,
     logout,
     hasPermission: (permission: string) => !!user?.permissions.includes(permission),
   };

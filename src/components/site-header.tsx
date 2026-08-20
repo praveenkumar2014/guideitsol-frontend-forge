@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 
-import { AuthModal } from "@/components/auth-modal";
+import { AuthModal, GoogleLogoIcon } from "@/components/auth-modal";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,13 +30,13 @@ export function SiteHeader() {
   const { user, isAuthenticated } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/90 backdrop-blur-2xl">
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
       <EnquiryDialog open={enquiryOpen} onOpenChange={setEnquiryOpen} />
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Left: Brand Logo & Main Navigation */}
-        <div className="flex items-center gap-8">
+        {/* Left: Brand Logo & Main Navigation & Left Quick Auth Badge */}
+        <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
             <img
               src={logoLight}
@@ -50,7 +50,7 @@ export function SiteHeader() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 activeProps={{ className: "text-foreground bg-accent/70 font-semibold" }}
               >
                 {item.label}
@@ -59,8 +59,22 @@ export function SiteHeader() {
           </nav>
         </div>
 
-        {/* Right: Auth User / Role Selector, Quick Enquire, Dashboard & Mobile Menu */}
-        <div className="flex items-center gap-3">
+        {/* Right: Left/Right Google Authorization, Quick Enquire, Role Switcher & Workspace */}
+        <div className="flex items-center gap-2.5">
+          {/* Quick Google Sign In Trigger (Right side) */}
+          {!isAuthenticated && (
+            <button
+              type="button"
+              id="header-google-auth-btn"
+              onClick={() => setAuthOpen(true)}
+              className="hidden md:flex items-center gap-2 rounded-lg border border-border/80 bg-surface/80 px-3 py-1.5 text-xs font-semibold text-foreground transition-all hover:border-primary/50 hover:bg-surface shadow-sm"
+              aria-label="Sign in with Google"
+            >
+              <GoogleLogoIcon className="h-4 w-4" />
+              <span>Google Sign-In</span>
+            </button>
+          )}
+
           {/* Quick Enquire CTA */}
           <div className="hidden sm:block">
             <Button
