@@ -1,0 +1,59 @@
+{
+  "name": "guidesoft-desktop",
+  "version": "1.0.0",
+  "description": "GUIDESOFT - Learn Real Technology. Build Real Skills.",
+  "main": "dist-electron/main.js",
+  "author": "GuideSoft IT Solutions",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "vite build && electron-builder",
+    "electron:build:mac": "vite build && electron-builder --mac",
+    "electron:build:win": "vite build && electron-builder --win",
+    "electron:build:linux": "vite build && electron-builder --linux"
+  },
+  "build": {
+    "appId": "in.guideitsol.desktop",
+    "productName": "GUIDESOFT",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "public/favicon.png",
+      "target": ["dmg", "zip"],
+      "hardenedRuntime": true,
+      "entitlements": "electron/entitlements.mac.plist"
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "public/favicon.png"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "public/favicon.png",
+      "category": "Education"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "concurrently": "^9.0.0",
+    "wait-on": "^8.0.0",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.0",
+    "typescript": "^5.8.0"
+  }
+}

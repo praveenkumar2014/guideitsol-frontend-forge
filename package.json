@@ -12,7 +12,12 @@
     "format": "prettier --write .",
     "test:e2e": "playwright test",
     "test:selenium": "bun run --bun selenium/guidesoft.selenium.ts",
-    "test:all": "playwright test && bun run --bun selenium/guidesoft.selenium.ts"
+    "test:all": "playwright test && bun run --bun selenium/guidesoft.selenium.ts",
+    "electron:dev": "cd electron && npm run electron:dev",
+    "electron:build": "cd electron && npm run electron:build",
+    "electron:build:mac": "cd electron && npm run electron:build:mac",
+    "electron:build:win": "cd electron && npm run electron:build:win",
+    "electron:build:linux": "cd electron && npm run electron:build:linux"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
