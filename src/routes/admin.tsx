@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Archive,
-  ArrowUpDown,
-  CheckCircle2,
   Clock,
   Download,
   KeyRound,
-  Loader2,
   Mail,
   MessageSquare,
   Phone,
-  Plus,
   RefreshCw,
   Search,
   Shield,
@@ -51,59 +46,6 @@ interface Lead {
   created_at?: string;
 }
 
-const INITIAL_DEMO_LEADS: Lead[] = [
-  {
-    id: "demo-lead-101",
-    name: "Aarav Sharma",
-    email: "aarav.sharma@example.com",
-    phone: "+91 9876543210",
-    course_slug: "java-full-stack-development",
-    batch_id: "java-aug-26",
-    source: "website",
-    message: "I am looking for weekend live batches with placement assistance.",
-    status: "new",
-    notes: "Follow-up scheduled for tomorrow 11 AM",
-    created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
-  },
-  {
-    id: "demo-lead-102",
-    name: "Sneha Patel",
-    email: "sneha.p@example.com",
-    phone: "+91 9823456789",
-    course_slug: "devops-cloud-engineering",
-    batch_id: "devops-aug-26",
-    source: "enquiry_modal",
-    message: "Need company sponsorship invoice for DevOps training.",
-    status: "contacted",
-    notes: "Shared course syllabus and corporate fee structure.",
-    created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-  {
-    id: "demo-lead-103",
-    name: "Vikram Reddy",
-    email: "vikram.reddy@example.com",
-    phone: "+91 9988776655",
-    course_slug: "react-full-stack-development",
-    batch_id: "react-sep-26",
-    source: "website",
-    message: "Enrolled after demo session. Payment confirmed via Cashfree.",
-    status: "enrolled",
-    notes: "Added to Batch Sep-26 Discord channel and shared starter repo.",
-    created_at: new Date(Date.now() - 3600000 * 48).toISOString(),
-  },
-  {
-    id: "demo-lead-104",
-    name: "Meera Krishnan",
-    email: "meera.k@example.com",
-    phone: "+91 9765432190",
-    course_slug: "python-data-engineering",
-    source: "contact_page",
-    message: "Interested in the Python & Data Engineering 6-month roadmap.",
-    status: "new",
-    created_at: new Date(Date.now() - 3600000 * 72).toISOString(),
-  },
-];
-
 function AdminPage() {
   const [adminKey, setAdminKey] = useState<string>(() => {
     if (typeof window !== "undefined") {
@@ -119,15 +61,15 @@ function AdminPage() {
   });
   const [tempKeyInput, setTempKeyInput] = useState<string>(adminKey);
 
-  const [leads, setLeads] = useState<Lead[]>(INITIAL_DEMO_LEADS);
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState({
-    total: INITIAL_DEMO_LEADS.length,
-    new: 2,
-    contacted: 1,
-    enrolled: 1,
+    total: 0,
+    new: 0,
+    contacted: 0,
+    enrolled: 0,
   });
 
   const handleLogin = (e: React.FormEvent) => {
@@ -381,98 +323,126 @@ function AdminPage() {
           </Button>
         </div>
 
+        {/* Empty State */}
+        {!isLoading && leads.length === 0 && (
+          <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 px-6 py-20 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Users className="h-8 w-8" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-foreground">No enquiries yet</h3>
+            <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+              When prospective learners submit an enquiry through the website, it will appear here.
+              You can also refresh to pull the latest data from the server.
+            </p>
+            <Button
+              variant="subtle"
+              size="sm"
+              className="mt-5"
+              onClick={fetchLeads}
+              disabled={isLoading}
+            >
+              <RefreshCw className="mr-1.5 h-4 w-4" />
+              Fetch Enquiries
+            </Button>
+          </div>
+        )}
+
         {/* Leads Table */}
-        <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-border bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-6 py-4">Learner</th>
-                  <th className="px-6 py-4">Course & Batch</th>
-                  <th className="px-6 py-4">Enquiry Note</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredLeads.length > 0 ? (
-                  filteredLeads.map((lead) => (
-                    <tr key={lead.id} className="transition-colors hover:bg-muted/30">
-                      <td className="px-6 py-4">
-                        <p className="font-semibold text-foreground">{lead.name}</p>
-                        <div className="mt-1 flex flex-col gap-0.5 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1.5">
-                            <Mail className="h-3 w-3" /> {lead.email}
-                          </span>
-                          {lead.phone && (
+        {(isLoading || leads.length > 0) && (
+          <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="border-b border-border bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <tr>
+                    <th className="px-6 py-4">Learner</th>
+                    <th className="px-6 py-4">Course & Batch</th>
+                    <th className="px-6 py-4">Enquiry Note</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {filteredLeads.length > 0 ? (
+                    filteredLeads.map((lead) => (
+                      <tr key={lead.id} className="transition-colors hover:bg-muted/30">
+                        <td className="px-6 py-4">
+                          <p className="font-semibold text-foreground">{lead.name}</p>
+                          <div className="mt-1 flex flex-col gap-0.5 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1.5">
-                              <Phone className="h-3 w-3" /> {lead.phone}
+                              <Mail className="h-3 w-3" /> {lead.email}
                             </span>
+                            {lead.phone && (
+                              <span className="flex items-center gap-1.5">
+                                <Phone className="h-3 w-3" /> {lead.phone}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
+                            {lead.course_slug || "General Enquiry"}
+                          </span>
+                          {lead.batch_id && (
+                            <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                              Batch: {lead.batch_id}
+                            </p>
                           )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
-                          {lead.course_slug || "General Enquiry"}
-                        </span>
-                        {lead.batch_id && (
-                          <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-                            Batch: {lead.batch_id}
+                        </td>
+                        <td className="px-6 py-4 max-w-xs">
+                          <p className="line-clamp-2 text-xs text-muted-foreground">
+                            {lead.message}
                           </p>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 max-w-xs">
-                        <p className="line-clamp-2 text-xs text-muted-foreground">{lead.message}</p>
-                        {lead.notes && (
-                          <p className="mt-1 text-[11px] font-medium text-primary">
-                            Note: {lead.notes}
-                          </p>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <select
-                          value={lead.status}
-                          onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                          className={`rounded-full px-3 py-1 text-xs font-semibold border ${
-                            lead.status === "enrolled"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300"
-                              : lead.status === "contacted"
-                                ? "bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-950 dark:text-blue-300"
-                                : lead.status === "new"
-                                  ? "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-300"
-                                  : "bg-muted text-muted-foreground border-border"
-                          }`}
-                        >
-                          <option value="new">● New</option>
-                          <option value="contacted">● Contacted</option>
-                          <option value="enrolled">● Enrolled</option>
-                          <option value="closed">● Closed</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteLead(lead.id)}
-                          className="text-muted-foreground hover:text-destructive"
-                          title="Delete enquiry"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          {lead.notes && (
+                            <p className="mt-1 text-[11px] font-medium text-primary">
+                              Note: {lead.notes}
+                            </p>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <select
+                            value={lead.status}
+                            onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                            className={`rounded-full px-3 py-1 text-xs font-semibold border ${
+                              lead.status === "enrolled"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300"
+                                : lead.status === "contacted"
+                                  ? "bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-950 dark:text-blue-300"
+                                  : lead.status === "new"
+                                    ? "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-300"
+                                    : "bg-muted text-muted-foreground border-border"
+                            }`}
+                          >
+                            <option value="new">● New</option>
+                            <option value="contacted">● Contacted</option>
+                            <option value="enrolled">● Enrolled</option>
+                            <option value="closed">● Closed</option>
+                          </select>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteLead(lead.id)}
+                            className="text-muted-foreground hover:text-destructive"
+                            title="Delete enquiry"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                        No enquiries matching your filter.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
-                      No enquiries matching your filter.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </Section>
     </div>
   );

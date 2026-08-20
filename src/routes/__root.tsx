@@ -17,6 +17,7 @@ import { Toaster } from "../components/ui/sonner";
 import { site } from "../data/site";
 import { setupContentProtection } from "../lib/content-protection";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { registerServiceWorker, initInstallPrompt } from "@/lib/pwa";
 
 function NotFoundComponent() {
   return (
@@ -160,6 +161,11 @@ function RootComponent() {
 
   useEffect(() => {
     return setupContentProtection();
+  }, []);
+
+  useEffect(() => {
+    registerServiceWorker();
+    initInstallPrompt();
   }, []);
 
   return (

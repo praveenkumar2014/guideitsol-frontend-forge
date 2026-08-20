@@ -46,8 +46,8 @@ function AuthPageComponent() {
     navigate({ to: "/student-dashboard" });
   };
 
-  const handleGoogleLogin = () => {
-    const loggedUser = loginWithGoogle();
+  const handleGoogleLogin = async () => {
+    const loggedUser = await loginWithGoogle();
     toast.success(`Signed in with Google as ${loggedUser.name}!`, {
       description: `Verified Google Account linked (${loggedUser.email})`,
     });
@@ -72,8 +72,8 @@ function AuthPageComponent() {
     navigate({ to: "/student-dashboard" });
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     toast.info("You have been signed out.");
   };
 

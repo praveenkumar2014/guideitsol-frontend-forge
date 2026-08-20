@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import {
+  supabase,
+  signInWithGoogle as supabaseSignInWithGoogle,
+  signOut as supabaseSignOut,
+  getSession,
+} from "@/lib/supabase";
 
 export type UserRole = "learner" | "instructor" | "admin" | "partner";
 
@@ -122,29 +128,61 @@ export function loginWithCredentials(
   return user;
 }
 
-export function loginWithGoogle(): UserProfile {
-  const googleUser: UserProfile = {
-    id: `usr_google_${Date.now()}`,
-    name: "Google Verified Learner",
-    email: "learner@gmail.com",
-    role: "learner",
-    avatar:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-    title: "Google Authenticated Member",
-    badge: "Google Verified",
-    enrolledTrack: "Java Full Stack & Cloud Architecture",
-    progress: 45,
-    permissions: TEST_ACCOUNTS.learner.permissions,
-  };
-
-  if (typeof window !== "undefined") {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(googleUser));
-    window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: googleUser }));
+export async function loginWithGoogle(): Promise<UserProfile> {
+  try {
+    const session = await getSession();
+    if (session?.user) {
+      const meta = session.user.user_metadata || {};
+      const user: UserProfile = {
+        id: session.user.id,
+        name: meta.full_name || meta.name || session.user.email?.split("@")[0] || "Learner",
+        email: session.user.email || "",
+        role: "learner",
+        avatar: meta.avatar_url || meta.picture || "",
+        title: "Google Authenticated Member",
+        badge: "Google Verified",
+        permissions: TEST_ACCOUNTS.learner.permissions,
+      };
+      if (typeof window !== "undefined") {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: user }));
+      }
+      return user;
+    }
+    // Fall back to mock if Supabase not configured
+    const googleUser: UserProfile = {
+      ...TEST_ACCOUNTS.learner,
+      id: `usr_google_${Date.now()}`,
+      name: "Google Verified Learner",
+      email: "learner@gmail.com",
+    };
+    if (typeof window !== "undefined") {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(googleUser));
+      window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: googleUser }));
+    }
+    return googleUser;
+  } catch {
+    // Supabase not configured, use mock
+    const googleUser: UserProfile = {
+      ...TEST_ACCOUNTS.learner,
+      id: `usr_google_${Date.now()}`,
+      name: "Google Verified Learner",
+      email: "learner@gmail.com",
+    };
+    if (typeof window !== "undefined") {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(googleUser));
+      window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: googleUser }));
+    }
+    return googleUser;
   }
-  return googleUser;
 }
 
-export function logout(): void {
+export async function logout(): Promise<void> {
+  try {
+    await supabaseSignOut();
+  } catch {
+    /* ignore */
+  }
   if (typeof window !== "undefined") {
     localStorage.removeItem(AUTH_STORAGE_KEY);
     window.dispatchEvent(new CustomEvent(AUTH_EVENT_NAME, { detail: null }));

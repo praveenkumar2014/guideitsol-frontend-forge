@@ -72,8 +72,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     onOpenChange(false);
   };
 
-  const handleGoogleLogin = () => {
-    const loggedUser = loginWithGoogle();
+  const handleGoogleLogin = async () => {
+    const loggedUser = await loginWithGoogle();
     toast.success(`Signed in with Google as ${loggedUser.name}!`, {
       description: `Verified Google Account linked (${loggedUser.email})`,
     });
@@ -98,8 +98,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     onOpenChange(false);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     toast.info("You have been signed out.");
     onOpenChange(false);
   };
@@ -239,7 +239,10 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   <div className="flex-1 space-y-0.5">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-bold text-foreground">{user.name}</h4>
-                      <Badge variant="default" className="bg-primary text-primary-foreground text-[10px]">
+                      <Badge
+                        variant="default"
+                        className="bg-primary text-primary-foreground text-[10px]"
+                      >
                         {user.badge}
                       </Badge>
                     </div>
@@ -247,7 +250,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                     <p className="text-xs font-semibold text-primary">{user.title}</p>
                     {user.enrolledTrack && (
                       <p className="text-[11px] text-muted-foreground">
-                        Track: <span className="text-foreground">{user.enrolledTrack}</span> ({user.progress}% complete)
+                        Track: <span className="text-foreground">{user.enrolledTrack}</span> (
+                        {user.progress}% complete)
                       </p>
                     )}
                   </div>
@@ -275,7 +279,12 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
                     Close
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={handleLogout} className="gap-1.5">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="gap-1.5"
+                  >
                     <LogOut className="h-4 w-4" /> Sign Out
                   </Button>
                 </div>
@@ -376,7 +385,11 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                     </div>
                   </div>
 
-                  <Button type="submit" variant="hero" className="w-full mt-2 gap-2 text-xs font-bold">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    className="w-full mt-2 gap-2 text-xs font-bold"
+                  >
                     <Sparkles className="h-4 w-4" />
                     {authMode === "signin" ? "Sign In to Portal" : "Create My Account"}
                   </Button>

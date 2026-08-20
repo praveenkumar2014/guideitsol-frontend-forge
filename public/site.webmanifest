@@ -2,10 +2,26 @@
   "name": "GUIDESOFT IT Solutions & Trainings",
   "short_name": "GUIDESOFT",
   "description": "Industry-focused online and classroom IT training from GUIDESOFT.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "orientation": "any",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
+  "categories": ["education", "learning"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Browse Courses",
+      "url": "/courses",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Live Batches",
+      "url": "/live-batches",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "/gslogo.png",
