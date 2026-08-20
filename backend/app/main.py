@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 import httpx
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
 
@@ -443,3 +443,60 @@ async def admin_update_lead(
 async def admin_delete_lead(lead_id: str, _: None = Depends(require_admin_key)) -> Response:
     await supabase_request("DELETE", f"leads?id=eq.{lead_id}")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# ---------------------------------------------------------------------------
+# AI Content Generation
+# ---------------------------------------------------------------------------
+
+from .ai_content import ContentRequest, generate_content, generate_full_course
+from .scraper import research_course_topics
+
+
+class ContentGenerateRequest(BaseModel):
+    content_type: str = Field(description="course_outline, lesson_plan, quiz, video_script, blog_post")
+    topic: str = Field(min_length=3, max_length=200)
+    level: str = Field(default="intermediate", max_length=50)
+    duration_minutes: int = Field(default=60, ge=10, le=480)
+    num_items: int = Field(default=10, ge=1, le=50)
+    extra_context: str = Field(default="", max_length=2000)
+
+
+@app.post("/api/ai/generate")
+async def ai_generate_content(req: ContentGenerateRequest) -> Any:
+    """Generate educational content using AI."""
+    request = ContentRequest(
+        content_type=req.content_type,
+        topic=req.topic,
+        level=req.level,
+        duration_minutes=req.duration_minutes,
+        num_items=req.num_items,
+        extra_context=req.extra_context,
+    )
+    result = await generate_content(request)
+    return {
+        "content_type": result.content_type,
+        "topic": result.topic,
+        "content": result.content,
+        "metadata": result.metadata,
+    }
+
+
+@app.post("/api/ai/generate-course")
+async def ai_generate_full_course(
+    topic: str = Query(..., min_length=3),
+    level: str = Query(default="intermediate"),
+) -> Any:
+    """Generate a complete course package: outline + quizzes + video scripts."""
+    result = await generate_full_course(topic, level)
+    return result
+
+
+@app.get("/api/ai/research")
+async def ai_research_topic(
+    topic: str = Query(..., min_length=3),
+    num_results: int = Query(default=5, ge=1, le=20),
+) -> Any:
+    """Research course topics from the web."""
+    results = await research_course_topics(topic, num_results)
+    return {"topic": topic, "results": results}
