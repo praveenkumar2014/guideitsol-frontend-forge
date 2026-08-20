@@ -50,7 +50,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Architect high-throughput enterprise backend systems, event-driven Kafka pipelines, secure REST APIs, and full-scale AWS cloud infrastructure with industry mentors.",
     image:
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "java-full-stack",
     salaryRange: "₹8.5 - ₹18 LPA",
     duration: "16 Weeks",
@@ -68,7 +68,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "From Python fundamentals to fine-tuning LLMs, building retrieval-augmented generation (RAG) systems, vector databases, and multi-agent workflows with LangChain & LlamaIndex.",
     image:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "python-full-stack",
     salaryRange: "₹10.0 - ₹24 LPA",
     duration: "14 Weeks",
@@ -90,7 +90,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Master statistical modeling, predictive algorithms, business intelligence with Tableau, automated ETL pipelines, and scalable distributed Spark processing.",
     image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "data-science",
     salaryRange: "₹9.0 - ₹20 LPA",
     duration: "16 Weeks",
@@ -112,7 +112,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Automate end-to-end delivery pipelines with Terraform IaC, multi-tenant Kubernetes clusters, ArgoCD GitOps, and 24x7 Prometheus/Grafana observability.",
     image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "aws-devops",
     salaryRange: "₹9.5 - ₹22 LPA",
     duration: "14 Weeks",
@@ -134,7 +134,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Full-stack web engineering from high-performance React client architectures, Next.js App Router, GraphQL APIs, and NoSQL databases to production edge deployments.",
     image:
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "react-fullstack",
     salaryRange: "₹7.5 - ₹16 LPA",
     duration: "12 Weeks",
@@ -156,7 +156,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Master end-to-end product design from user discovery interviews, wireframing, component-driven Figma design tokens, and interactive micro-animations to design-to-code handoff.",
     image:
-      "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "ui-ux-design",
     salaryRange: "₹7.0 - ₹15 LPA",
     duration: "10 Weeks",
@@ -178,7 +178,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Elevate beyond manual testing to build robust test frameworks using Playwright, Selenium WebDriver, Cypress, API testing with RestAssured, and CI test pipelines.",
     image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "software-testing",
     salaryRange: "₹6.5 - ₹14 LPA",
     duration: "12 Weeks",
@@ -200,7 +200,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     description:
       "Hands-on threat intelligence, SIEM operations with Splunk, network forensics with Wireshark, ethical hacking, vulnerability assessments, and SOC incident response.",
     image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1920&auto=format&fit=crop&q=90",
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&auto=format&fit=crop&q=90",
     courseSlug: "cyber-security",
     salaryRange: "₹8.0 - ₹19 LPA",
     duration: "14 Weeks",
