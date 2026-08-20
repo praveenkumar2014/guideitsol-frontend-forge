@@ -25,16 +25,19 @@ export function SectionHeading({
   title,
   description,
   align = "left",
+  centered = false,
   as: Heading = "h2",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
+  centered?: boolean;
   as?: "h1" | "h2";
 }) {
+  const isCenter = align === "center" || centered;
   return (
-    <div className={cn("max-w-3xl", align === "center" && "mx-auto text-center")}>
+    <div className={cn("max-w-3xl", isCenter && "mx-auto text-center")}>
       {eyebrow ? (
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
       ) : null}

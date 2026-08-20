@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Software Development",
+    "subcategories": [
+      "Web Development"
+    ]
+  },
+  {
+    "name": "Data & AI",
+    "subcategories": [
+      "Machine Learning & AI",
+      "Data Science"
+    ]
+  },
+  {
+    "name": "Cloud & DevOps",
+    "subcategories": [
+      "Cloud Computing"
+    ]
+  },
+  {
+    "name": "Testing",
+    "subcategories": [
+      "Software Testing"
+    ]
+  }
+]

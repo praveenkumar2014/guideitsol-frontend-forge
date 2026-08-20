@@ -117,12 +117,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              (function(){
+                try {
+                  var t = localStorage.getItem('guidesoft-theme') || 'dark';
+                  document.documentElement.classList.add(t);
+                } catch(e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
               document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
               document.addEventListener('copy', function(e) { if (!['INPUT','TEXTAREA'].includes(e.target ? e.target.tagName : '')) { e.preventDefault(); return false; } }, true);
               document.addEventListener('cut', function(e) { if (!['INPUT','TEXTAREA'].includes(e.target ? e.target.tagName : '')) { e.preventDefault(); return false; } }, true);

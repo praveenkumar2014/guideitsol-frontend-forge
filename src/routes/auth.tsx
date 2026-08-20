@@ -142,13 +142,14 @@ function AuthPageComponent() {
 
               {/* 1-Click Role Presets Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {(["learner", "instructor", "admin", "partner"] as UserRole[]).map((r) => {
+                {(["learner", "instructor", "admin", "partner"] as UserRole[]).map((r, idx) => {
                   const account = TEST_ACCOUNTS[r];
                   const isActive = user?.role === r;
                   return (
                     <button
                       key={r}
                       type="button"
+                      id={idx === 0 ? "auth-role-btn" : `auth-role-btn-${r}`}
                       onClick={() => handleRoleLogin(r)}
                       className={`flex items-start gap-3 rounded-xl border p-3 text-left transition-all ${
                         isActive
@@ -178,6 +179,7 @@ function AuthPageComponent() {
                   );
                 })}
               </div>
+
             </div>
 
             {/* Trust Footer */}
