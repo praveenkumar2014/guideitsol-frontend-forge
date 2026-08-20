@@ -1,58 +1,110 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Smartphone } from "lucide-react";
 
 import { CtaBand } from "@/components/cta-band";
-import { PageHero, Section, SectionHeading } from "@/components/section";
+import { Section } from "@/components/section";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { services, site } from "@/data/site";
+import { site } from "@/data/site";
+import { courses } from "@/data/training";
 
 export const Route = createFileRoute("/mobile-apps")({
   head: () => ({
     meta: [
-      { title: `Mobile Apps | ${site.name}` },
+      { title: `Mobile App Development | ${site.name}` },
       {
         name: "description",
         content:
-          "Reliable iOS and Android apps with offline-first data, thoughtful UX and release support.",
+          "Learn Mobile App Development with Flutter and React Native. Build cross-platform apps for iOS and Android with GuideSoft IT.",
       },
     ],
   }),
   component: MobileApps,
 });
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
+  }),
+};
+
 function MobileApps() {
-  const service = services[1];
+  // Try to find mobile specific courses, otherwise fallback to frontend or general software development
+  const mobileCourses = courses.filter((c) => 
+    c.title.toLowerCase().includes("mobile") || 
+    c.title.toLowerCase().includes("flutter") || 
+    c.title.toLowerCase().includes("react")
+  );
+
   return (
-    <>
-      <PageHero
-        eyebrow="Mobile apps"
-        title="Mobile experiences people keep coming back to."
-        description={service.summary}
-      >
-        <Button asChild variant="hero" size="xl">
-          <Link to="/contact">
-            Plan a mobile build <ArrowRight />
-          </Link>
-        </Button>
-      </PageHero>
+    <div className="bg-background text-foreground">
+      <section className="relative border-b border-border overflow-hidden">
+        <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
+              Specialization Track
+            </Badge>
+            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              Mobile App <span className="text-gradient">Development</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+              Build fast, beautiful cross-platform applications for iOS and Android using modern frameworks like Flutter and React Native.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       <Section>
-        <SectionHeading
-          eyebrow="Built for the real world"
-          title="From first tap to store release."
-        />
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {service.points.map((point) => (
-            <div key={point} className="surface-panel rounded-xl p-5">
-              <Check className="h-5 w-5 text-primary" />
-              <h2 className="mt-6 text-lg font-semibold">{point}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                A polished, observable experience across the devices your customers use.
-              </p>
-            </div>
+        <div className="grid gap-8 lg:grid-cols-2">
+          {mobileCourses.slice(0, 4).map((course, i) => (
+            <motion.article
+              key={course.slug}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              custom={i}
+              className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
+            >
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Smartphone className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <Badge variant="secondary" className="mb-1 text-xs">{course.level}</Badge>
+                    <h2 className="text-2xl font-display font-semibold text-foreground">{course.title}</h2>
+                  </div>
+                </div>
+                
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  {course.summary}
+                </p>
+
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {course.tools.slice(0, 5).map((tool) => (
+                    <Badge key={tool} variant="outline" className="text-xs">{tool}</Badge>
+                  ))}
+                </div>
+
+                <Button asChild className="w-full rounded-xl">
+                  <Link to="/courses/$slug" params={{ slug: course.slug }}>
+                    View Course Details
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.article>
           ))}
         </div>
       </Section>
-      <CtaBand title="Ready to make mobile a growth channel?" />
-    </>
+
+      <CtaBand title="Start Building Apps" description="Join our next cohort and launch your first app to the App Store and Google Play." />
+    </div>
   );
 }
