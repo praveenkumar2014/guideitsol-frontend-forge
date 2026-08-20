@@ -35,6 +35,7 @@ import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import logoLight from "../logolight.svg?url";
+import logoDark from "../logodark.svg?url";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -84,9 +85,9 @@ export function SiteHeader() {
         <div className="flex items-center gap-4 lg:gap-6">
           <Link to="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
             <img
-              src={logoLight}
+              src={mounted && theme === 'dark' ? logoDark : logoLight}
               alt={site.legalName}
-              className="h-9 w-auto max-w-[140px] object-contain"
+              className="h-9 w-auto max-w-[140px] object-contain transition-opacity duration-300"
             />
           </Link>
 
