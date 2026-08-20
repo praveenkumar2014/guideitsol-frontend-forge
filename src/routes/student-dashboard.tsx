@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { api, type LearnerProfile, type LearnerProgressRecord } from "@/lib/api";
 import { Section, SectionHeading } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { certificates, courses, learnerDashboard } from "@/data/training";
@@ -54,9 +55,42 @@ function StudentDashboard() {
     return learnerDashboard.overallProgress;
   });
 
-  const currentCourseSlug = learnerDashboard.currentCourse;
+  const [apiProfile, setApiProfile] = useState<LearnerProfile | null>(null);
+  const [apiProgress, setApiProgress] = useState<LearnerProgressRecord[]>([]);
+  const [dataMode, setDataMode] = useState<"live" | "demo">("demo");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const profile = await api.getLearnerProfile();
+        if (cancelled) return;
+        setApiProfile(profile);
+        setDataMode("live");
+
+        const firstEnrolment = profile.enrolments?.[0] as Record<string, unknown> | undefined;
+        const courseSlug =
+          (firstEnrolment?.course_slug as string) || learnerDashboard.currentCourse;
+        try {
+          const progress = await api.getLearnerProgress(courseSlug);
+          if (!cancelled) setApiProgress(progress);
+        } catch {
+          // progress fetch is non-critical
+        }
+      } catch {
+        // API unavailable — stay in demo mode
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const liveCourseSlug = (apiProfile?.enrolments?.[0] as Record<string, unknown> | undefined)
+    ?.course_slug as string | undefined;
+  const currentCourseSlug = liveCourseSlug || learnerDashboard.currentCourse;
   const course = courses.find((item) => item.slug === currentCourseSlug) || courses[0];
-  const learnerDisplayName = user?.name || learnerDashboard.learner;
+  const learnerDisplayName = apiProfile?.name || user?.name || learnerDashboard.learner;
 
   const assignmentsList = [
     {
@@ -99,6 +133,15 @@ function StudentDashboard() {
               <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary uppercase tracking-wider">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Learner Workspace</span>
+                <span
+                  className={`ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal ${
+                    dataMode === "live"
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {dataMode === "live" ? "Live Data" : "Demo Data"}
+                </span>
               </div>
               <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
                 Welcome back, {learnerDisplayName}!
@@ -473,12 +516,19 @@ function StudentDashboard() {
             <div className="surface-panel rounded-3xl p-8 border border-border max-w-2xl shadow-sm">
               <div className="flex items-center gap-4 border-b border-border pb-6">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary text-xl font-bold">
-                  PS
+                  {apiProfile?.name
+                    ? apiProfile.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()
+                    : "PS"}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">{learnerDashboard.learner}</h3>
+                  <h3 className="text-xl font-bold">{learnerDisplayName}</h3>
                   <p className="text-xs text-muted-foreground">
-                    {learnerDashboard.role} · Member since June 2026
+                    {apiProfile ? "Learner" : learnerDashboard.role} · Member since June 2026
                   </p>
                 </div>
               </div>
@@ -486,7 +536,9 @@ function StudentDashboard() {
               <div className="mt-6 space-y-4 text-sm">
                 <div className="flex justify-between border-b border-border pb-3">
                   <span className="text-muted-foreground">Email</span>
-                  <span className="font-medium">priya.sharma@example.com</span>
+                  <span className="font-medium">
+                    {apiProfile?.email || "priya.sharma@example.com"}
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-border pb-3">
                   <span className="text-muted-foreground">Phone</span>

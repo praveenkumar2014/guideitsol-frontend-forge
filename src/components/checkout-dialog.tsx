@@ -1,22 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  Copy,
-  CreditCard,
-  ExternalLink,
-  Loader2,
-  Lock,
-  QrCode,
-  ShieldCheck,
-  Smartphone,
-  Sparkles,
-  Zap,
-} from "lucide-react";
-import QRCode from "qrcode";
+import { ArrowRight, CreditCard, Loader2, Lock, ShieldCheck, Smartphone, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -32,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import type { Batch } from "@/data/training";
-import { api, type PaymentOrderResponse } from "@/lib/api";
+import { api } from "@/lib/api";
 
 const checkoutSchema = z.object({
   customer_name: z.string().min(2, "Please enter your full name."),
@@ -49,28 +34,9 @@ interface CheckoutDialogProps {
   courseTitle: string;
 }
 
-const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_mockKey123456789";
-
-// Load Razorpay script dynamically
-function loadRazorpayScript(): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (document.getElementById("razorpay-script")) {
-      resolve(true);
-      return;
-    }
-    const script = document.createElement("script");
-    script.id = "razorpay-script";
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-}
-
 export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: CheckoutDialogProps) {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isRazorpayLoading, setIsRazorpayLoading] = useState(false);
 
   const {
     register,
@@ -86,67 +52,35 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
     },
   });
 
-  const numericAmount = batch ? parseFloat(batch.price.replace(/[^0-9.]/g, "") || "48000") : 48000;
-
   const onSubmit = async (values: CheckoutValues) => {
+    if (!batch) return;
     setIsProcessing(true);
-    setIsRazorpayLoading(true);
-
     try {
-      const isLoaded = await loadRazorpayScript();
-      if (!isLoaded) {
-        toast.error("Failed to load payment gateway. Please check your connection.");
-        return;
-      }
-
-      // In a real application, you would create the order on your backend here:
-      // const order = await api.createPaymentOrder({...})
-      // We will mock the order id for this production-ready frontend integration.
-      const mockOrderId = `order_${Math.floor(Math.random() * 1000000000)}`;
-
-      const options = {
-        key: RAZORPAY_KEY,
-        amount: numericAmount * 100, // Razorpay takes amount in paise
-        currency: "INR",
-        name: "GuideSoft IT Solutions",
-        description: `Enrollment: ${courseTitle}`,
-        image: "/logolight.svg", // Use your logo
-        order_id: mockOrderId,
-        handler: function (response: any) {
-          toast.success("Payment successful! Welcome to the cohort.");
-          onOpenChange(false);
-          reset();
-          navigate({
-            to: "/payment-return",
-            search: {
-              order_id: response.razorpay_order_id || mockOrderId,
-              status: "SUCCESS",
-            },
-          });
-        },
-        prefill: {
-          name: values.customer_name,
-          email: values.customer_email,
-          contact: values.customer_phone,
-        },
-        theme: {
-          color: "#0369a1", // primary color
-        },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-
-      rzp.on("payment.failed", function (response: any) {
-        toast.error(`Payment failed: ${response.error.description}`);
+      const order = await api.createPaymentOrder({
+        batch_id: batch.id,
+        customer_name: values.customer_name,
+        customer_email: values.customer_email,
+        customer_phone: values.customer_phone,
       });
 
-      rzp.open();
+      toast.success(`Payment order created! Amount: ₹${order.amount}`, {
+        description: `Order ID: ${order.order_id}`,
+      });
+
+      onOpenChange(false);
+      reset();
+      navigate({
+        to: "/payment-return",
+        search: { order_id: order.order_id, status: "PENDING" },
+      });
     } catch (err: unknown) {
-      console.error("Payment initiation error:", err);
-      toast.error("Could not initiate payment gateway.");
+      const msg = err instanceof Error ? err.message : "Payment initiation failed";
+      toast.error(msg);
+      toast.info("You can also pay via bank transfer. Contact info@guideitsol.in", {
+        duration: 8000,
+      });
     } finally {
       setIsProcessing(false);
-      setIsRazorpayLoading(false);
     }
   };
 
@@ -250,11 +184,11 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
             {isProcessing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Initializing Gateway...
+                Initializing Payment...
               </>
             ) : (
               <>
-                Pay securely with Razorpay <ArrowRight className="ml-2 h-4 w-4" />
+                Pay securely <ArrowRight className="ml-2 h-4 w-4" />
               </>
             )}
           </Button>
