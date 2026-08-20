@@ -1,22 +1,23 @@
 export const site = {
-  name: "Guide IT Solutions",
-  short: "GuideITSol",
-  domain: "guideitsol.in",
-  url: "https://guideitsol.in",
-  tagline: "Engineering teams that ship products, not slide decks.",
-  email: "hello@guideitsol.in",
-  phone: "+91 80 4718 2200",
-  address: "4th Floor, Prestige Tech Park, Outer Ring Road, Bengaluru 560103, India",
-  hours: "Mon–Fri, 9:30 AM – 7:00 PM IST",
+  name: "GUIDESOFT",
+  legalName: "GuideSoft IT Solutions & Trainings",
+  short: "GUIDESOFT",
+  domain: "guideitsol.com",
+  url: "https://guideitsol.com",
+  tagline: "Learn real technology. Build real skills. Launch your career.",
+  email: "info@guideitsol.com",
+  phone: "+91 863 234 5678",
+  address: "Guntur, Andhra Pradesh, India",
+  hours: "Mon–Sat, 9:00 AM – 7:00 PM IST",
 } as const;
 
 export const nav = [
-  { label: "Services", to: "/services" },
-  { label: "Web", to: "/web-development" },
-  { label: "Mobile", to: "/mobile-apps" },
-  { label: "Work", to: "/work" },
-  { label: "Pricing", to: "/pricing" },
-  { label: "About", to: "/about" },
+  { label: "Courses", to: "/courses" },
+  { label: "Learning paths", to: "/learning-paths" },
+  { label: "Live batches", to: "/live-batches" },
+  { label: "Internships", to: "/internships" },
+  { label: "Career center", to: "/career-center" },
+  { label: "Resources", to: "/resources" },
   { label: "Contact", to: "/contact" },
 ] as const;
 

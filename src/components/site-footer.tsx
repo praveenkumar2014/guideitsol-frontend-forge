@@ -1,12 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { Hexagon, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
-import { services, site } from "@/data/site";
+import { site } from "@/data/site";
+import { courseCategories } from "@/data/training";
+import logoLight from "../logolight.svg?url";
 
 const company = [
   { label: "About", to: "/about" },
-  { label: "Work", to: "/work" },
-  { label: "Pricing", to: "/pricing" },
+  { label: "Instructors", to: "/instructors" },
+  { label: "Projects", to: "/projects" },
+  { label: "Career center", to: "/career-center" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
 ] as const;
@@ -17,26 +20,26 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="space-y-4">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-signal)]">
-              <Hexagon className="h-5 w-5 text-primary-foreground" aria-hidden="true" />
-            </span>
-            <span className="font-display text-base font-semibold">Guide IT Solutions</span>
+            <img
+              src={logoLight}
+              alt={site.legalName}
+              className="h-10 w-auto max-w-[170px] object-contain"
+            />
           </div>
           <p className="max-w-xs text-sm text-muted-foreground">{site.tagline}</p>
           <p className="text-xs text-muted-foreground">{site.hours}</p>
         </div>
 
         <div>
-          <h2 className="font-display text-sm font-semibold">Services</h2>
+          <h2 className="font-display text-sm font-semibold">Learning areas</h2>
           <ul className="mt-4 space-y-2.5 text-sm">
-            {services.slice(0, 5).map((s) => (
-              <li key={s.slug}>
+            {courseCategories.slice(0, 5).map((category) => (
+              <li key={category.name}>
                 <Link
-                  to="/services"
-                  hash={s.slug}
+                  to="/courses"
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {s.title}
+                  {category.name}
                 </Link>
               </li>
             ))}
@@ -85,7 +88,8 @@ export function SiteFooter() {
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
+            © {new Date().getFullYear()} {site.legalName}. Training information and schedules are
+            subject to change.
           </p>
           <p>{site.domain}</p>
         </div>

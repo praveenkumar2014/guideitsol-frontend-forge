@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Hexagon } from "lucide-react";
+import { BookOpen, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { nav, site } from "@/data/site";
 import { cn } from "@/lib/utils";
+import logoLight from "../logolight.svg?url";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -13,12 +14,11 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[image:var(--gradient-signal)]">
-            <Hexagon className="h-5 w-5 text-primary-foreground" aria-hidden="true" />
-          </span>
-          <span className="font-display text-base font-semibold tracking-tight">
-            Guide <span className="text-gradient">IT</span> Solutions
-          </span>
+          <img
+            src={logoLight}
+            alt={site.legalName}
+            className="h-9 w-auto max-w-[150px] object-contain"
+          />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
@@ -36,7 +36,9 @@ export function SiteHeader() {
 
         <div className="hidden lg:block">
           <Button asChild variant="hero" size="lg">
-            <Link to="/contact">Book a consultation</Link>
+            <Link to="/courses">
+              <BookOpen /> Explore courses
+            </Link>
           </Button>
         </div>
 
@@ -72,8 +74,8 @@ export function SiteHeader() {
             </Link>
           ))}
           <Button asChild variant="hero" size="lg" className="mt-2">
-            <Link to="/contact" onClick={() => setOpen(false)}>
-              Book a consultation
+            <Link to="/courses" onClick={() => setOpen(false)}>
+              Explore courses
             </Link>
           </Button>
         </nav>

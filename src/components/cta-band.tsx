@@ -17,7 +17,7 @@ export function CtaBand({
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">{description}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild variant="hero" size="xl">
-              <Link to="/contact">Book a consultation</Link>
+              <Link to="/contact">Talk to a career advisor</Link>
             </Button>
             <Button asChild variant="subtle" size="xl">
               <Link to="/pricing">See engagement models</Link>
