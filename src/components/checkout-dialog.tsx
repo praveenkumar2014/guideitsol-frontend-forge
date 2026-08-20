@@ -135,7 +135,7 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
       };
 
       const rzp = new (window as any).Razorpay(options);
-      
+
       rzp.on("payment.failed", function (response: any) {
         toast.error(`Payment failed: ${response.error.description}`);
       });
@@ -164,7 +164,10 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
       <DialogContent className="max-w-md border-border/80 bg-background/95 p-6 backdrop-blur-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="text-left">
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary text-xs">
+            <Badge
+              variant="outline"
+              className="border-primary/40 bg-primary/10 text-primary text-xs"
+            >
               Live Checkout
             </Badge>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -177,7 +180,7 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground mt-2 border-b border-border/50 pb-4">
             <span className="block font-semibold text-foreground mb-1">{courseTitle}</span>
-            {batch.mode} Cohort starts {batch.startDate}
+            {batch.mode} Cohort starts {batch.start}
           </DialogDescription>
         </DialogHeader>
 

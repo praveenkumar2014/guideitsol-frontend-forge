@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
@@ -131,10 +132,12 @@ const successStories = [
     role: "Software Engineer",
     company: "Amazon India",
     package: "₹22 LPA",
-    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+    photo:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
     course: "Java Full Stack Development",
     prev: "Bank Teller (₹3.2 LPA)",
-    quote: "The placement team at GuideSoft is genuinely invested. After 4 mock interviews, I walked into Amazon's loop feeling prepared — not scared. Cleared all 4 rounds first attempt.",
+    quote:
+      "The placement team at GuideSoft is genuinely invested. After 4 mock interviews, I walked into Amazon's loop feeling prepared — not scared. Cleared all 4 rounds first attempt.",
     gap: "8 months",
   },
   {
@@ -142,10 +145,12 @@ const successStories = [
     role: "Data Analyst",
     company: "Flipkart",
     package: "₹14 LPA",
-    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
+    photo:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
     course: "Data Science & Machine Learning",
     prev: "Schoolteacher (₹2.8 LPA)",
-    quote: "I was a Mathematics teacher for 6 years. GuideSoft helped me pivot to data science in 8 months. The career counselling sessions helped me position my math background as a strength, not a gap.",
+    quote:
+      "I was a Mathematics teacher for 6 years. GuideSoft helped me pivot to data science in 8 months. The career counselling sessions helped me position my math background as a strength, not a gap.",
     gap: "8 months",
   },
   {
@@ -153,10 +158,12 @@ const successStories = [
     role: "Cloud Engineer",
     company: "Microsoft India",
     package: "₹19 LPA",
-    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+    photo:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
     course: "AWS Cloud & DevOps Engineering",
     prev: "Network Admin (₹5.5 LPA)",
-    quote: "My existing networking background combined with the DevOps skills from GuideSoft made me a unique candidate. Got 3 offers simultaneously — GuideSoft's negotiation coaching helped me choose the best one.",
+    quote:
+      "My existing networking background combined with the DevOps skills from GuideSoft made me a unique candidate. Got 3 offers simultaneously — GuideSoft's negotiation coaching helped me choose the best one.",
     gap: "5 months",
   },
   {
@@ -164,46 +171,80 @@ const successStories = [
     role: "Frontend Developer",
     company: "Razorpay",
     package: "₹11 LPA",
-    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80",
+    photo:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80",
     course: "React & Next.js Frontend Development",
     prev: "Fresher — B.Tech 2024",
-    quote: "I graduated in June 2024 with average grades and was struggling to get interviews. GuideSoft's portfolio review transformed my GitHub — Razorpay's recruiter reached out because they saw my capstone project on LinkedIn.",
+    quote:
+      "I graduated in June 2024 with average grades and was struggling to get interviews. GuideSoft's portfolio review transformed my GitHub — Razorpay's recruiter reached out because they saw my capstone project on LinkedIn.",
     gap: "4 months",
   },
 ];
 
 const assessmentServices = [
-  { title: "Career Aptitude Assessment", desc: "Identify which tech role (Backend, Frontend, Data, Cloud, Testing) aligns best with your strengths and long-term goals.", free: true },
-  { title: "Salary Benchmarking Report", desc: "Get a personalised report showing current market salaries for your target role in your target city — based on live hiring data.", free: true },
-  { title: "Resume Review", desc: "Expert review of your current resume with line-by-line feedback and a revised version — completely free for course enrollees.", free: true },
-  { title: "Technical Skills Gap Analysis", desc: "30-minute conversation with a technical mentor to identify exactly what skills you need to close before interviewing at your target companies.", free: false },
+  {
+    title: "Career Aptitude Assessment",
+    desc: "Identify which tech role (Backend, Frontend, Data, Cloud, Testing) aligns best with your strengths and long-term goals.",
+    free: true,
+  },
+  {
+    title: "Salary Benchmarking Report",
+    desc: "Get a personalised report showing current market salaries for your target role in your target city — based on live hiring data.",
+    free: true,
+  },
+  {
+    title: "Resume Review",
+    desc: "Expert review of your current resume with line-by-line feedback and a revised version — completely free for course enrollees.",
+    free: true,
+  },
+  {
+    title: "Technical Skills Gap Analysis",
+    desc: "30-minute conversation with a technical mentor to identify exactly what skills you need to close before interviewing at your target companies.",
+    free: false,
+  },
 ];
 
 function CareerCenter() {
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
+
   return (
     <div className="bg-background text-foreground">
+      <EnquiryDialog
+        open={enquiryOpen}
+        onOpenChange={setEnquiryOpen}
+        defaultCourseSlug="Career Counselling Session"
+        title="Career Counselling"
+      />
       {/* HERO */}
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl"
+          >
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               12,400+ Placements & Counting
             </Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Your Career Launch{" "}
-              <span className="text-gradient">Command Center</span>
+              Your Career Launch <span className="text-gradient">Command Center</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-              GuideSoft's Career Center doesn't just hand you a resume template. We run a structured, 6-stage placement preparation program with dedicated career coaches, industry mentors, and direct referrals to 250+ hiring companies — until you get hired.
+              GuideSoft's Career Center doesn't just hand you a resume template. We run a
+              structured, 6-stage placement preparation program with dedicated career coaches,
+              industry mentors, and direct referrals to 250+ hiring companies — until you get hired.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <EnquiryDialog courseName="Career Counselling Session">
-                <Button id="career-centre-cta-btn" size="lg" className="rounded-xl">
-                  Book Free Career Counselling
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </EnquiryDialog>
+              <Button
+                id="career-centre-cta-btn"
+                size="lg"
+                className="rounded-xl"
+                onClick={() => setEnquiryOpen(true)}
+              >
+                Book Free Career Counselling
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
               <Button asChild size="lg" variant="outline" className="rounded-xl">
                 <Link to="/courses">Explore Courses</Link>
               </Button>
@@ -289,17 +330,27 @@ function CareerCenter() {
               className="surface-panel rounded-2xl p-6"
             >
               <div className="flex items-start gap-4">
-                <img src={s.photo} alt={s.name} className="h-14 w-14 rounded-xl object-cover shrink-0" />
+                <img
+                  src={s.photo}
+                  alt={s.name}
+                  className="h-14 w-14 rounded-xl object-cover shrink-0"
+                />
                 <div>
                   <p className="font-semibold text-foreground">{s.name}</p>
-                  <p className="text-xs text-primary font-medium">{s.role} — {s.company}</p>
+                  <p className="text-xs text-primary font-medium">
+                    {s.role} — {s.company}
+                  </p>
                   <div className="mt-1 flex items-center gap-2">
-                    <Badge className="bg-primary/10 text-primary text-xs border-primary/20">{s.package}</Badge>
+                    <Badge className="bg-primary/10 text-primary text-xs border-primary/20">
+                      {s.package}
+                    </Badge>
                     <span className="text-xs text-muted-foreground">in {s.gap}</span>
                   </div>
                 </div>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground italic leading-relaxed">"{s.quote}"</p>
+              <p className="mt-4 text-sm text-muted-foreground italic leading-relaxed">
+                "{s.quote}"
+              </p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-muted-foreground">
                 <div>
                   <p className="font-medium text-foreground">Course Completed</p>
@@ -342,7 +393,9 @@ function CareerCenter() {
             >
               <p className="text-xs font-medium text-foreground">{p.name}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{p.sector}</p>
-              <Badge variant="secondary" className="text-xs mt-1.5 px-1.5 py-0">{p.type}</Badge>
+              <Badge variant="secondary" className="text-xs mt-1.5 px-1.5 py-0">
+                {p.type}
+              </Badge>
             </motion.div>
           ))}
         </div>
@@ -376,7 +429,9 @@ function CareerCenter() {
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-foreground text-sm">{s.title}</h3>
                   {s.free && (
-                    <Badge className="text-xs bg-primary/10 text-primary border-primary/20">Free</Badge>
+                    <Badge className="text-xs bg-primary/10 text-primary border-primary/20">
+                      Free
+                    </Badge>
                   )}
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
@@ -386,12 +441,15 @@ function CareerCenter() {
         </div>
 
         <div className="mt-10 text-center">
-          <EnquiryDialog courseName="Free Career Assessment">
-            <Button id="free-assessment-btn" size="lg" className="rounded-xl">
-              Book Free Career Assessment
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </EnquiryDialog>
+          <Button
+            id="free-assessment-btn"
+            size="lg"
+            className="rounded-xl"
+            onClick={() => setEnquiryOpen(true)}
+          >
+            Book Free Career Assessment
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
           <p className="mt-3 text-xs text-muted-foreground">
             <MapPin className="inline h-3 w-3 mr-1" />
             Available online for students across India · Mon–Sat, 10 AM – 6 PM IST

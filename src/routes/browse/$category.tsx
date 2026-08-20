@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Clock, Code2, Globe, Server, Star, Trophy } from "lucide-react";
 
@@ -39,28 +39,39 @@ const fadeUp = {
 
 function formatCategoryName(slug: string) {
   // Convert slug to standard category names based on data
-  if (slug === "software-development") return "Software Development";
-  if (slug === "data-science") return "Data & AI";
-  if (slug === "cloud-devops") return "Cloud & DevOps";
-  if (slug === "testing") return "Testing";
-  if (slug === "design") return "UI/UX & Design";
-  
-  return slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  const slugMap: Record<string, string> = {
+    "software-development": "Software Development",
+    "data-ai": "Data & AI",
+    "data-science": "Data & AI",
+    "cloud-devops": "Cloud & DevOps",
+    testing: "Testing",
+    "ui-ux-design": "UI/UX & Design",
+    design: "UI/UX & Design",
+    "sap-enterprise": "SAP & Enterprise",
+    "mobile-development": "Mobile Development",
+    "digital-business": "Digital & Business",
+  };
+
+  return (
+    slugMap[slug] ||
+    slug
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
 }
 
 function CategoryBrowse() {
   const { category: categorySlug } = Route.useParams();
   const categoryName = formatCategoryName(categorySlug);
-  
+
   // Filter courses by category
   // Handle edge cases where category strings might have slightly different formatting
-  const categoryCourses = courses.filter((c) => 
-    c.category.toLowerCase().includes(categoryName.toLowerCase()) ||
-    categoryName.toLowerCase().includes(c.category.toLowerCase()) ||
-    c.category.toLowerCase() === categorySlug.replace(/-/g, ' ').toLowerCase()
+  const categoryCourses = courses.filter(
+    (c) =>
+      c.category.toLowerCase().includes(categoryName.toLowerCase()) ||
+      categoryName.toLowerCase().includes(c.category.toLowerCase()) ||
+      c.category.toLowerCase() === categorySlug.replace(/-/g, " ").toLowerCase(),
   );
 
   return (
@@ -69,7 +80,11 @@ function CategoryBrowse() {
       <section className="relative border-b border-border bg-surface/50 overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl"
+          >
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               Explore Top Courses
             </Badge>
@@ -77,7 +92,8 @@ function CategoryBrowse() {
               Learn {categoryName}
             </h1>
             <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Launch your new career in {categoryName}. Build your portfolio with hands-on projects, earn a certificate, and get job-ready with guidance from top instructors.
+              Launch your new career in {categoryName}. Build your portfolio with hands-on projects,
+              earn a certificate, and get job-ready with guidance from top instructors.
             </p>
           </motion.div>
         </div>
@@ -93,7 +109,9 @@ function CategoryBrowse() {
         {categoryCourses.length === 0 ? (
           <div className="text-center py-24 bg-surface/50 rounded-2xl border border-border">
             <h3 className="text-lg font-semibold mb-2">No specific courses found yet.</h3>
-            <p className="text-muted-foreground">We are constantly adding new programs. Check back soon!</p>
+            <p className="text-muted-foreground">
+              We are constantly adding new programs. Check back soon!
+            </p>
             <Button asChild className="mt-6">
               <Link to="/courses">View All Courses</Link>
             </Button>
@@ -112,7 +130,10 @@ function CategoryBrowse() {
               >
                 <div>
                   <div className="flex items-start justify-between mb-4">
-                    <Badge variant="outline" className={`border-${course.accent}-500/30 text-${course.accent}-500 bg-${course.accent}-500/10`}>
+                    <Badge
+                      variant="outline"
+                      className={`border-${course.accent}-500/30 text-${course.accent}-500 bg-${course.accent}-500/10`}
+                    >
                       {course.credentialType || "Professional Certificate"}
                     </Badge>
                     <span className="flex items-center text-xs font-semibold text-amber-500">
@@ -124,12 +145,17 @@ function CategoryBrowse() {
                     {course.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Offered by <span className="font-semibold text-foreground/80">{course.instructor}</span>
+                    Offered by{" "}
+                    <span className="font-semibold text-foreground/80">{course.instructor}</span>
                   </p>
-                  
+
                   <div className="flex items-center gap-3 text-xs text-muted-foreground mb-6">
-                    <span className="flex items-center"><Clock className="mr-1 h-3.5 w-3.5" /> {course.duration}</span>
-                    <span className="flex items-center"><Trophy className="mr-1 h-3.5 w-3.5" /> {course.level}</span>
+                    <span className="flex items-center">
+                      <Clock className="mr-1 h-3.5 w-3.5" /> {course.duration}
+                    </span>
+                    <span className="flex items-center">
+                      <Trophy className="mr-1 h-3.5 w-3.5" /> {course.level}
+                    </span>
                   </div>
                 </div>
 
@@ -146,7 +172,10 @@ function CategoryBrowse() {
         )}
       </Section>
 
-      <CtaBand title="Not sure where to start?" description="Chat with an admissions counselor to map out your career path." />
+      <CtaBand
+        title="Not sure where to start?"
+        description="Chat with an admissions counselor to map out your career path."
+      />
     </div>
   );
 }

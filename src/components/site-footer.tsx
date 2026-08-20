@@ -63,9 +63,7 @@ export function SiteFooter() {
                 className="h-10 w-auto max-w-[180px] object-contain"
               />
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-              {site.tagline}
-            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">{site.tagline}</p>
 
             {/* Contact details - purely email support */}
             <div className="space-y-2.5 text-sm text-muted-foreground">
@@ -97,12 +95,17 @@ export function SiteFooter() {
 
           {/* Learning Areas */}
           <div>
-            <h2 className="font-display text-sm font-semibold text-foreground mb-4">Learning Areas</h2>
+            <h2 className="font-display text-sm font-semibold text-foreground mb-4">
+              Learning Areas
+            </h2>
             <ul className="space-y-2.5 text-sm">
               {courseCategories.map((category) => (
                 <li key={category.name}>
                   <Link
-                    to="/courses"
+                    to="/browse/$category"
+                    params={{
+                      category: category.name.toLowerCase().replace(/ & /g, "-").replace(/ /g, "-"),
+                    }}
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {category.name}
@@ -168,15 +171,15 @@ export function SiteFooter() {
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             <span>CIN: U80904AP2016PTC097xxx</span>
             <span>GST: 37AXXXXX1234X1ZX</span>
-            <a href="/privacy" className="hover:text-foreground transition-colors">
+            <Link to="/privacy" className="hover:text-foreground transition-colors">
               Privacy Policy
-            </a>
-            <a href="/terms" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/terms" className="hover:text-foreground transition-colors">
               Terms of Service
-            </a>
-            <a href="/refund" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/refund" className="hover:text-foreground transition-colors">
               Refund Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -53,22 +53,27 @@ export function SiteHeader() {
 
   const exploreCategories = [
     {
-      name: "Software & Cloud",
+      name: "Software Development",
       icon: Cpu,
-      courses: courses.filter((c) => c.category === "Software Development" || c.category === "Cloud & DevOps"),
+      courses: courses.filter((c) => c.category === "Software Development"),
     },
     {
-      name: "Data, AI & ML",
+      name: "Data & AI",
       icon: Database,
       courses: courses.filter((c) => c.category === "Data & AI"),
     },
     {
-      name: "Testing & Quality",
+      name: "Cloud & DevOps",
+      icon: Globe,
+      courses: courses.filter((c) => c.category === "Cloud & DevOps"),
+    },
+    {
+      name: "Testing",
       icon: ShieldCheck,
       courses: courses.filter((c) => c.category === "Testing"),
     },
     {
-      name: "Design & Product",
+      name: "UI/UX & Design",
       icon: Compass,
       courses: courses.filter((c) => c.category === "UI/UX & Design"),
     },
@@ -101,14 +106,25 @@ export function SiteHeader() {
               className="flex items-center gap-1.5 rounded-md bg-primary hover:bg-primary/90 px-4 py-2 text-sm font-semibold text-white transition-all shadow-sm"
             >
               <span>Explore</span>
-              <ChevronDown className={cn("h-4 w-4 text-white/80 transition-transform", exploreOpen && "rotate-180")} />
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 text-white/80 transition-transform",
+                  exploreOpen && "rotate-180",
+                )}
+              />
             </button>
 
             {exploreOpen && (
-              <div className="absolute left-0 top-full mt-2 w-[520px] rounded-2xl border border-border bg-popover p-4 shadow-2xl backdrop-blur-2xl z-50 grid grid-cols-2 gap-3 animate-in fade-in zoom-in-95">
+              <div className="absolute left-0 top-full mt-2 w-[680px] rounded-2xl border border-border bg-popover p-4 shadow-2xl backdrop-blur-2xl z-50 grid grid-cols-3 gap-3 animate-in fade-in zoom-in-95">
                 {exploreCategories.map((cat) => (
                   <div key={cat.name} className="space-y-1.5">
-                    <Link to="/browse/$category" params={{ category: cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-') }} className="flex items-center gap-1.5 text-xs font-extrabold text-primary border-b border-border/60 pb-1 hover:underline">
+                    <Link
+                      to="/browse/$category"
+                      params={{
+                        category: cat.name.toLowerCase().replace(/ & /g, "-").replace(/ /g, "-"),
+                      }}
+                      className="flex items-center gap-1.5 text-xs font-extrabold text-primary border-b border-border/60 pb-1 hover:underline"
+                    >
                       <cat.icon className="h-3.5 w-3.5" />
                       <span>{cat.name}</span>
                     </Link>
@@ -128,7 +144,7 @@ export function SiteHeader() {
                   </div>
                 ))}
 
-                <div className="col-span-2 border-t border-border pt-2 flex items-center justify-between text-[11px]">
+                <div className="col-span-3 border-t border-border pt-2 flex items-center justify-between text-[11px]">
                   <span className="text-muted-foreground">Accredited Career Programs</span>
                   <Link to="/courses" className="font-bold text-primary hover:underline">
                     View All Tracks ({courses.length}) →
@@ -153,24 +169,15 @@ export function SiteHeader() {
 
           {/* Main Navigation Links */}
           <nav aria-label="Primary Navigation" className="hidden items-center gap-1 xl:flex">
-            <Link
-              to="/courses"
-              className="rounded-md px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground"
-            >
-              Courses
-            </Link>
-            <Link
-              to="/live-batches"
-              className="rounded-md px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground"
-            >
-              Live batches
-            </Link>
-            <Link
-              to="/verify"
-              className="rounded-md px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground"
-            >
-              Verify
-            </Link>
+            {nav.slice(0, 6).map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="rounded-md px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
@@ -238,7 +245,7 @@ export function SiteHeader() {
                     "text-[10px] uppercase font-mono px-1.5 py-0",
                     user.role === "admin" && "border-amber-400/60 text-amber-400",
                     user.role === "instructor" && "border-sky-400/60 text-sky-400",
-                    user.role === "student" && "border-primary/60 text-primary",
+                    user.role === "learner" && "border-primary/60 text-primary",
                   )}
                 >
                   {user.role}
@@ -254,7 +261,12 @@ export function SiteHeader() {
 
           {/* Student Dashboard link for logged-in users */}
           {isAuthenticated && (
-            <Button asChild variant="hero" size="sm" className="hidden lg:flex gap-1.5 text-xs font-bold">
+            <Button
+              asChild
+              variant="hero"
+              size="sm"
+              className="hidden lg:flex gap-1.5 text-xs font-bold"
+            >
               <Link to="/student-dashboard">
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 <span>Dashboard</span>

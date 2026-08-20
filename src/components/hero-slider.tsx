@@ -51,7 +51,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Architect high-throughput enterprise backend systems, event-driven Kafka pipelines, secure REST APIs, and full-scale AWS cloud infrastructure with industry mentors.",
     image:
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "java-full-stack",
+    courseSlug: "java-full-stack-development",
     salaryRange: "₹8.5 - ₹18 LPA",
     duration: "16 Weeks",
     mode: "Live Online & Classroom",
@@ -69,7 +69,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "From Python fundamentals to fine-tuning LLMs, building retrieval-augmented generation (RAG) systems, vector databases, and multi-agent workflows with LangChain & LlamaIndex.",
     image:
       "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "python-full-stack",
+    courseSlug: "python-full-stack-and-generative-ai",
     salaryRange: "₹10.0 - ₹24 LPA",
     duration: "14 Weeks",
     mode: "Live Instructor-Led",
@@ -91,7 +91,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Master statistical modeling, predictive algorithms, business intelligence with Tableau, automated ETL pipelines, and scalable distributed Spark processing.",
     image:
       "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "data-science",
+    courseSlug: "data-science-and-machine-learning",
     salaryRange: "₹9.0 - ₹20 LPA",
     duration: "16 Weeks",
     mode: "Hybrid & Weekend Cohorts",
@@ -113,7 +113,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Automate end-to-end delivery pipelines with Terraform IaC, multi-tenant Kubernetes clusters, ArgoCD GitOps, and 24x7 Prometheus/Grafana observability.",
     image:
       "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "aws-devops",
+    courseSlug: "aws-cloud-and-devops",
     salaryRange: "₹9.5 - ₹22 LPA",
     duration: "14 Weeks",
     mode: "Live Online Hands-On",
@@ -135,7 +135,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Full-stack web engineering from high-performance React client architectures, Next.js App Router, GraphQL APIs, and NoSQL databases to production edge deployments.",
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "react-fullstack",
+    courseSlug: "react-and-nextjs-frontend-development",
     salaryRange: "₹7.5 - ₹16 LPA",
     duration: "12 Weeks",
     mode: "Flexible & Interactive",
@@ -157,7 +157,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Master end-to-end product design from user discovery interviews, wireframing, component-driven Figma design tokens, and interactive micro-animations to design-to-code handoff.",
     image:
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "ui-ux-design",
+    courseSlug: "ui-ux-product-design",
     salaryRange: "₹7.0 - ₹15 LPA",
     duration: "10 Weeks",
     mode: "Studio & Portfolio Led",
@@ -179,7 +179,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Elevate beyond manual testing to build robust test frameworks using Playwright, Selenium WebDriver, Cypress, API testing with RestAssured, and CI test pipelines.",
     image:
       "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "software-testing",
+    courseSlug: "selenium-and-api-testing-automation",
     salaryRange: "₹6.5 - ₹14 LPA",
     duration: "12 Weeks",
     mode: "Live Practical Sessions",
@@ -201,7 +201,7 @@ export const HERO_SLIDES: HeroSlide[] = [
       "Hands-on threat intelligence, SIEM operations with Splunk, network forensics with Wireshark, ethical hacking, vulnerability assessments, and SOC incident response.",
     image:
       "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&auto=format&fit=crop&q=90",
-    courseSlug: "cyber-security",
+    courseSlug: "cyber-security-and-ethical-hacking",
     salaryRange: "₹8.0 - ₹19 LPA",
     duration: "14 Weeks",
     mode: "Virtual Cyber Range",
@@ -317,7 +317,10 @@ export function HeroSlider() {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               {current.category}
             </span>
-            <Badge variant="outline" className="border-amber-400/50 bg-amber-400/15 text-amber-300 text-xs font-bold backdrop-blur-md">
+            <Badge
+              variant="outline"
+              className="border-amber-400/50 bg-amber-400/15 text-amber-300 text-xs font-bold backdrop-blur-md"
+            >
               {current.badge}
             </Badge>
           </div>
@@ -371,12 +374,16 @@ export function HeroSlider() {
               <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2 text-xs sm:text-sm text-white/90">
                 <div className="flex items-center gap-1.5 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 backdrop-blur-md">
                   <TrendingUp className="h-4 w-4 text-emerald-400" />
-                  <span>Salary: <strong className="text-white font-bold">{current.salaryRange}</strong></span>
+                  <span>
+                    Salary: <strong className="text-white font-bold">{current.salaryRange}</strong>
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 backdrop-blur-md">
                   <Clock className="h-4 w-4 text-sky-400" />
-                  <span>Duration: <strong className="text-white font-bold">{current.duration}</strong></span>
+                  <span>
+                    Duration: <strong className="text-white font-bold">{current.duration}</strong>
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 backdrop-blur-md">
@@ -436,7 +443,9 @@ export function HeroSlider() {
                     className="h-7 w-7 rounded-lg object-cover border border-white/20"
                   />
                   <div className="hidden md:block text-left">
-                    <p className={`text-xs font-extrabold ${isActive ? "text-white" : "text-white/80"}`}>
+                    <p
+                      className={`text-xs font-extrabold ${isActive ? "text-white" : "text-white/80"}`}
+                    >
                       {slide.category}
                     </p>
                     <p className="text-[10px] text-white/60 font-mono">0{slide.id} / 08</p>

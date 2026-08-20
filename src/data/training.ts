@@ -1,6 +1,22 @@
 export type CourseLevel = "Beginner" | "Intermediate" | "Advanced";
 export type LearningMode = "Live online" | "Classroom" | "Hybrid" | "Self-paced";
 
+export type Batch = {
+  id: string;
+  courseSlug: string;
+  name: string;
+  start: string;
+  end: string;
+  days: string;
+  time: string;
+  seats: number;
+  available: number;
+  mode: string;
+  instructor: string;
+  status: string;
+  price: string;
+};
+
 export type Lesson = {
   title: string;
   duration: string;
@@ -100,6 +116,133 @@ export const courseCategories = [
   { name: "Digital & Business", count: 4, tone: "green" },
 ] as const;
 
+export const roles = [
+  { name: "Data Analyst", icon: "BarChart3", courseCount: 4, color: "blue" },
+  { name: "Project Manager", icon: "ClipboardList", courseCount: 3, color: "green" },
+  { name: "Cyber Security Analyst", icon: "ShieldCheck", courseCount: 3, color: "red" },
+  { name: "Data Scientist", icon: "BrainCircuit", courseCount: 5, color: "violet" },
+  { name: "Business Intelligence Analyst", icon: "PieChart", courseCount: 3, color: "amber" },
+  { name: "Digital Marketing Specialist", icon: "Megaphone", courseCount: 4, color: "orange" },
+  { name: "UI / UX Designer", icon: "Palette", courseCount: 4, color: "pink" },
+  { name: "Machine Learning Engineer", icon: "Cpu", courseCount: 5, color: "cyan" },
+  { name: "Social Media Specialist", icon: "Share2", courseCount: 2, color: "indigo" },
+  { name: "Computer Support Specialist", icon: "MonitorCheck", courseCount: 3, color: "teal" },
+] as const;
+
+export const exploreCategories = [
+  { name: "Artificial Intelligence", icon: "BrainCircuit", courseCount: 12, color: "violet" },
+  { name: "Business", icon: "Briefcase", courseCount: 9, color: "green" },
+  { name: "Data Science", icon: "BarChart3", courseCount: 8, color: "blue" },
+  { name: "Information Technology", icon: "Server", courseCount: 10, color: "cyan" },
+  { name: "Computer Science", icon: "Code2", courseCount: 14, color: "indigo" },
+  { name: "Healthcare", icon: "HeartPulse", courseCount: 4, color: "rose" },
+  { name: "Physical Science and Engineering", icon: "Atom", courseCount: 5, color: "amber" },
+  { name: "Personal Development", icon: "Rocket", courseCount: 6, color: "orange" },
+  { name: "Social Sciences", icon: "Users", courseCount: 3, color: "teal" },
+  { name: "Language Learning", icon: "Languages", courseCount: 2, color: "pink" },
+  { name: "Arts and Humanities", icon: "Paintbrush", courseCount: 3, color: "fuchsia" },
+] as const;
+
+export const trendingSkills = [
+  { name: "Python", courseCount: 18, color: "blue" },
+  { name: "Artificial Intelligence", courseCount: 12, color: "violet" },
+  { name: "Excel", courseCount: 8, color: "green" },
+  { name: "Machine Learning", courseCount: 10, color: "cyan" },
+  { name: "SQL", courseCount: 14, color: "amber" },
+  { name: "Project Management", courseCount: 7, color: "orange" },
+  { name: "Power BI", courseCount: 5, color: "yellow" },
+  { name: "Marketing", courseCount: 6, color: "pink" },
+] as const;
+
+export const professionalCertificates = [
+  {
+    name: "Business",
+    icon: "Briefcase",
+    certificates: [
+      "Google Project Management",
+      "Business Analytics",
+      "Digital Marketing",
+      "Agile Project Management",
+    ],
+  },
+  {
+    name: "Computer Science",
+    icon: "Monitor",
+    certificates: [
+      "Google IT Support",
+      "Full Stack Web Development",
+      "Cybersecurity",
+      "IT Automation with Python",
+    ],
+  },
+  {
+    name: "Data Science",
+    icon: "BarChart3",
+    certificates: [
+      "Google Data Analytics",
+      "IBM Data Science",
+      "Advanced Data Science",
+      "Data Engineering",
+    ],
+  },
+  {
+    name: "Information Technology",
+    icon: "Server",
+    certificates: [
+      "Google IT Support",
+      "AWS Cloud Solutions",
+      "System Administration",
+      "Network Engineering",
+    ],
+  },
+] as const;
+
+export const degreePrograms = [
+  {
+    category: "Bachelor's Degrees",
+    degrees: [
+      "B.Sc. Computer Science",
+      "BBA Digital Marketing",
+      "B.Sc. Data Science",
+      "B.Tech Information Technology",
+    ],
+  },
+  {
+    category: "Master's Degrees",
+    degrees: [
+      "M.Sc. Artificial Intelligence",
+      "MBA Business Analytics",
+      "M.Sc. Data Science",
+      "M.Tech Cloud Computing",
+    ],
+  },
+  {
+    category: "University Certificates",
+    degrees: [
+      "Data Science Professional Certificate",
+      "AI & Machine Learning Certificate",
+      "Cloud Architecture Certificate",
+      "Cybersecurity Certificate",
+    ],
+  },
+] as const;
+
+export const certificationExams = [
+  {
+    name: "AWS Solutions Architect",
+    provider: "Amazon Web Services",
+    code: "SAA-C03",
+    color: "amber",
+  },
+  { name: "Google Cloud Professional", provider: "Google Cloud", code: "PCA", color: "blue" },
+  { name: "Certified Kubernetes Admin", provider: "CNCF", code: "CKA", color: "violet" },
+  { name: "PMP Certification", provider: "PMI", code: "PMP", color: "green" },
+  { name: "CompTIA Security+", provider: "CompTIA", code: "SY0-701", color: "red" },
+  { name: "Microsoft Azure Fundamentals", provider: "Microsoft", code: "AZ-900", color: "cyan" },
+  { name: "TensorFlow Developer Certificate", provider: "Google", code: "TFDev", color: "orange" },
+  { name: "Certified Scrum Master", provider: "Scrum Alliance", code: "CSM", color: "teal" },
+] as const;
+
 export const courses: Course[] = [
   {
     slug: "java-full-stack-development",
@@ -112,11 +255,35 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹48,000",
     accent: "cyan",
-    summary: "Build production-grade full-stack applications with Java 21, Spring Boot 3, REST APIs, React 18, and deploy on AWS Cloud with enterprise-level DevOps practices.",
-    overview: "This comprehensive program is designed for aspiring full-stack engineers who want to master the complete Java ecosystem. You'll learn from industry practitioners who have built scalable systems at companies like TCS, Infosys, Wipro, and startups. The curriculum follows the same rigorous standards used by top software firms, with weekly live sessions, code reviews, and real-world capstone projects.",
-    tools: ["Java 21","Spring Boot 3","PostgreSQL","React 18","TypeScript","Docker","AWS","GitHub Actions","Redis","Kafka"],
-    prerequisites: ["Basic programming fundamentals (any language)","Understanding of HTML and CSS","Familiarity with command line tools","A laptop with minimum 8GB RAM"],
-    outcomes: ["Land a Full Stack Java Developer role (avg. ₹6-12 LPA fresher)","Build a portfolio with 5+ production-level projects","Receive placement support with 200+ partner companies","Get a verified GuideSoft IT Professional Certificate","Access alumni network of 15,000+ placed developers"],
+    summary:
+      "Build production-grade full-stack applications with Java 21, Spring Boot 3, REST APIs, React 18, and deploy on AWS Cloud with enterprise-level DevOps practices.",
+    overview:
+      "This comprehensive program is designed for aspiring full-stack engineers who want to master the complete Java ecosystem. You'll learn from industry practitioners who have built scalable systems at companies like TCS, Infosys, Wipro, and startups. The curriculum follows the same rigorous standards used by top software firms, with weekly live sessions, code reviews, and real-world capstone projects.",
+    tools: [
+      "Java 21",
+      "Spring Boot 3",
+      "PostgreSQL",
+      "React 18",
+      "TypeScript",
+      "Docker",
+      "AWS",
+      "GitHub Actions",
+      "Redis",
+      "Kafka",
+    ],
+    prerequisites: [
+      "Basic programming fundamentals (any language)",
+      "Understanding of HTML and CSS",
+      "Familiarity with command line tools",
+      "A laptop with minimum 8GB RAM",
+    ],
+    outcomes: [
+      "Land a Full Stack Java Developer role (avg. ₹6-12 LPA fresher)",
+      "Build a portfolio with 5+ production-level projects",
+      "Receive placement support with 200+ partner companies",
+      "Get a verified GuideSoft IT Professional Certificate",
+      "Access alumni network of 15,000+ placed developers",
+    ],
     instructor: "Rajesh Kumar Sharma",
     instructorProfile: {
       name: "Rajesh Kumar Sharma",
@@ -126,17 +293,29 @@ export const courses: Course[] = [
       bio: "Rajesh Kumar Sharma is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.8,
     reviewsCount: 3847,
     enrolledCount: "18,500+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
   },
   {
     slug: "python-full-stack-and-generative-ai",
@@ -149,11 +328,35 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹55,000",
     accent: "violet",
-    summary: "Master Python from fundamentals to GenAI: build RAG pipelines, fine-tune LLMs, deploy production AI applications, and engineer autonomous AI agents using LangChain, LlamaIndex, and FastAPI.",
-    overview: "The most comprehensive Python-to-GenAI program in India, designed for the era of AI-first software. You'll master Python engineering, data science fundamentals, and cutting-edge generative AI techniques. By the end, you'll have built production-ready AI applications including a personal LLM assistant, RAG document system, and autonomous agent.",
-    tools: ["Python 3.12","LangChain","LlamaIndex","PyTorch","FastAPI","Pinecone","AWS Lambda","OpenAI API","Hugging Face","Docker"],
-    prerequisites: ["Basic programming knowledge (any language)","High school level mathematics","Curiosity about AI and machine learning","Laptop with 16GB RAM recommended for local LLM inference"],
-    outcomes: ["Land AI/ML Engineer roles (avg. ₹12-25 LPA)","Build production GenAI applications and agents","Work with cutting-edge LLM technologies","Get verified as a GuideSoft Certified AI Engineer","Access exclusive GenAI job placement network"],
+    summary:
+      "Master Python from fundamentals to GenAI: build RAG pipelines, fine-tune LLMs, deploy production AI applications, and engineer autonomous AI agents using LangChain, LlamaIndex, and FastAPI.",
+    overview:
+      "The most comprehensive Python-to-GenAI program in India, designed for the era of AI-first software. You'll master Python engineering, data science fundamentals, and cutting-edge generative AI techniques. By the end, you'll have built production-ready AI applications including a personal LLM assistant, RAG document system, and autonomous agent.",
+    tools: [
+      "Python 3.12",
+      "LangChain",
+      "LlamaIndex",
+      "PyTorch",
+      "FastAPI",
+      "Pinecone",
+      "AWS Lambda",
+      "OpenAI API",
+      "Hugging Face",
+      "Docker",
+    ],
+    prerequisites: [
+      "Basic programming knowledge (any language)",
+      "High school level mathematics",
+      "Curiosity about AI and machine learning",
+      "Laptop with 16GB RAM recommended for local LLM inference",
+    ],
+    outcomes: [
+      "Land AI/ML Engineer roles (avg. ₹12-25 LPA)",
+      "Build production GenAI applications and agents",
+      "Work with cutting-edge LLM technologies",
+      "Get verified as a GuideSoft Certified AI Engineer",
+      "Access exclusive GenAI job placement network",
+    ],
     instructor: "Dr. Kavitha Subramaniam",
     instructorProfile: {
       name: "Dr. Kavitha Subramaniam",
@@ -163,17 +366,29 @@ export const courses: Course[] = [
       bio: "Dr. Kavitha Subramaniam is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.9,
     reviewsCount: 2943,
     enrolledCount: "14,200+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
   },
   {
     slug: "aws-cloud-and-devops",
@@ -186,11 +401,33 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹42,000",
     accent: "lime",
-    summary: "Achieve AWS certification readiness while mastering real-world DevOps: Terraform IaC, Kubernetes orchestration, CI/CD pipelines, cloud security, and cost optimization for enterprise workloads.",
-    overview: "The most in-demand skill combination in the Indian IT market: AWS Cloud + DevOps Engineering. This program combines certification preparation (AWS SAA-C03, AWS-DVA-C02) with hands-on lab experience building and managing production cloud infrastructure. You'll work on real enterprise scenarios with 40+ AWS services.",
-    tools: ["AWS","Terraform","Kubernetes","Docker","GitHub Actions","Jenkins","Ansible","Python","Bash","Prometheus"],
-    prerequisites: ["Basic Linux/command line familiarity","Understanding of networking concepts (TCP/IP, DNS, HTTP)","Any programming experience helpful but not mandatory"],
-    outcomes: ["Pass AWS Solutions Architect Associate (SAA-C03) exam","Land Cloud/DevOps Engineer roles (avg. ₹8-18 LPA)","Build a cloud portfolio with enterprise-grade projects","Get GuideSoft Certified Cloud & DevOps Engineer credential"],
+    summary:
+      "Achieve AWS certification readiness while mastering real-world DevOps: Terraform IaC, Kubernetes orchestration, CI/CD pipelines, cloud security, and cost optimization for enterprise workloads.",
+    overview:
+      "The most in-demand skill combination in the Indian IT market: AWS Cloud + DevOps Engineering. This program combines certification preparation (AWS SAA-C03, AWS-DVA-C02) with hands-on lab experience building and managing production cloud infrastructure. You'll work on real enterprise scenarios with 40+ AWS services.",
+    tools: [
+      "AWS",
+      "Terraform",
+      "Kubernetes",
+      "Docker",
+      "GitHub Actions",
+      "Jenkins",
+      "Ansible",
+      "Python",
+      "Bash",
+      "Prometheus",
+    ],
+    prerequisites: [
+      "Basic Linux/command line familiarity",
+      "Understanding of networking concepts (TCP/IP, DNS, HTTP)",
+      "Any programming experience helpful but not mandatory",
+    ],
+    outcomes: [
+      "Pass AWS Solutions Architect Associate (SAA-C03) exam",
+      "Land Cloud/DevOps Engineer roles (avg. ₹8-18 LPA)",
+      "Build a cloud portfolio with enterprise-grade projects",
+      "Get GuideSoft Certified Cloud & DevOps Engineer credential",
+    ],
     instructor: "Ramana Murthy Vangala",
     instructorProfile: {
       name: "Ramana Murthy Vangala",
@@ -200,17 +437,29 @@ export const courses: Course[] = [
       bio: "Ramana Murthy Vangala is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.8,
     reviewsCount: 2156,
     enrolledCount: "11,800+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
   },
   {
     slug: "data-science-and-machine-learning",
@@ -223,11 +472,33 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹45,000",
     accent: "amber",
-    summary: "Go from zero to Data Scientist: Python, SQL, statistics, ML algorithms, deep learning, NLP, and deploying models to production — with real business datasets from Indian industries.",
-    overview: "India's most comprehensive Data Science bootcamp, taught by practitioners who've built data products at Flipkart, Ola, and HDFC Bank. You'll work with real datasets from e-commerce, fintech, and healthcare sectors, and learn to communicate data insights to business stakeholders.",
-    tools: ["Python","Pandas","scikit-learn","TensorFlow","SQL","Tableau","Spark","FastAPI","Streamlit","Apache Airflow"],
-    prerequisites: ["No prior programming experience required","Basic algebra and statistics helpful","Eagerness to work with data"],
-    outcomes: ["Land Data Analyst or Junior Data Scientist roles (avg. ₹6-14 LPA)","Build a portfolio of 8+ data science projects","Get hands-on experience with Indian industry datasets","Receive GuideSoft Certified Data Scientist credential"],
+    summary:
+      "Go from zero to Data Scientist: Python, SQL, statistics, ML algorithms, deep learning, NLP, and deploying models to production — with real business datasets from Indian industries.",
+    overview:
+      "India's most comprehensive Data Science bootcamp, taught by practitioners who've built data products at Flipkart, Ola, and HDFC Bank. You'll work with real datasets from e-commerce, fintech, and healthcare sectors, and learn to communicate data insights to business stakeholders.",
+    tools: [
+      "Python",
+      "Pandas",
+      "scikit-learn",
+      "TensorFlow",
+      "SQL",
+      "Tableau",
+      "Spark",
+      "FastAPI",
+      "Streamlit",
+      "Apache Airflow",
+    ],
+    prerequisites: [
+      "No prior programming experience required",
+      "Basic algebra and statistics helpful",
+      "Eagerness to work with data",
+    ],
+    outcomes: [
+      "Land Data Analyst or Junior Data Scientist roles (avg. ₹6-14 LPA)",
+      "Build a portfolio of 8+ data science projects",
+      "Get hands-on experience with Indian industry datasets",
+      "Receive GuideSoft Certified Data Scientist credential",
+    ],
     instructor: "Pradeep Ganguly",
     instructorProfile: {
       name: "Pradeep Ganguly",
@@ -237,17 +508,29 @@ export const courses: Course[] = [
       bio: "Pradeep Ganguly is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.7,
     reviewsCount: 3214,
     enrolledCount: "22,400+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
   },
   {
     slug: "selenium-and-api-testing-automation",
@@ -260,11 +543,33 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹38,000",
     accent: "rose",
-    summary: "Become an SDET (Software Development Engineer in Test) — master Selenium WebDriver, RestAssured API testing, Playwright, CI/CD integration, performance testing with JMeter, and build complete test automation frameworks.",
-    overview: "The most comprehensive SDET training program in India, covering the complete modern QA toolkit. You'll learn to build robust test automation frameworks from scratch using industry best practices like Page Object Model, BDD with Cucumber, and integrate them into CI/CD pipelines.",
-    tools: ["Selenium 4","Java","TestNG","RestAssured","Playwright","JMeter","Cucumber","Postman","GitHub Actions","JIRA"],
-    prerequisites: ["Basic Java or Python programming knowledge","Understanding of web technologies (HTML, CSS, HTTP)","Familiarity with software testing concepts"],
-    outcomes: ["Land SDET or QA Automation Engineer roles (avg. ₹5-12 LPA)","Build complete test automation frameworks used in production","Get certified as GuideSoft QA Automation Specialist","Work with the industry's most in-demand testing tools"],
+    summary:
+      "Become an SDET (Software Development Engineer in Test) — master Selenium WebDriver, RestAssured API testing, Playwright, CI/CD integration, performance testing with JMeter, and build complete test automation frameworks.",
+    overview:
+      "The most comprehensive SDET training program in India, covering the complete modern QA toolkit. You'll learn to build robust test automation frameworks from scratch using industry best practices like Page Object Model, BDD with Cucumber, and integrate them into CI/CD pipelines.",
+    tools: [
+      "Selenium 4",
+      "Java",
+      "TestNG",
+      "RestAssured",
+      "Playwright",
+      "JMeter",
+      "Cucumber",
+      "Postman",
+      "GitHub Actions",
+      "JIRA",
+    ],
+    prerequisites: [
+      "Basic Java or Python programming knowledge",
+      "Understanding of web technologies (HTML, CSS, HTTP)",
+      "Familiarity with software testing concepts",
+    ],
+    outcomes: [
+      "Land SDET or QA Automation Engineer roles (avg. ₹5-12 LPA)",
+      "Build complete test automation frameworks used in production",
+      "Get certified as GuideSoft QA Automation Specialist",
+      "Work with the industry's most in-demand testing tools",
+    ],
     instructor: "Narasimha Rao Paluri",
     instructorProfile: {
       name: "Narasimha Rao Paluri",
@@ -274,17 +579,102 @@ export const courses: Course[] = [
       bio: "Narasimha Rao Paluri is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.8,
     reviewsCount: 1892,
     enrolledCount: "9,800+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
+  },
+  {
+    slug: "ui-ux-product-design",
+    title: "UI/UX Product Design",
+    shortTitle: "UI/UX Design",
+    category: "UI/UX & Design",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+    level: "Beginner",
+    duration: "12 weeks",
+    format: "Live online",
+    price: "₹28,000",
+    accent: "violet",
+    summary:
+      "Master user experience research, interface design with Figma, prototyping, design systems, usability testing, and build a professional UX portfolio with real-world case studies.",
+    overview:
+      "The most practical UI/UX design program in India, taught by designers who've shipped products at top Indian startups and enterprises. You'll learn the complete product design process from research to high-fidelity prototypes, with weekly critiques and portfolio reviews.",
+    tools: [
+      "Figma",
+      "Adobe XD",
+      "Miro",
+      "FigJam",
+      "Protopie",
+      "Maze",
+      "Hotjar",
+      "Notion",
+      "Illustrator",
+      "Framer",
+    ],
+    prerequisites: [
+      "No prior design experience required",
+      "A creative mindset and willingness to learn",
+      "Basic computer literacy",
+      "Laptop with Figma installed (free)",
+    ],
+    outcomes: [
+      "Land UI/UX Designer roles (avg. ₹5-10 LPA fresher)",
+      "Build a professional UX portfolio with 4+ case studies",
+      "Master the industry-standard design tool (Figma)",
+      "Get GuideSoft Certified Product Designer credential",
+    ],
+    instructor: "Kavya Thomas",
+    instructorProfile: {
+      name: "Kavya Thomas",
+      role: "Senior Design Lead",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+      bio: "Kavya Thomas is a design leader with over 10 years of experience crafting user-centered products. They have mentored hundreds of designers and led design systems at scale.",
+      rating: 4.9,
+      studentsTaught: "8,000+",
+      coursesCount: 2,
+    },
+    rating: 4.9,
+    reviewsCount: 1654,
+    enrolledCount: "9,200+",
+    modules: [
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup Figma and complete first wireframe exercise.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Design a complete mobile app flow from research to prototype.",
+      ),
+      module(
+        "Portfolio & Career Launch",
+        "Building your design portfolio and preparing for interviews.",
+        "Create a polished case study and present it to peers.",
+      ),
+    ],
+    project:
+      "End-to-end UX case study: research, wireframes, prototyping, usability testing, and portfolio presentation.",
   },
   {
     slug: "react-and-nextjs-frontend-development",
@@ -297,11 +687,33 @@ export const courses: Course[] = [
     format: "Live online",
     price: "₹35,000",
     accent: "blue",
-    summary: "Master modern frontend engineering: React 18, Next.js 14, TypeScript, Tailwind CSS, state management, performance optimization, and deploy production applications with Vercel and AWS.",
-    overview: "The definitive React and Next.js program for aspiring frontend engineers. You'll build real-world applications including a SaaS dashboard, e-commerce storefront, and a blog platform — all production-deployed and portfolio-ready.",
-    tools: ["React 18","Next.js 14","TypeScript","Tailwind CSS","Zustand","React Query","Prisma","PostgreSQL","Vercel","Playwright"],
-    prerequisites: ["Understanding of HTML, CSS, and JavaScript basics","Completion of GuideSoft HTML/CSS Fundamentals (or equivalent)","A laptop capable of running Node.js 18+"],
-    outcomes: ["Land Frontend Developer or React Engineer roles (avg. ₹5-10 LPA)","Build 5+ production-deployed portfolio projects","Master the most in-demand frontend stack in the Indian job market","Get GuideSoft Certified Frontend Developer credential"],
+    summary:
+      "Master modern frontend engineering: React 18, Next.js 14, TypeScript, Tailwind CSS, state management, performance optimization, and deploy production applications with Vercel and AWS.",
+    overview:
+      "The definitive React and Next.js program for aspiring frontend engineers. You'll build real-world applications including a SaaS dashboard, e-commerce storefront, and a blog platform — all production-deployed and portfolio-ready.",
+    tools: [
+      "React 18",
+      "Next.js 14",
+      "TypeScript",
+      "Tailwind CSS",
+      "Zustand",
+      "React Query",
+      "Prisma",
+      "PostgreSQL",
+      "Vercel",
+      "Playwright",
+    ],
+    prerequisites: [
+      "Understanding of HTML, CSS, and JavaScript basics",
+      "Completion of GuideSoft HTML/CSS Fundamentals (or equivalent)",
+      "A laptop capable of running Node.js 18+",
+    ],
+    outcomes: [
+      "Land Frontend Developer or React Engineer roles (avg. ₹5-10 LPA)",
+      "Build 5+ production-deployed portfolio projects",
+      "Master the most in-demand frontend stack in the Indian job market",
+      "Get GuideSoft Certified Frontend Developer credential",
+    ],
     instructor: "Swathi Rao Pulluru",
     instructorProfile: {
       name: "Swathi Rao Pulluru",
@@ -311,17 +723,102 @@ export const courses: Course[] = [
       bio: "Swathi Rao Pulluru is a renowned expert with over 10 years of experience in building scalable enterprise systems. They have trained thousands of students and consulted for Fortune 500 companies.",
       rating: 4.8,
       studentsTaught: "15,000+",
-      coursesCount: 3
+      coursesCount: 3,
     },
     rating: 4.8,
     reviewsCount: 2876,
     enrolledCount: "16,300+",
     modules: [
-      module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
-      module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
-      module("Architecture & Scale", "Building for production, performance and security.", "Deploy the application to a cloud provider.")
+      module(
+        "Foundation & Core Concepts",
+        "Understanding the basic principles and environment setup.",
+        "Setup local environment and run first program.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced techniques and industry standard patterns.",
+        "Refactor previous code to use advanced patterns.",
+      ),
+      module(
+        "Architecture & Scale",
+        "Building for production, performance and security.",
+        "Deploy the application to a cloud provider.",
+      ),
     ],
-    project: "Comprehensive capstone project involving all skills learned, deployed to production."
+    project: "Comprehensive capstone project involving all skills learned, deployed to production.",
+  },
+  {
+    slug: "cyber-security-and-ethical-hacking",
+    title: "Cyber Security, Ethical Hacking & SOC Defense",
+    shortTitle: "Cyber Security",
+    category: "Information Technology",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
+    level: "Intermediate",
+    duration: "14 weeks",
+    format: "Live online",
+    price: "₹42,000",
+    accent: "red",
+    summary:
+      "Master cybersecurity fundamentals: ethical hacking, SIEM operations with Splunk, network forensics, vulnerability assessments, and SOC incident response with hands-on cyber range labs.",
+    overview:
+      "The most practical cybersecurity training program in India, designed for aspiring SOC analysts and security engineers. You'll work on real threat scenarios in virtual cyber ranges and learn to defend enterprise infrastructure against advanced persistent threats.",
+    tools: [
+      "Splunk SIEM",
+      "Wireshark",
+      "Burp Suite",
+      "Kali Linux",
+      "Metasploit",
+      "Nmap",
+      "OWASP ZAP",
+      "Snort",
+      "Volatility",
+      "Ghidra",
+    ],
+    prerequisites: [
+      "Basic networking knowledge (TCP/IP, DNS, HTTP)",
+      "Familiarity with Linux command line",
+      "Understanding of operating systems",
+      "Laptop with 8GB RAM minimum",
+    ],
+    outcomes: [
+      "Land SOC Analyst or Cybersecurity Engineer roles (avg. ₹6-15 LPA)",
+      "Master industry-standard security tools and frameworks",
+      "Get GuideSoft Certified Cybersecurity Professional credential",
+      "Build a portfolio of security audit reports and incident response playbooks",
+    ],
+    instructor: "Arjun Nair",
+    instructorProfile: {
+      name: "Arjun Nair",
+      role: "Security Engineering Lead",
+      organization: "GuideSoft IT",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+      bio: "Arjun Nair is a cybersecurity expert with over 10 years of experience in enterprise security operations and threat intelligence.",
+      rating: 4.8,
+      studentsTaught: "6,000+",
+      coursesCount: 2,
+    },
+    rating: 4.7,
+    reviewsCount: 1432,
+    enrolledCount: "7,800+",
+    modules: [
+      module(
+        "Foundation & Core Concepts",
+        "Understanding security fundamentals and setting up a safe lab environment.",
+        "Configure Kali Linux and complete first vulnerability scan.",
+      ),
+      module(
+        "Deep Dive & Best Practices",
+        "Advanced penetration testing and SIEM operations.",
+        "Conduct a full penetration test and create a security report.",
+      ),
+      module(
+        "SOC Operations & Career Launch",
+        "Building incident response skills and security portfolio.",
+        "Complete a cyber range exercise and present findings.",
+      ),
+    ],
+    project:
+      "Enterprise SOC threat hunting simulation with incident response playbook and security audit report.",
   },
 ];
 
@@ -343,7 +840,7 @@ export const batches = [
   },
   {
     id: "python-sep-26",
-    courseSlug: "python-full-stack-development",
+    courseSlug: "python-full-stack-and-generative-ai",
     name: "Python Full Stack · Weekend Cohort",
     start: "05 Sep 2026",
     end: "06 Feb 2027",
@@ -358,7 +855,7 @@ export const batches = [
   },
   {
     id: "data-sep-26",
-    courseSlug: "data-science-with-python",
+    courseSlug: "data-science-and-machine-learning",
     name: "Data Science · Applied Track",
     start: "12 Sep 2026",
     end: "16 Jan 2027",
@@ -373,7 +870,7 @@ export const batches = [
   },
   {
     id: "aws-oct-26",
-    courseSlug: "aws-cloud-devops",
+    courseSlug: "aws-cloud-and-devops",
     name: "AWS Cloud & DevOps · Lab Track",
     start: "03 Oct 2026",
     end: "23 Jan 2027",
@@ -388,7 +885,7 @@ export const batches = [
   },
   {
     id: "uiux-sep-26",
-    courseSlug: "ui-ux-design",
+    courseSlug: "ui-ux-product-design",
     name: "UI/UX Design · Studio Cohort",
     start: "19 Sep 2026",
     end: "12 Dec 2026",

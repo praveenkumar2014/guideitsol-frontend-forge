@@ -32,7 +32,12 @@ import { CheckoutDialog } from "@/components/checkout-dialog";
 import { CtaBand } from "@/components/cta-band";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Section, SectionHeading } from "@/components/training-ui";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
@@ -43,7 +48,11 @@ export const Route = createFileRoute("/courses/$slug")({
     const course = courses.find((item) => item.slug === params.slug);
     return {
       meta: [
-        { title: course ? `${course.title} Professional Certificate | ${site.name}` : `Course | ${site.name}` },
+        {
+          title: course
+            ? `${course.title} Professional Certificate | ${site.name}`
+            : `Course | ${site.name}`,
+        },
         { name: "description", content: course?.summary ?? "Explore a GUIDESOFT training course." },
       ],
     };
@@ -87,6 +96,7 @@ function CourseDetail() {
           open={checkoutOpen}
           onOpenChange={setCheckoutOpen}
           batch={selectedBatch}
+          courseTitle={course.title}
         />
       )}
 
@@ -96,10 +106,17 @@ function CourseDetail() {
       <section className="border-b border-border/80 bg-surface/50 py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb Bar */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-foreground">Home</Link>
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-xs text-muted-foreground mb-6"
+          >
+            <Link to="/" className="hover:text-foreground">
+              Home
+            </Link>
             <span>/</span>
-            <Link to="/courses" className="hover:text-foreground">Courses</Link>
+            <Link to="/courses" className="hover:text-foreground">
+              Courses
+            </Link>
             <span>/</span>
             <span className="text-primary font-medium">{course.category}</span>
           </nav>
@@ -113,7 +130,10 @@ function CourseDetail() {
                   Professional Certificate
                 </span>
                 <span className="text-xs font-medium text-muted-foreground">
-                  Accredited by <strong className="text-foreground">{course.partnerName || "GuideSoft IT Academic Council"}</strong>
+                  Accredited by{" "}
+                  <strong className="text-foreground">
+                    {course.partnerName || "GuideSoft IT Academic Council"}
+                  </strong>
                 </span>
               </div>
 
@@ -131,17 +151,23 @@ function CourseDetail() {
                 <div className="flex items-center gap-1.5 font-bold text-amber-400">
                   <Star className="h-4 w-4 fill-current" />
                   <span>{rating}</span>
-                  <span className="text-muted-foreground font-normal">({reviewsCount.toLocaleString()} ratings)</span>
+                  <span className="text-muted-foreground font-normal">
+                    ({reviewsCount.toLocaleString()} ratings)
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Users className="h-4 w-4 text-primary" />
-                  <span><strong className="text-foreground">{enrolledCount}</strong> already enrolled</span>
+                  <span>
+                    <strong className="text-foreground">{enrolledCount}</strong> already enrolled
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Clock className="h-4 w-4 text-sky-400" />
-                  <span>{course.duration} · {course.format}</span>
+                  <span>
+                    {course.duration} · {course.format}
+                  </span>
                 </div>
               </div>
 
@@ -152,15 +178,17 @@ function CourseDetail() {
                   size="xl"
                   id="course-enroll-primary-btn"
                   onClick={() => {
-                    if (courseBatches.length > 0) {
-                      handleOpenCheckout(courseBatches[0]);
+                    const firstBatch = courseBatches[0];
+                    if (firstBatch) {
+                      handleOpenCheckout(firstBatch);
                     } else {
                       setEnquiryOpen(true);
                     }
                   }}
                   className="font-bold shadow-xl shadow-primary/20"
                 >
-                  {courseBatches.length > 0 ? "Enroll in Next Batch" : "Enquire for Admission"} <ArrowRight className="h-4 w-4 ml-1.5" />
+                  {courseBatches.length > 0 ? "Enroll in Next Batch" : "Enquire for Admission"}{" "}
+                  <ArrowRight className="h-4 w-4 ml-1.5" />
                 </Button>
 
                 <Button
@@ -188,10 +216,17 @@ function CourseDetail() {
             <aside className="rounded-3xl border border-border bg-card p-7 shadow-xl backdrop-blur-xl lg:sticky lg:top-24">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Tuition Fee</span>
-                  <p className="font-display text-3xl font-extrabold text-foreground mt-0.5">{course.price}</p>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Total Tuition Fee
+                  </span>
+                  <p className="font-display text-3xl font-extrabold text-foreground mt-0.5">
+                    {course.price}
+                  </p>
                 </div>
-                <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/10 text-emerald-400 text-xs font-bold">
+                <Badge
+                  variant="outline"
+                  className="border-emerald-500/40 bg-emerald-500/10 text-emerald-400 text-xs font-bold"
+                >
                   EMI Available
                 </Badge>
               </div>
@@ -207,7 +242,9 @@ function CourseDetail() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Credentials:</span>
-                  <strong className="text-foreground font-semibold">Verified Digital Certificate</strong>
+                  <strong className="text-foreground font-semibold">
+                    Verified Digital Certificate
+                  </strong>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Prerequisites:</span>
@@ -221,8 +258,9 @@ function CourseDetail() {
                   size="lg"
                   className="w-full font-bold shadow-lg shadow-primary/25"
                   onClick={() => {
-                    if (courseBatches.length > 0) {
-                      handleOpenCheckout(courseBatches[0]);
+                    const firstBatch = courseBatches[0];
+                    if (firstBatch) {
+                      handleOpenCheckout(firstBatch);
                     } else {
                       setEnquiryOpen(true);
                     }
@@ -299,8 +337,16 @@ function CourseDetail() {
       <section className="py-14 border-b border-border/80 bg-surface/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <SectionHeading eyebrow="Comprehensive Curriculum" title="Detailed Syllabus Breakdown" />
-            <Button variant="outline" size="sm" onClick={handleDownloadSyllabus} className="self-start border-border">
+            <SectionHeading
+              eyebrow="Comprehensive Curriculum"
+              title="Detailed Syllabus Breakdown"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDownloadSyllabus}
+              className="self-start border-border"
+            >
               <Download className="mr-1.5 h-4 w-4" /> Download PDF Syllabus
             </Button>
           </div>
@@ -319,13 +365,17 @@ function CourseDetail() {
                     </span>
                     <div>
                       <p className="text-sm sm:text-base font-bold text-foreground">{item.title}</p>
-                      <p className="text-xs font-normal text-muted-foreground mt-0.5">{item.duration} · {item.lessons.length} Modules</p>
+                      <p className="text-xs font-normal text-muted-foreground mt-0.5">
+                        {item.duration} · {item.lessons.length} Modules
+                      </p>
                     </div>
                   </div>
                 </AccordionTrigger>
 
                 <AccordionContent className="pt-2 pb-5 space-y-4 border-t border-border/60">
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
 
                   <div className="space-y-2">
                     {item.lessons.map((lesson) => (
@@ -343,12 +393,14 @@ function CourseDetail() {
                   </div>
 
                   <div className="rounded-xl border border-primary/20 bg-primary/5 p-3.5 text-xs text-foreground">
-                    <strong className="text-primary font-bold">Practical Lab Assignment:</strong> {item.assignment}
+                    <strong className="text-primary font-bold">Practical Lab Assignment:</strong>{" "}
+                    {item.assignment}
                   </div>
 
                   {item.project && (
                     <div className="rounded-xl border border-highlight/20 bg-highlight/5 p-3.5 text-xs text-foreground">
-                      <strong className="text-highlight font-bold">Capstone Deliverable:</strong> {item.project}
+                      <strong className="text-highlight font-bold">Capstone Deliverable:</strong>{" "}
+                      {item.project}
                     </div>
                   )}
                 </AccordionContent>
@@ -368,19 +420,30 @@ function CourseDetail() {
           <div className="mt-8 rounded-3xl border border-border bg-surface/50 p-6 sm:p-8 backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-primary/20 font-display text-2xl font-extrabold text-primary border border-primary/30 shadow-lg">
-                {course.instructor.split(" ").map((n) => n[0]).join("")}
+                {course.instructor
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </div>
 
               <div className="space-y-1.5 flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-display text-xl font-bold text-foreground">{course.instructor}</h3>
-                  <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary text-[10px]">
+                  <h3 className="font-display text-xl font-bold text-foreground">
+                    {course.instructor}
+                  </h3>
+                  <Badge
+                    variant="outline"
+                    className="border-primary/40 bg-primary/10 text-primary text-[10px]"
+                  >
                     Verified Lead Instructor
                   </Badge>
                 </div>
-                <p className="text-xs sm:text-sm text-primary font-medium">Principal Architect & Technical Mentor · GuideSoft IT Academic Council</p>
+                <p className="text-xs sm:text-sm text-primary font-medium">
+                  Principal Architect & Technical Mentor · GuideSoft IT Academic Council
+                </p>
                 <p className="text-xs text-muted-foreground leading-relaxed pt-1">
-                  12+ years of enterprise engineering leadership across Tier-1 tech firms. Guided over 8,500+ professionals into high-impact software engineering roles.
+                  12+ years of enterprise engineering leadership across Tier-1 tech firms. Guided
+                  over 8,500+ professionals into high-impact software engineering roles.
                 </p>
               </div>
 
@@ -414,7 +477,9 @@ function CourseDetail() {
             </div>
             <h3 className="text-lg sm:text-xl font-bold text-foreground">{course.project}</h3>
             <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Design, test, and deploy a complete production-grade system with full CI/CD deployment, code reviews, and live architectural walkthroughs that you can showcase to hiring recruiters.
+              Design, test, and deploy a complete production-grade system with full CI/CD
+              deployment, code reviews, and live architectural walkthroughs that you can showcase to
+              hiring recruiters.
             </p>
           </div>
         </div>
@@ -424,20 +489,6 @@ function CourseDetail() {
       <CtaBand
         title={`Ready to Master ${course.title}?`}
         description="Join the next live cohort with hands-on lab sandbox access and dedicated 1-on-1 mentor guidance."
-        primaryAction={{
-          label: "Enrol Online",
-          onClick: () => {
-            if (courseBatches.length > 0) {
-              handleOpenCheckout(courseBatches[0]);
-            } else {
-              setEnquiryOpen(true);
-            }
-          },
-        }}
-        secondaryAction={{
-          label: "Ask a Counsellor",
-          onClick: () => setEnquiryOpen(true),
-        }}
       />
     </div>
   );

@@ -25,7 +25,15 @@ export const Route = createFileRoute("/faq")({
   component: FAQ,
 });
 
-const categories = ["All", "Admissions", "Curriculum", "Placements", "Fees & EMI", "Certificates", "Technical"];
+const categories = [
+  "All",
+  "Admissions",
+  "Curriculum",
+  "Placements",
+  "Fees & EMI",
+  "Certificates",
+  "Technical",
+];
 
 const faqs = [
   {
@@ -144,6 +152,7 @@ function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   const filtered = faqs.filter((f) => {
     const matchCat = activeCategory === "All" || f.category === activeCategory;
@@ -156,6 +165,12 @@ function FAQ() {
 
   return (
     <div className="bg-background text-foreground">
+      <EnquiryDialog
+        open={enquiryOpen}
+        onOpenChange={setEnquiryOpen}
+        defaultCourseSlug="General Enquiry"
+        title="General Enquiry"
+      />
       {/* HERO */}
       <section className="border-b border-border bg-surface/20">
         <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8 text-center">
@@ -167,7 +182,8 @@ function FAQ() {
               Frequently Asked <span className="text-gradient">Questions</span>
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
-              Everything you want to know about GuideSoft IT courses, fees, placements, and certifications — answered honestly.
+              Everything you want to know about GuideSoft IT courses, fees, placements, and
+              certifications — answered honestly.
             </p>
 
             {/* Search */}
@@ -266,11 +282,13 @@ function FAQ() {
             Our counsellors respond within 2 hours (Mon–Sat, 9 AM – 7 PM IST).
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <EnquiryDialog courseName="General Enquiry">
-              <Button id="faq-enquiry-btn" className="rounded-xl">
-                Send an Enquiry
-              </Button>
-            </EnquiryDialog>
+            <Button
+              id="faq-enquiry-btn"
+              className="rounded-xl"
+              onClick={() => setEnquiryOpen(true)}
+            >
+              Send an Enquiry
+            </Button>
             <Button variant="outline" className="rounded-xl" asChild>
               <a href={`mailto:${site.email}`}>Email {site.email}</a>
             </Button>

@@ -23,10 +23,13 @@ import { Route as LiveBatchesRouteImport } from './routes/live-batches'
 import { Route as MobileAppsRouteImport } from './routes/mobile-apps'
 import { Route as PaymentReturnRouteImport } from './routes/payment-return'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as RefundRouteImport } from './routes/refund'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StudentDashboardRouteImport } from './routes/student-dashboard'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WebDevelopmentRouteImport } from './routes/web-development'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as BrowseIndexRouteImport } from './routes/browse/index'
@@ -108,9 +111,19 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundRoute = RefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -126,6 +139,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student-dashboard',
   path: '/student-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WebDevelopmentRoute = WebDevelopmentRouteImport.update({
@@ -195,10 +213,13 @@ export interface FileRoutesByFullPath {
   '/mobile-apps': typeof MobileAppsRoute
   '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
+  '/refund': typeof RefundRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
@@ -225,10 +246,13 @@ export interface FileRoutesByTo {
   '/mobile-apps': typeof MobileAppsRoute
   '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
+  '/refund': typeof RefundRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
@@ -256,10 +280,13 @@ export interface FileRoutesById {
   '/mobile-apps': typeof MobileAppsRoute
   '/payment-return': typeof PaymentReturnRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
+  '/refund': typeof RefundRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
   '/student-dashboard': typeof StudentDashboardRoute
+  '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
@@ -288,10 +315,13 @@ export interface FileRouteTypes {
     | '/mobile-apps'
     | '/payment-return'
     | '/pricing'
+    | '/privacy'
     | '/projects'
+    | '/refund'
     | '/resources'
     | '/services'
     | '/student-dashboard'
+    | '/terms'
     | '/web-development'
     | '/work'
     | '/browse/$category'
@@ -318,10 +348,13 @@ export interface FileRouteTypes {
     | '/mobile-apps'
     | '/payment-return'
     | '/pricing'
+    | '/privacy'
     | '/projects'
+    | '/refund'
     | '/resources'
     | '/services'
     | '/student-dashboard'
+    | '/terms'
     | '/web-development'
     | '/work'
     | '/browse/$category'
@@ -348,10 +381,13 @@ export interface FileRouteTypes {
     | '/mobile-apps'
     | '/payment-return'
     | '/pricing'
+    | '/privacy'
     | '/projects'
+    | '/refund'
     | '/resources'
     | '/services'
     | '/student-dashboard'
+    | '/terms'
     | '/web-development'
     | '/work'
     | '/browse/$category'
@@ -379,10 +415,13 @@ export interface RootRouteChildren {
   MobileAppsRoute: typeof MobileAppsRoute
   PaymentReturnRoute: typeof PaymentReturnRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProjectsRoute: typeof ProjectsRoute
+  RefundRoute: typeof RefundRoute
   ResourcesRoute: typeof ResourcesRoute
   ServicesRoute: typeof ServicesRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  TermsRoute: typeof TermsRoute
   WebDevelopmentRoute: typeof WebDevelopmentRoute
   WorkRoute: typeof WorkRoute
   BrowseCategoryRoute: typeof BrowseCategoryRouteWithChildren
@@ -494,11 +533,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects': {
       id: '/projects'
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund': {
+      id: '/refund'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof RefundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -520,6 +573,13 @@ declare module '@tanstack/react-router' {
       path: '/student-dashboard'
       fullPath: '/student-dashboard'
       preLoaderRoute: typeof StudentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/web-development': {
@@ -622,10 +682,13 @@ const rootRouteChildren: RootRouteChildren = {
   MobileAppsRoute: MobileAppsRoute,
   PaymentReturnRoute: PaymentReturnRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ProjectsRoute: ProjectsRoute,
+  RefundRoute: RefundRoute,
   ResourcesRoute: ResourcesRoute,
   ServicesRoute: ServicesRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  TermsRoute: TermsRoute,
   WebDevelopmentRoute: WebDevelopmentRoute,
   WorkRoute: WorkRoute,
   BrowseCategoryRoute: BrowseCategoryRouteWithChildren,

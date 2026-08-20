@@ -167,7 +167,7 @@ function VerifyCertificate() {
                       Issuing Authority
                     </span>
                     <p className="mt-1 text-sm font-semibold text-foreground">{site.legalName}</p>
-                    <p className="text-xs text-muted-foreground">{site.address}</p>
+                    <p className="text-xs text-muted-foreground">{site.domain}</p>
                   </div>
 
                   <div>
