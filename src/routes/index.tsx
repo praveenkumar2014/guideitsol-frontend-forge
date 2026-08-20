@@ -175,53 +175,53 @@ function Home() {
           {filteredCourses.slice(0, 6).map((course) => (
             <div
               key={course.slug}
-              className="group flex flex-col justify-between rounded-3xl border border-border bg-card p-6 shadow-sm transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:-translate-y-1"
+              className="group flex flex-col justify-between overflow-hidden rounded-md border border-border bg-card shadow-sm hover:shadow-md transition-shadow h-full"
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="border-primary/30 bg-primary/10 text-primary text-[11px] font-bold">
-                    {course.category}
-                  </Badge>
-                  <div className="flex items-center gap-1 text-xs font-bold text-amber-400">
-                    <Star className="h-3.5 w-3.5 fill-current" />
-                    <span>4.9</span>
-                    <span className="text-muted-foreground font-normal text-[10px]">(2.4k)</span>
+                {course.image && (
+                  <div className="h-40 w-full overflow-hidden border-b border-border">
+                    <img src={course.image} alt={course.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                   </div>
-                </div>
+                )}
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80" alt="GuideSoft Logo" className="w-5 h-5 rounded-sm object-cover" />
+                    <span className="text-[11px] font-bold text-foreground">GuideSoft IT</span>
+                  </div>
 
-                <h3 className="mt-4 font-display text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                  <Link to="/courses/$slug" params={{ slug: course.slug }}>
-                    {course.title}
-                  </Link>
-                </h3>
+                  <h3 className="font-bold text-lg text-foreground line-clamp-2 min-h-[56px]">
+                    <Link to="/courses/$slug" params={{ slug: course.slug }} className="hover:underline">
+                      {course.title}
+                    </Link>
+                  </h3>
+                  
+                  <p className="mt-1 text-sm text-muted-foreground">Professional Certificate</p>
 
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2">
-                  {course.summary}
-                </p>
-
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {(course.tools || []).slice(0, 4).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-md border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-foreground"
-                    >
-                      {t}
-                    </span>
-                  ))}
+                  <div className="mt-3 flex flex-wrap gap-1">
+                    {(course.tools || []).slice(0, 3).map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-sm bg-surface px-1.5 py-0.5 text-[10px] font-semibold text-foreground/80"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-border pt-4 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Tuition Fee</span>
-                  <p className="font-display text-lg font-extrabold text-foreground">{course.price}</p>
+              <div className="p-5 pt-0 mt-auto">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-foreground mb-4">
+                  <span className="flex items-center gap-1 text-amber-500">
+                    <Star className="h-3.5 w-3.5 fill-current" />
+                    4.9
+                  </span>
+                  <span className="text-muted-foreground font-normal">(2.4k reviews)</span>
                 </div>
-
-                <Button asChild size="sm" variant="hero" className="font-bold">
-                  <Link to="/courses/$slug" params={{ slug: course.slug }}>
-                    View Program
-                  </Link>
-                </Button>
+                <div className="border-t border-border pt-3">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Tuition</p>
+                  <p className="font-bold text-foreground">{course.price}</p>
+                </div>
               </div>
             </div>
           ))}

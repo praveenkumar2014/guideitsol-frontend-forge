@@ -75,7 +75,7 @@ export function SiteHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-2xl transition-colors duration-200">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background transition-colors duration-200 shadow-sm">
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
       <EnquiryDialog open={enquiryOpen} onOpenChange={setEnquiryOpen} />
       <CourseSearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
@@ -98,11 +98,10 @@ export function SiteHeader() {
               id="header-explore-btn"
               onClick={() => setExploreOpen(!exploreOpen)}
               onBlur={() => setTimeout(() => setExploreOpen(false), 200)}
-              className="flex items-center gap-1.5 rounded-lg border border-border bg-surface/80 px-3 py-1.5 text-xs font-bold text-foreground transition-all hover:border-primary/50 hover:bg-surface"
+              className="flex items-center gap-1.5 rounded-md bg-primary hover:bg-primary/90 px-4 py-2 text-sm font-semibold text-white transition-all shadow-sm"
             >
-              <Compass className="h-4 w-4 text-primary" />
               <span>Explore</span>
-              <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", exploreOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-4 w-4 text-white/80 transition-transform", exploreOpen && "rotate-180")} />
             </button>
 
             {exploreOpen && (
@@ -144,11 +143,12 @@ export function SiteHeader() {
             type="button"
             id="header-search-btn"
             onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2 rounded-xl border border-border bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all max-w-[200px]"
+            className="flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm text-muted-foreground hover:border-primary/50 transition-all flex-1 max-w-[400px] shadow-sm overflow-hidden"
           >
-            <Search className="h-3.5 w-3.5 text-primary" />
-            <span className="truncate">Search courses...</span>
-            <kbd className="ml-auto text-[10px] font-mono opacity-60">⌘K</kbd>
+            <span className="truncate flex-1 text-left">What do you want to learn?</span>
+            <div className="bg-primary p-1.5 rounded-full">
+              <Search className="h-4 w-4 text-white" />
+            </div>
           </button>
 
           {/* Main Navigation Links */}
