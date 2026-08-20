@@ -108,10 +108,10 @@ export function SiteHeader() {
               <div className="absolute left-0 top-full mt-2 w-[520px] rounded-2xl border border-border bg-popover p-4 shadow-2xl backdrop-blur-2xl z-50 grid grid-cols-2 gap-3 animate-in fade-in zoom-in-95">
                 {exploreCategories.map((cat) => (
                   <div key={cat.name} className="space-y-1.5">
-                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-primary border-b border-border/60 pb-1">
+                    <Link to="/browse/$category" params={{ category: cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-') }} className="flex items-center gap-1.5 text-xs font-extrabold text-primary border-b border-border/60 pb-1 hover:underline">
                       <cat.icon className="h-3.5 w-3.5" />
                       <span>{cat.name}</span>
-                    </div>
+                    </Link>
                     <ul className="space-y-1">
                       {cat.courses.slice(0, 3).map((c) => (
                         <li key={c.slug}>

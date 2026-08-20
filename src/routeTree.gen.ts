@@ -29,11 +29,14 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StudentDashboardRouteImport } from './routes/student-dashboard'
 import { Route as WebDevelopmentRouteImport } from './routes/web-development'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as BrowseIndexRouteImport } from './routes/browse/index'
+import { Route as BrowseCategoryRouteImport } from './routes/browse/$category'
 import { Route as CoursePlayerSlugRouteImport } from './routes/course-player/$slug'
 import { Route as CoursesIndexRouteImport } from './routes/courses/index'
 import { Route as CoursesSlugRouteImport } from './routes/courses/$slug'
 import { Route as VerifyIndexRouteImport } from './routes/verify/index'
 import { Route as VerifyCertificateIdRouteImport } from './routes/verify/$certificateId'
+import { Route as BrowseCategorySubcategoryRouteImport } from './routes/browse/$category/$subcategory'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -135,6 +138,16 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrowseIndexRoute = BrowseIndexRouteImport.update({
+  id: '/browse/',
+  path: '/browse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseCategoryRoute = BrowseCategoryRouteImport.update({
+  id: '/browse/$category',
+  path: '/browse/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursePlayerSlugRoute = CoursePlayerSlugRouteImport.update({
   id: '/course-player/$slug',
   path: '/course-player/$slug',
@@ -160,6 +173,12 @@ const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
   path: '/verify/$certificateId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrowseCategorySubcategoryRoute =
+  BrowseCategorySubcategoryRouteImport.update({
+    id: '/$subcategory',
+    path: '/$subcategory',
+    getParentRoute: () => BrowseCategoryRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -182,11 +201,14 @@ export interface FileRoutesByFullPath {
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/browse/': typeof BrowseIndexRoute
   '/courses/': typeof CoursesIndexRoute
   '/verify/': typeof VerifyIndexRoute
+  '/browse/$category/$subcategory': typeof BrowseCategorySubcategoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -209,11 +231,14 @@ export interface FileRoutesByTo {
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/browse': typeof BrowseIndexRoute
   '/courses': typeof CoursesIndexRoute
   '/verify': typeof VerifyIndexRoute
+  '/browse/$category/$subcategory': typeof BrowseCategorySubcategoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -237,11 +262,14 @@ export interface FileRoutesById {
   '/student-dashboard': typeof StudentDashboardRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
+  '/browse/': typeof BrowseIndexRoute
   '/courses/': typeof CoursesIndexRoute
   '/verify/': typeof VerifyIndexRoute
+  '/browse/$category/$subcategory': typeof BrowseCategorySubcategoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -266,11 +294,14 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
     | '/verify/$certificateId'
+    | '/browse/'
     | '/courses/'
     | '/verify/'
+    | '/browse/$category/$subcategory'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -293,11 +324,14 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
     | '/verify/$certificateId'
+    | '/browse'
     | '/courses'
     | '/verify'
+    | '/browse/$category/$subcategory'
   id:
     | '__root__'
     | '/'
@@ -320,11 +354,14 @@ export interface FileRouteTypes {
     | '/student-dashboard'
     | '/web-development'
     | '/work'
+    | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
     | '/verify/$certificateId'
+    | '/browse/'
     | '/courses/'
     | '/verify/'
+    | '/browse/$category/$subcategory'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -348,9 +385,11 @@ export interface RootRouteChildren {
   StudentDashboardRoute: typeof StudentDashboardRoute
   WebDevelopmentRoute: typeof WebDevelopmentRoute
   WorkRoute: typeof WorkRoute
+  BrowseCategoryRoute: typeof BrowseCategoryRouteWithChildren
   CoursePlayerSlugRoute: typeof CoursePlayerSlugRoute
   CoursesSlugRoute: typeof CoursesSlugRoute
   VerifyCertificateIdRoute: typeof VerifyCertificateIdRoute
+  BrowseIndexRoute: typeof BrowseIndexRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   VerifyIndexRoute: typeof VerifyIndexRoute
 }
@@ -497,6 +536,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/browse/': {
+      id: '/browse/'
+      path: '/browse'
+      fullPath: '/browse/'
+      preLoaderRoute: typeof BrowseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/$category': {
+      id: '/browse/$category'
+      path: '/browse/$category'
+      fullPath: '/browse/$category'
+      preLoaderRoute: typeof BrowseCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/course-player/$slug': {
       id: '/course-player/$slug'
       path: '/course-player/$slug'
@@ -532,8 +585,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyCertificateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/browse/$category/$subcategory': {
+      id: '/browse/$category/$subcategory'
+      path: '/$subcategory'
+      fullPath: '/browse/$category/$subcategory'
+      preLoaderRoute: typeof BrowseCategorySubcategoryRouteImport
+      parentRoute: typeof BrowseCategoryRoute
+    }
   }
 }
+
+interface BrowseCategoryRouteChildren {
+  BrowseCategorySubcategoryRoute: typeof BrowseCategorySubcategoryRoute
+}
+
+const BrowseCategoryRouteChildren: BrowseCategoryRouteChildren = {
+  BrowseCategorySubcategoryRoute: BrowseCategorySubcategoryRoute,
+}
+
+const BrowseCategoryRouteWithChildren = BrowseCategoryRoute._addFileChildren(
+  BrowseCategoryRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -556,9 +628,11 @@ const rootRouteChildren: RootRouteChildren = {
   StudentDashboardRoute: StudentDashboardRoute,
   WebDevelopmentRoute: WebDevelopmentRoute,
   WorkRoute: WorkRoute,
+  BrowseCategoryRoute: BrowseCategoryRouteWithChildren,
   CoursePlayerSlugRoute: CoursePlayerSlugRoute,
   CoursesSlugRoute: CoursesSlugRoute,
   VerifyCertificateIdRoute: VerifyCertificateIdRoute,
+  BrowseIndexRoute: BrowseIndexRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   VerifyIndexRoute: VerifyIndexRoute,
 }

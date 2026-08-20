@@ -1,0 +1,31 @@
+backend:
+  name: github
+  repo: praveenkumar2014/guideitsol-frontend-forge
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "courses"
+    label: "Courses"
+    folder: "src/content/courses"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Short Title", name: "shortTitle", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Software Development", "Data & AI", "Cloud & DevOps", "Testing", "UI/UX & Design"]}
+      - {label: "Level", name: "level", widget: "select", options: ["Beginner", "Intermediate", "Advanced"]}
+      - {label: "Duration", name: "duration", widget: "string"}
+      - {label: "Format", name: "format", widget: "select", options: ["Live online", "Classroom", "Hybrid", "Self-paced"]}
+      - {label: "Price", name: "price", widget: "string"}
+      - {label: "Accent Color", name: "accent", widget: "string", default: "cyan"}
+      - {label: "Summary", name: "summary", widget: "text"}
+      - {label: "Overview", name: "overview", widget: "markdown"}
+      - {label: "Instructor", name: "instructor", widget: "string"}
+      - {label: "Rating", name: "rating", widget: "number", value_type: "float", default: 4.5}
+      - {label: "Enrolled Count", name: "enrolledCount", widget: "string"}
+      - {label: "Tools", name: "tools", widget: "list", field: {label: "Tool", name: "tool", widget: "string"}}
+      - {label: "Prerequisites", name: "prerequisites", widget: "list", field: {label: "Prerequisite", name: "prerequisite", widget: "string"}}
+      - {label: "Outcomes", name: "outcomes", widget: "list", field: {label: "Outcome", name: "outcome", widget: "string"}}
