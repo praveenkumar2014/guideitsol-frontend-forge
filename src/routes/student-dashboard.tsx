@@ -23,6 +23,7 @@ import { Section, SectionHeading } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { certificates, courses, learnerDashboard } from "@/data/training";
 import { site } from "@/data/site";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/student-dashboard")({
   head: () => ({
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/student-dashboard")({
 });
 
 function StudentDashboard() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<
     "overview" | "courses" | "assignments" | "certificates" | "profile"
   >("overview");
@@ -51,8 +53,10 @@ function StudentDashboard() {
     }
     return learnerDashboard.overallProgress;
   });
+
   const currentCourseSlug = learnerDashboard.currentCourse;
   const course = courses.find((item) => item.slug === currentCourseSlug) || courses[0];
+  const learnerDisplayName = user?.name || learnerDashboard.learner;
 
   const assignmentsList = [
     {
@@ -97,7 +101,7 @@ function StudentDashboard() {
                 <span>Learner Workspace</span>
               </div>
               <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
-                Welcome back, {learnerDashboard.learner.split(" ")[0]}!
+                Welcome back, {learnerDisplayName}!
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Enrolled Program: <strong className="text-foreground">{course.title}</strong> ·

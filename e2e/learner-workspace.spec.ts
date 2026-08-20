@@ -6,7 +6,7 @@ test.describe("Student Dashboard & Interactive Course Player", () => {
     await page.waitForLoadState("networkidle");
 
     await expect(page.getByText("Learner Workspace")).toBeVisible();
-    await expect(page.getByText("Welcome back, Priya!")).toBeVisible();
+    await expect(page.locator("h1")).toContainText("Welcome back");
 
     // Switch to Assignments tab
     const assignmentsTab = page.locator("#tab-assignments");

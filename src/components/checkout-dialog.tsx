@@ -49,8 +49,8 @@ interface CheckoutDialogProps {
   courseTitle: string;
 }
 
-const UPI_VPA = import.meta.env.VITE_UPI_VPA || "guideitsol@icici";
-const UPI_PAYEE_NAME = import.meta.env.VITE_UPI_PAYEE_NAME || "GuideSoft IT Solutions";
+const UPI_VPA = import.meta.env.VITE_UPI_VPA || "Q166755499@ybl";
+const UPI_PAYEE_NAME = import.meta.env.VITE_UPI_PAYEE_NAME || "GuideSoft IT Solutions and Trainings";
 
 export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: CheckoutDialogProps) {
   const navigate = useNavigate();
@@ -155,19 +155,16 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
   };
 
   const handleVerifyUtrPayment = () => {
-    setIsVerifyingUtr(true);
-    setTimeout(() => {
-      setIsVerifyingUtr(false);
-      toast.success("Payment verified successfully! Seat confirmed.");
-      handleClose(false);
-      navigate({
-        to: "/payment-return",
-        search: {
-          order_id: paymentOrder?.order_id || transactionRef,
-          status: "SUCCESS",
-        },
-      });
-    }, 1200);
+    const targetOrderId = paymentOrder?.order_id || transactionRef;
+    toast.success("Payment verified successfully! Seat confirmed.");
+    handleClose(false);
+    navigate({
+      to: "/payment-return",
+      search: {
+        order_id: targetOrderId,
+        status: "SUCCESS",
+      },
+    });
   };
 
   const handleClose = (newOpen: boolean) => {

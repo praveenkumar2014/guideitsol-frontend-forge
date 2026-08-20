@@ -50,4 +50,22 @@ test.describe("Multi-Role Authentication & Session Management", () => {
     // Verify reset to Sign In
     await expect(page.locator("#auth-role-btn")).toContainText("Sign In");
   });
+
+  test("authenticates with Google Fast Sign-In and loads dedicated /auth portal", async ({
+    page,
+  }) => {
+    await page.goto("/auth");
+    await page.waitForLoadState("networkidle");
+
+    // Verify /auth Left & Right Split Layout
+    await expect(page.getByRole("heading", { name: "Enterprise-Grade Learning Portal" })).toBeVisible();
+    await expect(page.locator("#page-google-auth-btn")).toBeVisible();
+
+    // Sign in with Google on the page
+    await page.locator("#page-google-auth-btn").click();
+
+    // Verify redirection to /student-dashboard with Google Verified Learner session
+    await expect(page).toHaveURL(/\/student-dashboard/, { timeout: 10000 });
+    await expect(page.getByText("Welcome back, Google Verified Learner")).toBeVisible();
+  });
 });

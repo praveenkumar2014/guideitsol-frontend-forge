@@ -28,7 +28,7 @@ test.describe("Live Batches & Checkout Workflow", () => {
 
     // Expect real-time UPI payment screen with QR code and UPI ID
     await expect(page.getByText("Scan with any UPI App to Pay")).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText("guideitsol@icici")).toBeVisible();
+    await expect(page.getByText("Q166755499@ybl")).toBeVisible();
 
     // Click Verify & Confirm
     const verifyBtn = page.locator('button:has-text("Verify & Confirm")');
