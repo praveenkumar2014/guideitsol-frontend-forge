@@ -26,7 +26,7 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { CheckoutDialog } from "@/components/checkout-dialog";
 import { CtaBand } from "@/components/cta-band";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
-import { HeroSection } from "@/components/hero-section";
+import { HeroSlider } from "@/components/hero-slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
@@ -74,9 +74,9 @@ function Home() {
       <AnimatedBackground />
 
       {/* ========================================================================= */}
-      {/* COURSERA STYLE HERO SECTION                                                */}
+      {/* 100% FULL-SCREEN HERO BACKGROUND IMAGE SLIDER (8 SLIDES)                  */}
       {/* ========================================================================= */}
-      <HeroSection />
+      <HeroSlider />
 
       {/* ========================================================================= */}
       {/* TRUST & ACCREDITATION METRICS STRIP                                       */}
