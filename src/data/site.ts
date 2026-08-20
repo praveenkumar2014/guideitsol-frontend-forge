@@ -14,6 +14,7 @@ export const nav = [
   { label: "Learning paths", to: "/learning-paths" },
   { label: "Internships", to: "/internships" },
   { label: "Career center", to: "/career-center" },
+  { label: "AI Studio", to: "/ai-studio" },
   { label: "Verify", to: "/verify" },
   { label: "Dashboard", to: "/student-dashboard" },
   { label: "Contact", to: "/contact" },

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AiStudioRouteImport } from './routes/ai-studio'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CareerCenterRouteImport } from './routes/career-center'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -54,6 +55,11 @@ const AboutRoute = AboutRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiStudioRoute = AiStudioRouteImport.update({
+  id: '/ai-studio',
+  path: '/ai-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -202,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ai-studio'
     | '/auth'
     | '/career-center'
     | '/contact'
@@ -337,6 +347,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ai-studio'
     | '/auth'
     | '/career-center'
     | '/contact'
@@ -370,6 +381,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ai-studio'
     | '/auth'
     | '/career-center'
     | '/contact'
@@ -404,6 +416,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  AiStudioRoute: typeof AiStudioRoute
   AuthRoute: typeof AuthRoute
   CareerCenterRoute: typeof CareerCenterRoute
   ContactRoute: typeof ContactRoute
@@ -454,6 +467,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-studio': {
+      id: '/ai-studio'
+      path: '/ai-studio'
+      fullPath: '/ai-studio'
+      preLoaderRoute: typeof AiStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -671,6 +691,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  AiStudioRoute: AiStudioRoute,
   AuthRoute: AuthRoute,
   CareerCenterRoute: CareerCenterRoute,
   ContactRoute: ContactRoute,
