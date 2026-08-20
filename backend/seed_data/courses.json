@@ -461,14 +461,7 @@
         "assignment": "Record a five-minute technical walkthrough."
       }
     ],
-    "tools": [
-      "Java",
-      "Spring Boot",
-      "PostgreSQL",
-      "React",
-      "GitHub",
-      "Docker"
-    ],
+    "tools": ["Java", "Spring Boot", "PostgreSQL", "React", "GitHub", "Docker"],
     "published": true
   },
   {
@@ -740,14 +733,7 @@
         "assignment": "Write a deployment checklist."
       }
     ],
-    "tools": [
-      "Python",
-      "Django",
-      "FastAPI",
-      "PostgreSQL",
-      "React",
-      "Git"
-    ],
+    "tools": ["Python", "Django", "FastAPI", "PostgreSQL", "React", "Git"],
     "published": true
   },
   {
@@ -955,14 +941,7 @@
         "project": "Collaborative project workspace"
       }
     ],
-    "tools": [
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Node.js",
-      "Express",
-      "MongoDB"
-    ],
+    "tools": ["JavaScript", "TypeScript", "React", "Node.js", "Express", "MongoDB"],
     "published": true
   },
   {
@@ -1202,14 +1181,7 @@
         "assignment": "Record a project walkthrough."
       }
     ],
-    "tools": [
-      "Python",
-      "Pandas",
-      "NumPy",
-      "SQL",
-      "Jupyter",
-      "scikit-learn"
-    ],
+    "tools": ["Python", "Pandas", "NumPy", "SQL", "Jupyter", "scikit-learn"],
     "published": true
   },
   {
@@ -1417,14 +1389,7 @@
         "project": "Container deployment pipeline"
       }
     ],
-    "tools": [
-      "AWS",
-      "Linux",
-      "Docker",
-      "GitHub Actions",
-      "Terraform",
-      "Kubernetes"
-    ],
+    "tools": ["AWS", "Linux", "Docker", "GitHub Actions", "Terraform", "Kubernetes"],
     "published": true
   },
   {
@@ -1632,13 +1597,7 @@
         "project": "Learning enrolment redesign"
       }
     ],
-    "tools": [
-      "Figma",
-      "FigJam",
-      "Maze",
-      "Notion",
-      "Accessibility checks"
-    ],
+    "tools": ["Figma", "FigJam", "Maze", "Notion", "Accessibility checks"],
     "published": true
   },
   {
@@ -1814,13 +1773,7 @@
         "project": "Course catalogue regression suite"
       }
     ],
-    "tools": [
-      "Selenium",
-      "Postman",
-      "Java",
-      "Jira-style workflows",
-      "GitHub Actions"
-    ],
+    "tools": ["Selenium", "Postman", "Java", "Jira-style workflows", "GitHub Actions"],
     "published": true
   },
   {
@@ -1964,13 +1917,7 @@
         "project": "Learner progress dashboard"
       }
     ],
-    "tools": [
-      "Power BI",
-      "Power Query",
-      "SQL",
-      "Excel",
-      "DAX"
-    ],
+    "tools": ["Power BI", "Power Query", "SQL", "Excel", "DAX"],
     "published": true
   },
   {
@@ -2329,13 +2276,7 @@
         "project": "Field-service mobile app"
       }
     ],
-    "tools": [
-      "Dart",
-      "Flutter",
-      "Firebase",
-      "REST APIs",
-      "Git"
-    ],
+    "tools": ["Dart", "Flutter", "Firebase", "REST APIs", "Git"],
     "published": true
   },
   {

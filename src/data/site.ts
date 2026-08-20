@@ -13,11 +13,12 @@ export const site = {
 
 export const nav = [
   { label: "Courses", to: "/courses" },
-  { label: "Learning paths", to: "/learning-paths" },
   { label: "Live batches", to: "/live-batches" },
+  { label: "Learning paths", to: "/learning-paths" },
   { label: "Internships", to: "/internships" },
   { label: "Career center", to: "/career-center" },
-  { label: "Resources", to: "/resources" },
+  { label: "Verify", to: "/verify" },
+  { label: "Dashboard", to: "/student-dashboard" },
   { label: "Contact", to: "/contact" },
 ] as const;
 

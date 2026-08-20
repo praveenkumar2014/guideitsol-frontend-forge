@@ -14,6 +14,7 @@ import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
 import { Toaster } from "../components/ui/sonner";
 import { site } from "../data/site";
+import { setupContentProtection } from "../lib/content-protection";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -119,6 +120,23 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
+              document.addEventListener('copy', function(e) { if (!['INPUT','TEXTAREA'].includes(e.target ? e.target.tagName : '')) { e.preventDefault(); return false; } }, true);
+              document.addEventListener('cut', function(e) { if (!['INPUT','TEXTAREA'].includes(e.target ? e.target.tagName : '')) { e.preventDefault(); return false; } }, true);
+              document.addEventListener('dragstart', function(e) { if (!['INPUT','TEXTAREA'].includes(e.target ? e.target.tagName : '')) { e.preventDefault(); return false; } }, true);
+              document.addEventListener('keydown', function(e) {
+                var k = e.key ? e.key.toUpperCase() : '';
+                var ctrl = e.ctrlKey || e.metaKey;
+                if (e.key === 'F12' || (ctrl && e.shiftKey && (k === 'I' || k === 'J' || k === 'C')) || (e.metaKey && e.altKey && (k === 'I' || k === 'J' || k === 'C' || k === 'U')) || (ctrl && k === 'U')) {
+                  e.preventDefault(); e.stopPropagation(); return false;
+                }
+              }, true);
+            `,
+          }}
+        />
       </head>
       <body>
         {children}
@@ -130,6 +148,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    return setupContentProtection();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

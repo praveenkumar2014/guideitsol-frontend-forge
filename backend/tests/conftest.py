@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from types import SimpleNamespace
 from typing import Any
@@ -25,11 +27,30 @@ from app.supabase import SupabaseError  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 
 
+from app.security import lead_limiter, order_limiter
+
+
 @pytest.fixture(autouse=True)
 def _reset_settings():
     settings_module.get_settings.cache_clear()
+    lead_limiter.reset()
+    order_limiter.reset()
+    main.app.dependency_overrides.clear()
     yield
     settings_module.get_settings.cache_clear()
+    lead_limiter.reset()
+    order_limiter.reset()
+    main.app.dependency_overrides.clear()
+
+
+@pytest.fixture()
+def settings_env(monkeypatch):
+    def apply(**overrides: str) -> None:
+        for k, v in overrides.items():
+            monkeypatch.setenv(k, v)
+        settings_module.get_settings.cache_clear()
+
+    return apply
 
 
 @pytest.fixture()

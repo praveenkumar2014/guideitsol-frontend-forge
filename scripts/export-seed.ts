@@ -17,8 +17,18 @@ const parseDate = (value: string): string => {
   const match = value.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/);
   if (!match) return "";
   const months: Record<string, string> = {
-    Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06",
-    Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12",
+    Jan: "01",
+    Feb: "02",
+    Mar: "03",
+    Apr: "04",
+    May: "05",
+    Jun: "06",
+    Jul: "07",
+    Aug: "08",
+    Sep: "09",
+    Oct: "10",
+    Nov: "11",
+    Dec: "12",
   };
   const [, day, mon, year] = match;
   return `${year}-${months[mon]}-${day.padStart(2, "0")}`;
@@ -105,4 +115,6 @@ const certificateRows = [
 writeFileSync(join(outDir, "courses.json"), JSON.stringify(courseRows, null, 2));
 writeFileSync(join(outDir, "batches.json"), JSON.stringify(batchRows, null, 2));
 writeFileSync(join(outDir, "certificates.json"), JSON.stringify(certificateRows, null, 2));
-console.log(`Wrote ${courseRows.length} courses, ${batchRows.length} batches, ${certificateRows.length} certificates to ${outDir}`);
+console.log(
+  `Wrote ${courseRows.length} courses, ${batchRows.length} batches, ${certificateRows.length} certificates to ${outDir}`,
+);

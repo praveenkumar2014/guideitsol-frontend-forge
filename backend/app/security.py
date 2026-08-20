@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import hashlib
 import hmac
@@ -41,6 +43,9 @@ class SlidingWindowLimiter:
         window.append(now)
         return True
 
+    def reset(self) -> None:
+        self._hits.clear()
+
 
 lead_limiter = SlidingWindowLimiter(max_requests=10, window_seconds=3600)
 order_limiter = SlidingWindowLimiter(max_requests=20, window_seconds=3600)
@@ -75,17 +80,28 @@ def _b64url_decode(data: str) -> bytes:
     return base64.urlsafe_b64decode(data + padding)
 
 
-async def verify_supabase_token(token: str | None) -> dict[str, Any]:
-    """Verify a Supabase-issued JWT and return its payload.
+async def verify_supabase_token(
+    authorization: str | None = Header(default=None, alias="Authorization"),
+) -> dict[str, Any]:
+    """Verify a Supabase-issued JWT from the Authorization header and return its payload.
 
     Raises 401 for missing, malformed, expired or untrusted tokens.
     """
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    token = authorization.removeprefix("Bearer ").removeprefix("bearer ").strip()
     if not token:
         raise HTTPException(status_code=401, detail="Authentication required")
+
     settings = get_settings()
     if not settings.supabase_url:
         raise HTTPException(status_code=503, detail="Authentication is not configured on this server")
-    unverified = jwt.decode(token, options={"verify_signature": False})
+
+    try:
+        unverified = jwt.decode(token, options={"verify_signature": False})
+    except Exception as exc:
+        raise HTTPException(status_code=401, detail="Invalid authentication token") from exc
+
     kid = unverified.get("kid")
     keys = await _get_jwks()
     matching = [key for key in keys if key.get("kid") == kid]

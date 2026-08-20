@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import hashlib
 import hmac
@@ -9,6 +11,7 @@ import pytest
 from fastapi import HTTPException
 
 from app.main import app
+from app.security import verify_supabase_token
 from app.settings import get_settings
 
 
@@ -168,10 +171,17 @@ def test_create_payment_order_success(client, mock_supabase, monkeypatch):
         def json(self):
             return {"payment_session_id": "session_abc", "order_status": "ACTIVE"}
 
-    async def fake_post(url, headers=None, json=None):
-        return FakeResponse()
+    class FakeClient:
+        async def __aenter__(self):
+            return self
 
-    monkeypatch.setattr("app.main.httpx.AsyncClient", lambda timeout=20: SimpleNamespace(post=fake_post))
+        async def __aexit__(self, *args):
+            pass
+
+        async def post(self, url, headers=None, json=None):
+            return FakeResponse()
+
+    monkeypatch.setattr("app.main.httpx.AsyncClient", lambda timeout=20: FakeClient())
 
     response = client.post(
         "/api/payments/orders",
@@ -327,11 +337,11 @@ def test_learner_me_unauthenticated(client):
     assert response.status_code == 401
 
 
-def test_learner_me_authenticated(client, mock_supabase, monkeypatch):
-    async def fake_verify(token):
+def test_learner_me_authenticated(client, mock_supabase):
+    async def fake_verify():
         return {"sub": "user-123", "email": "learner@example.com", "user_metadata": {"name": "Priya"}}
 
-    monkeypatch.setattr("app.main.verify_supabase_token", fake_verify)
+    app.dependency_overrides[verify_supabase_token] = fake_verify
     mock_supabase.results["GET"] = []
     response = client.get("/api/learner/me", headers={"Authorization": "Bearer any"})
     assert response.status_code == 200
@@ -339,11 +349,11 @@ def test_learner_me_authenticated(client, mock_supabase, monkeypatch):
     assert response.json()["name"] == "Priya"
 
 
-def test_learner_progress_save(client, mock_supabase, monkeypatch):
-    async def fake_verify(token):
+def test_learner_progress_save(client, mock_supabase):
+    async def fake_verify():
         return {"sub": "user-123"}
 
-    monkeypatch.setattr("app.main.verify_supabase_token", fake_verify)
+    app.dependency_overrides[verify_supabase_token] = fake_verify
     response = client.post(
         "/api/learner/progress",
         json={"course_slug": "java-full-stack-development", "module_index": 1, "lesson_index": 0, "completed": True},

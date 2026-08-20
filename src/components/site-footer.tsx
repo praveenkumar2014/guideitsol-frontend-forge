@@ -10,6 +10,9 @@ const company = [
   { label: "Instructors", to: "/instructors" },
   { label: "Projects", to: "/projects" },
   { label: "Career center", to: "/career-center" },
+  { label: "Verify Certificate", to: "/verify" },
+  { label: "Student Dashboard", to: "/student-dashboard" },
+  { label: "Admin Console", to: "/admin" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
 ] as const;

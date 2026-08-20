@@ -10,6 +10,8 @@ Usage (from the backend directory):
 Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to be set in the
 environment or in a .env file.
 """
+from __future__ import annotations
+
 import asyncio
 import json
 from pathlib import Path

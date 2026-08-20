@@ -31,3 +31,15 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Test artifacts
+test-results/
+playwright-report/
+blob-report/
+
+# Python artifacts
+.venv/
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import hashlib
 import hmac
@@ -6,7 +8,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 import httpx
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
 
@@ -264,7 +266,9 @@ async def cashfree_webhook(
     )
 
     if payment_status == "success":
-        record = (updated or existing or [{}])[0]
+        existing_rec = existing[0] if existing and isinstance(existing, list) and existing else {}
+        updated_rec = updated[0] if updated and isinstance(updated, list) and updated else {}
+        record = {**existing_rec, **updated_rec}
         await supabase_request(
             "POST",
             "enrolments",
@@ -378,7 +382,7 @@ async def admin_list_leads(
     query = "&".join(filters) + "&select=*"
     rows = await supabase_request("GET", "leads", query=query)
     total_result = await supabase_request("GET", "leads", query="select=count")
-    total = total_result[0].get("count", 0) if total_result else 0
+    total = total_result[0].get("count") if (total_result and isinstance(total_result[0], dict) and "count" in total_result[0]) else len(rows or [])
     items = rows or []
     if search:
         needle = search.lower()
@@ -435,6 +439,7 @@ async def admin_update_lead(
     return result[0]
 
 
-@app.delete("/api/admin/leads/{lead_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def admin_delete_lead(lead_id: str, _: None = Depends(require_admin_key)) -> None:
+@app.delete("/api/admin/leads/{lead_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def admin_delete_lead(lead_id: str, _: None = Depends(require_admin_key)) -> Response:
     await supabase_request("DELETE", f"leads?id=eq.{lead_id}")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

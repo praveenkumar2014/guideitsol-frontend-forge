@@ -99,7 +99,8 @@
   --sidebar-border: oklch(0.32 0.035 258);
   --sidebar-ring: oklch(0.78 0.14 190);
 
-  --gradient-hero: radial-gradient(
+  --gradient-hero:
+    radial-gradient(
       120% 100% at 80% 0%,
       color-mix(in oklab, var(--primary) 22%, transparent),
       transparent 60%
@@ -156,6 +157,16 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    user-select: text;
+    -webkit-user-select: text;
   }
 
   h1,

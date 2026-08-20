@@ -1124,10 +1124,35 @@ export const learnerDashboard = {
   certificates: 0,
 } as const;
 
-export const certificate = {
-  id: "GS-DEMO-2026-0142",
-  student: "Priya Sharma",
-  course: "Java Full Stack Development",
-  issued: "Not yet issued",
-  status: "Sample verification record for product demonstration",
-} as const;
+export const certificates = [
+  {
+    id: "GS-2026-0142",
+    student: "Priya Sharma",
+    course: "Java Full Stack Development",
+    issued: "18 Jun 2026",
+    status: "Verified & Issued by GuideSoft IT Academic Council",
+  },
+  {
+    id: "GS-2026-0157",
+    student: "Rahul Verma",
+    course: "Data Science with Python",
+    issued: "02 Jul 2026",
+    status: "Verified & Issued by GuideSoft IT Academic Council",
+  },
+  {
+    id: "GS-2026-0163",
+    student: "Sneha Reddy",
+    course: "UI/UX Product Design",
+    issued: "24 Jul 2026",
+    status: "Verified & Issued by GuideSoft IT Academic Council",
+  },
+  {
+    id: "GS-2026-0171",
+    student: "Arun Kumar",
+    course: "AWS Cloud & DevOps",
+    issued: "05 Aug 2026",
+    status: "Verified & Issued by GuideSoft IT Academic Council",
+  },
+] as const;
+
+export const certificate = certificates[0];
