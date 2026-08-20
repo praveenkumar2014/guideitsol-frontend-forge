@@ -1,14 +1,11 @@
 export const site = {
   name: "GUIDESOFT",
-  legalName: "GuideSoft IT Solutions & Trainings",
+  legalName: "GuideSoft IT Solutions",
   short: "GUIDESOFT",
   domain: "guideitsol.in",
   url: "https://www.guideitsol.in",
   tagline: "Learn real technology. Build real skills. Launch your career.",
   email: "info@guideitsol.in",
-  phone: "+91 863 234 5678",
-  address: "Guntur, Andhra Pradesh, India",
-  hours: "Mon–Sat, 9:00 AM – 7:00 PM IST",
 } as const;
 
 export const nav = [

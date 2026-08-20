@@ -107,40 +107,15 @@ function Contact() {
               <div className="flex gap-3.5">
                 <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div>
-                  <dt className="font-semibold text-foreground">Email</dt>
+                  <dt className="font-semibold text-foreground">Email Support</dt>
                   <dd className="mt-1 text-muted-foreground">
                     <a
                       href={`mailto:${site.email}`}
-                      className="hover:text-primary transition-colors"
+                      className="hover:text-primary transition-colors font-medium"
                     >
                       {site.email}
                     </a>
                   </dd>
-                </div>
-              </div>
-              <div className="flex gap-3.5">
-                <Phone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <dt className="font-semibold text-foreground">Phone & WhatsApp</dt>
-                  <dd className="mt-1 text-muted-foreground">
-                    <a href={`tel:${site.phone}`} className="hover:text-primary transition-colors">
-                      {site.phone}
-                    </a>
-                  </dd>
-                </div>
-              </div>
-              <div className="flex gap-3.5">
-                <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <dt className="font-semibold text-foreground">Campus Location</dt>
-                  <dd className="mt-1 text-muted-foreground">{site.address}</dd>
-                </div>
-              </div>
-              <div className="flex gap-3.5">
-                <Clock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <dt className="font-semibold text-foreground">Counselling Hours</dt>
-                  <dd className="mt-1 text-muted-foreground">{site.hours}</dd>
                 </div>
               </div>
             </dl>

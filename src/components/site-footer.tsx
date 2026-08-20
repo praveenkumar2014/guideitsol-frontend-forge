@@ -14,7 +14,9 @@ import {
 
 import { site } from "@/data/site";
 import { courseCategories } from "@/data/training";
+import { useTheme } from "@/lib/theme";
 import logoLight from "../logolight.svg?url";
+import logoDark from "../logodark.svg?url";
 
 const company = [
   { label: "About GuideSoft", to: "/about" },
@@ -45,6 +47,8 @@ const social = [
 ] as const;
 
 export function SiteFooter() {
+  const { theme } = useTheme();
+
   return (
     <footer className="border-t border-border bg-surface/30">
       {/* Main footer content */}
@@ -52,27 +56,18 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-5">
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-5">
-            <Link to="/" className="inline-flex items-center gap-2">
+            <Link to="/" className="inline-block">
               <img
-                src={logoLight}
+                src={theme === "dark" ? logoLight : logoDark}
                 alt={site.legalName}
-                className="h-9 sm:h-10 w-auto max-w-[160px] object-contain dark:brightness-0 dark:invert"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
+                className="h-10 w-auto max-w-[180px] object-contain"
               />
-              <span className="font-extrabold text-xl tracking-tight text-primary font-sans">
-                GUIDE<span className="text-foreground">SOFT</span>
-              </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
               {site.tagline}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {site.legalName} · Est. 2016 · Guntur, Andhra Pradesh
-            </p>
 
-            {/* Contact details */}
+            {/* Contact details - purely email support */}
             <div className="space-y-2.5 text-sm text-muted-foreground">
               <a
                 href={`mailto:${site.email}`}
@@ -81,21 +76,6 @@ export function SiteFooter() {
                 <Mail className="h-4 w-4 shrink-0 text-primary" />
                 {site.email}
               </a>
-              <a
-                href={`tel:${site.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-2.5 hover:text-foreground transition-colors"
-              >
-                <Phone className="h-4 w-4 shrink-0 text-primary" />
-                {site.phone}
-              </a>
-              <span className="flex items-start gap-2.5">
-                <MapPin className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                {site.address}
-              </span>
-              <span className="flex items-start gap-2.5 text-xs">
-                <span className="h-4 w-4 shrink-0 text-primary text-center">⏰</span>
-                {site.hours}
-              </span>
             </div>
 
             {/* Social links */}

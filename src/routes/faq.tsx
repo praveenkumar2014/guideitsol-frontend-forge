@@ -268,11 +268,11 @@ function FAQ() {
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <EnquiryDialog courseName="General Enquiry">
               <Button id="faq-enquiry-btn" className="rounded-xl">
-                Talk to a Counsellor
+                Send an Enquiry
               </Button>
             </EnquiryDialog>
             <Button variant="outline" className="rounded-xl" asChild>
-              <a href={`tel:${site.phone.replace(/\s/g, "")}`}>Call {site.phone}</a>
+              <a href={`mailto:${site.email}`}>Email {site.email}</a>
             </Button>
           </div>
         </div>
