@@ -84,11 +84,20 @@ export function SiteHeader() {
         {/* Left: Brand Logo & Coursera-Style Explore Dropdown */}
         <div className="flex items-center gap-4 lg:gap-6">
           <Link to="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
-            <img
-              src={mounted && theme === 'dark' ? logoDark : logoLight}
-              alt={site.legalName}
-              className="h-9 w-auto max-w-[140px] object-contain transition-opacity duration-300"
-            />
+            <div className="flex items-center gap-2">
+              <img
+                src={logoLight}
+                alt={site.legalName}
+                className="h-8 sm:h-9 w-auto max-w-[130px] sm:max-w-[150px] object-contain transition-all duration-200 dark:brightness-0 dark:invert"
+                onError={(e) => {
+                  // Fallback to text if svg fails to load
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-primary font-sans flex items-center">
+                GUIDE<span className="text-foreground">SOFT</span>
+              </span>
+            </div>
           </Link>
 
           {/* Coursera-Style Explore Mega Dropdown */}

@@ -185,8 +185,8 @@ function Home() {
                 )}
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80" alt="GuideSoft Logo" className="w-5 h-5 rounded-sm object-cover" />
-                    <span className="text-[11px] font-bold text-foreground">GuideSoft IT</span>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80" alt="Provider Logo" className="w-5 h-5 rounded-sm object-cover" />
+                    <span className="text-[11px] font-bold text-foreground">{course.instructor || "Coursera Partner"}</span>
                   </div>
 
                   <h3 className="font-bold text-lg text-foreground line-clamp-2 min-h-[56px]">
@@ -214,9 +214,9 @@ function Home() {
                 <div className="flex items-center gap-1.5 text-xs font-bold text-foreground mb-4">
                   <span className="flex items-center gap-1 text-amber-500">
                     <Star className="h-3.5 w-3.5 fill-current" />
-                    4.9
+                    {course.rating || "4.8"}
                   </span>
-                  <span className="text-muted-foreground font-normal">(2.4k reviews)</span>
+                  <span className="text-muted-foreground font-normal">({course.reviews || "10k"} reviews)</span>
                 </div>
                 <div className="border-t border-border pt-3">
                   <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Tuition</p>

@@ -52,12 +52,18 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-5">
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-5">
-            <Link to="/" className="inline-block">
+            <Link to="/" className="inline-flex items-center gap-2">
               <img
                 src={logoLight}
                 alt={site.legalName}
-                className="h-10 w-auto max-w-[180px] object-contain"
+                className="h-9 sm:h-10 w-auto max-w-[160px] object-contain dark:brightness-0 dark:invert"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
               />
+              <span className="font-extrabold text-xl tracking-tight text-primary font-sans">
+                GUIDE<span className="text-foreground">SOFT</span>
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
               {site.tagline}
