@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AiStudioRouteImport } from './routes/ai-studio'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareerCenterRouteImport } from './routes/career-center'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -33,6 +34,7 @@ import { Route as StudentDashboardRouteImport } from './routes/student-dashboard
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WebDevelopmentRouteImport } from './routes/web-development'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as BrowseIndexRouteImport } from './routes/browse/index'
 import { Route as BrowseCategoryRouteImport } from './routes/browse/$category'
 import { Route as CoursePlayerSlugRouteImport } from './routes/course-player/$slug'
@@ -65,6 +67,11 @@ const AiStudioRoute = AiStudioRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareerCenterRoute = CareerCenterRouteImport.update({
@@ -162,6 +169,11 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 const BrowseIndexRoute = BrowseIndexRouteImport.update({
   id: '/browse/',
   path: '/browse/',
@@ -210,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -229,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -244,6 +258,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -263,6 +278,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -279,6 +295,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/ai-studio': typeof AiStudioRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/career-center': typeof CareerCenterRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -298,6 +315,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/web-development': typeof WebDevelopmentRoute
   '/work': typeof WorkRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/browse/$category': typeof BrowseCategoryRouteWithChildren
   '/course-player/$slug': typeof CoursePlayerSlugRoute
   '/courses/$slug': typeof CoursesSlugRoute
@@ -315,6 +333,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-studio'
     | '/auth'
+    | '/blog'
     | '/career-center'
     | '/contact'
     | '/faq'
@@ -334,6 +353,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/web-development'
     | '/work'
+    | '/blog/$slug'
     | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
@@ -349,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-studio'
     | '/auth'
+    | '/blog'
     | '/career-center'
     | '/contact'
     | '/faq'
@@ -368,6 +389,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/web-development'
     | '/work'
+    | '/blog/$slug'
     | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
@@ -383,6 +405,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ai-studio'
     | '/auth'
+    | '/blog'
     | '/career-center'
     | '/contact'
     | '/faq'
@@ -402,6 +425,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/web-development'
     | '/work'
+    | '/blog/$slug'
     | '/browse/$category'
     | '/course-player/$slug'
     | '/courses/$slug'
@@ -418,6 +442,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AiStudioRoute: typeof AiStudioRoute
   AuthRoute: typeof AuthRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CareerCenterRoute: typeof CareerCenterRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -481,6 +506,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/career-center': {
@@ -616,6 +648,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/browse/': {
       id: '/browse/'
       path: '/browse'
@@ -675,6 +714,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 interface BrowseCategoryRouteChildren {
   BrowseCategorySubcategoryRoute: typeof BrowseCategorySubcategoryRoute
 }
@@ -693,6 +742,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AiStudioRoute: AiStudioRoute,
   AuthRoute: AuthRoute,
+  BlogRoute: BlogRouteWithChildren,
   CareerCenterRoute: CareerCenterRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,

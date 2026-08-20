@@ -33,6 +33,7 @@ const platform = [
   { label: "Live Batches", to: "/live-batches" },
   { label: "Learning Paths", to: "/learning-paths" },
   { label: "AI Content Studio", to: "/ai-studio" },
+  { label: "Blog", to: "/blog" },
   { label: "Verify Certificate", to: "/verify" },
   { label: "Student Dashboard", to: "/student-dashboard" },
   { label: "Admin Console", to: "/admin" },

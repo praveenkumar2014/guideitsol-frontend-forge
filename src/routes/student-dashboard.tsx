@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   CircleUserRound,
   ClipboardCheck,
-  Download,
   ExternalLink,
   FileCode,
   GraduationCap,
@@ -20,6 +19,8 @@ import {
 import { toast } from "sonner";
 
 import { api, type LearnerProfile, type LearnerProgressRecord } from "@/lib/api";
+import { CertificateDownload } from "@/components/certificate-download";
+import { CourseProgressTracker } from "@/components/course-progress-tracker";
 import { Section, SectionHeading } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { certificates, courses, learnerDashboard } from "@/data/training";
@@ -58,6 +59,7 @@ function StudentDashboard() {
   const [apiProfile, setApiProfile] = useState<LearnerProfile | null>(null);
   const [apiProgress, setApiProgress] = useState<LearnerProgressRecord[]>([]);
   const [dataMode, setDataMode] = useState<"live" | "demo">("demo");
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -121,6 +123,13 @@ function StudentDashboard() {
 
   const handleAssignmentSubmit = (title: string) => {
     toast.success(`Assignment '${title}' workspace opened. Upload your GitHub repository.`);
+  };
+
+  const toggleLesson = (moduleIndex: number, lessonIndex: number) => {
+    const key = `${moduleIndex}:${lessonIndex}`;
+    setCompletedLessons((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
   };
 
   return (
@@ -412,6 +421,17 @@ function StudentDashboard() {
                 </Button>
               </div>
             </div>
+
+            {/* Interactive Progress Tracker */}
+            <div className="surface-panel rounded-3xl p-6 border border-border shadow-sm">
+              <h3 className="font-display text-sm font-bold mb-4">Interactive Lesson Tracker</h3>
+              <CourseProgressTracker
+                courseSlug={course.slug}
+                modules={course.modules}
+                completedLessons={completedLessons}
+                onToggleLesson={toggleLesson}
+              />
+            </div>
           </div>
         )}
 
@@ -497,13 +517,17 @@ function StudentDashboard() {
                       <ExternalLink className="mr-1.5 h-3.5 w-3.5" /> View Public Credential
                     </Link>
                   </Button>
-                  <Button
-                    variant="subtle"
-                    size="sm"
-                    onClick={() => toast.success("Certificate PDF ready for print.")}
-                  >
-                    <Download className="mr-1.5 h-3.5 w-3.5" /> Download PDF
-                  </Button>
+                  <CertificateDownload
+                    learnerName={learnerDisplayName}
+                    courseTitle={course.title}
+                    issuedDate={new Date().toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                    certificateId="GS-2026-0142"
+                    instructorName={course.instructor}
+                  />
                 </div>
               </div>
             </div>
