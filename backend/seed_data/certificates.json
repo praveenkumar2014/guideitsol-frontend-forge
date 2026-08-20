@@ -1,0 +1,34 @@
+[
+  {
+    "id": "GS-2026-0142",
+    "learner_name": "Priya Sharma",
+    "course_title": "Java Full Stack Development",
+    "course_slug": "java-full-stack-development",
+    "issued_on": "2026-06-18",
+    "status": "issued"
+  },
+  {
+    "id": "GS-2026-0157",
+    "learner_name": "Rahul Verma",
+    "course_title": "Data Science with Python",
+    "course_slug": "data-science-with-python",
+    "issued_on": "2026-07-02",
+    "status": "issued"
+  },
+  {
+    "id": "GS-2026-0163",
+    "learner_name": "Sneha Reddy",
+    "course_title": "UI/UX Product Design",
+    "course_slug": "ui-ux-design",
+    "issued_on": "2026-07-24",
+    "status": "issued"
+  },
+  {
+    "id": "GS-2026-0171",
+    "learner_name": "Arun Kumar",
+    "course_title": "AWS Cloud & DevOps",
+    "course_slug": "aws-cloud-devops",
+    "issued_on": "2026-08-05",
+    "status": "issued"
+  }
+]
