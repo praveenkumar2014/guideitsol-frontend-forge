@@ -5,11 +5,9 @@ import {
   Award,
   BookOpen,
   CalendarDays,
-  CheckCircle2,
   CircleUserRound,
   ClipboardCheck,
   ExternalLink,
-  FileCode,
   GraduationCap,
   PlayCircle,
   ShieldCheck,
@@ -21,9 +19,10 @@ import { toast } from "sonner";
 import { api, type LearnerProfile, type LearnerProgressRecord } from "@/lib/api";
 import { CertificateDownload } from "@/components/certificate-download";
 import { CourseProgressTracker } from "@/components/course-progress-tracker";
+import { Skeleton, TableSkeleton } from "@/components/skeleton";
 import { Section, SectionHeading } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
-import { certificates, courses, learnerDashboard } from "@/data/training";
+import { courses, learnerDashboard } from "@/data/training";
 import { site } from "@/data/site";
 import { useAuth } from "@/lib/auth";
 
@@ -59,7 +58,14 @@ function StudentDashboard() {
   const [apiProfile, setApiProfile] = useState<LearnerProfile | null>(null);
   const [apiProgress, setApiProgress] = useState<LearnerProgressRecord[]>([]);
   const [dataMode, setDataMode] = useState<"live" | "demo">("demo");
-  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [completedLessons, setCompletedLessons] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const val = localStorage.getItem("guidesoft_completed_lessons");
+      return val ? JSON.parse(val) : [];
+    }
+    return [];
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -81,6 +87,8 @@ function StudentDashboard() {
         }
       } catch {
         // API unavailable — stay in demo mode
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
@@ -131,6 +139,10 @@ function StudentDashboard() {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
     );
   };
+
+  useEffect(() => {
+    localStorage.setItem("guidesoft_completed_lessons", JSON.stringify(completedLessons));
+  }, [completedLessons]);
 
   return (
     <div className="min-h-screen bg-surface/30 pb-20">
@@ -200,7 +212,34 @@ function StudentDashboard() {
       </section>
 
       <Section>
-        {activeTab === "overview" && (
+        {loading && (
+          <div className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
+              <div className="surface-panel rounded-3xl p-7 border border-border shadow-md space-y-4">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+                <Skeleton className="h-3 w-full mt-4" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+              <div className="space-y-5">
+                <div className="surface-panel rounded-3xl p-6 border border-border space-y-3">
+                  <Skeleton className="h-10 w-10 rounded-xl" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-full" />
+                </div>
+                <div className="surface-panel rounded-3xl p-6 border border-border space-y-3">
+                  <Skeleton className="h-10 w-10 rounded-xl" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-full" />
+                </div>
+              </div>
+            </div>
+            <TableSkeleton rows={3} cols={5} />
+          </div>
+        )}
+
+        {!loading && activeTab === "overview" && (
           <div className="space-y-8">
             <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
               {/* Active Course Card */}
@@ -365,7 +404,7 @@ function StudentDashboard() {
           </div>
         )}
 
-        {activeTab === "courses" && (
+        {!loading && activeTab === "courses" && (
           <div className="space-y-6">
             <SectionHeading eyebrow="Enrolled Catalogue" title="Your Active Learning Programs" />
             <div className="grid gap-6 md:grid-cols-2">
@@ -435,7 +474,7 @@ function StudentDashboard() {
           </div>
         )}
 
-        {activeTab === "assignments" && (
+        {!loading && activeTab === "assignments" && (
           <div className="space-y-6">
             <SectionHeading eyebrow="Lab Evaluations" title="Project Submissions & Code Reviews" />
             <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
@@ -488,7 +527,7 @@ function StudentDashboard() {
           </div>
         )}
 
-        {activeTab === "certificates" && (
+        {!loading && activeTab === "certificates" && (
           <div className="space-y-6">
             <SectionHeading
               eyebrow="Academic Records"
@@ -534,7 +573,7 @@ function StudentDashboard() {
           </div>
         )}
 
-        {activeTab === "profile" && (
+        {!loading && activeTab === "profile" && (
           <div className="space-y-6">
             <SectionHeading eyebrow="Account Settings" title="Learner Profile & Security" />
             <div className="surface-panel rounded-3xl p-8 border border-border max-w-2xl shadow-sm">

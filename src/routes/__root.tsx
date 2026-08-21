@@ -90,8 +90,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: site.name },
       { property: "og:description", content: site.tagline },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://guideitsol.in/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@guideitsol" },
+      { name: "twitter:image", content: "https://guideitsol.in/og-image.png" },
     ],
     links: [
       {
