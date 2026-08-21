@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Award,
   BadgeCheck,
   Calendar,
   CheckCircle2,
   ChevronLeft,
-  Download,
   Loader2,
   Printer,
-  QrCode,
   ShieldCheck,
   User,
   XCircle,
 } from "lucide-react";
 
+import { AnimatedSection } from "@/components/animated-section";
 import { Section, TrainingHero } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
@@ -48,7 +46,6 @@ function VerifyCertificate() {
   useEffect(() => {
     async function checkCert() {
       setLoading(true);
-      // First check local catalogue
       const localMatch = certificates.find(
         (c) => c.id.toLowerCase() === certificateId.toLowerCase(),
       );
@@ -58,7 +55,6 @@ function VerifyCertificate() {
         return;
       }
 
-      // Then check FastAPI backend
       try {
         const apiCert = await api.verifyCertificate(certificateId);
         if (apiCert) {
@@ -105,7 +101,7 @@ function VerifyCertificate() {
       </TrainingHero>
 
       <Section>
-        <div className="mx-auto max-w-3xl">
+        <AnimatedSection className="mx-auto max-w-3xl">
           {loading ? (
             <div className="surface-panel rounded-3xl p-12 text-center border border-border">
               <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
@@ -215,7 +211,7 @@ function VerifyCertificate() {
               </div>
             </div>
           )}
-        </div>
+        </AnimatedSection>
       </Section>
     </>
   );

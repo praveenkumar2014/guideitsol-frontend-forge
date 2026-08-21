@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import { StaggerContainer } from "@/components/animated-card";
 import { CourseCard, Section, SectionHeading, TrainingHero } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { courseCategories, courses } from "@/data/training";
@@ -81,11 +82,11 @@ function Courses() {
             </Button>
           )}
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => (
             <CourseCard key={course.slug} course={course} />
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
     </>
   );

@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Code2, Globe, LayoutTemplate, Server } from "lucide-react";
+import { ArrowRight, Code2 } from "lucide-react";
 
+import { AnimatedCard, StaggerContainer } from "@/components/animated-card";
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
 import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -23,15 +24,6 @@ export const Route = createFileRoute("/web-development")({
   component: WebDevelopment,
 });
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
-
 function WebDevelopment() {
   const webCourses = courses.filter((c) => c.category === "Software Development");
 
@@ -40,7 +32,7 @@ function WebDevelopment() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <AnimatedSection>
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               Specialization Track
             </Badge>
@@ -48,23 +40,25 @@ function WebDevelopment() {
               Web Development <span className="text-gradient">Engineering</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              From responsive frontend interfaces to scalable backend microservices, our web development tracks prepare you for the entire product lifecycle.
+              From responsive frontend interfaces to scalable backend microservices, our web
+              development tracks prepare you for the entire product lifecycle.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       <Section>
-        <div className="grid gap-8 lg:grid-cols-2">
-          {webCourses.map((course, i) => (
-            <motion.article
+        <SectionHeading
+          eyebrow="Web Dev Tracks"
+          title="Courses built for real engineering roles"
+          description="Each track combines frontend, backend, databases, and deployment — the exact stack companies hire for."
+          centered
+        />
+        <StaggerContainer className="mt-12 grid gap-8 lg:grid-cols-2">
+          {webCourses.map((course) => (
+            <AnimatedCard
               key={course.slug}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
+              className="overflow-hidden hover:border-primary/40 transition-colors"
             >
               <div className="p-6 md:p-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -72,18 +66,22 @@ function WebDevelopment() {
                     <Code2 className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <Badge variant="secondary" className="mb-1 text-xs">{course.level}</Badge>
-                    <h2 className="text-2xl font-display font-semibold text-foreground">{course.title}</h2>
+                    <Badge variant="secondary" className="mb-1 text-xs">
+                      {course.level}
+                    </Badge>
+                    <h2 className="text-2xl font-display font-semibold text-foreground">
+                      {course.title}
+                    </h2>
                   </div>
                 </div>
-                
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {course.summary}
-                </p>
+
+                <p className="text-muted-foreground leading-relaxed mb-6">{course.summary}</p>
 
                 <div className="mb-6 flex flex-wrap gap-2">
                   {course.tools.slice(0, 5).map((tool) => (
-                    <Badge key={tool} variant="outline" className="text-xs">{tool}</Badge>
+                    <Badge key={tool} variant="outline" className="text-xs">
+                      {tool}
+                    </Badge>
                   ))}
                 </div>
 
@@ -94,12 +92,15 @@ function WebDevelopment() {
                   </Link>
                 </Button>
               </div>
-            </motion.article>
+            </AnimatedCard>
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
 
-      <CtaBand title="Need help choosing?" description="Talk to our career counsellors to find the right web development track for your background." />
+      <CtaBand
+        title="Need help choosing?"
+        description="Talk to our career counsellors to find the right web development track for your background."
+      />
     </div>
   );
 }

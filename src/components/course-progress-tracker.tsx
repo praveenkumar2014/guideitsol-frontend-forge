@@ -39,9 +39,7 @@ export function CourseProgressTracker({
     completedLessons.includes(`${mIdx}:${lIdx}`);
 
   const getModuleProgress = (module: Module, moduleIdx: number) => {
-    const done = module.lessons.filter((_, lIdx) =>
-      isLessonCompleted(moduleIdx, lIdx)
-    ).length;
+    const done = module.lessons.filter((_, lIdx) => isLessonCompleted(moduleIdx, lIdx)).length;
     return { done, total: module.lessons.length };
   };
 
@@ -82,7 +80,7 @@ export function CourseProgressTracker({
               key={mIdx}
               className={cn(
                 "rounded-2xl border bg-background overflow-hidden transition-colors",
-                isComplete ? "border-emerald-500/30" : "border-border"
+                isComplete ? "border-emerald-500/30" : "border-border",
               )}
             >
               {/* Module Header */}
@@ -95,15 +93,13 @@ export function CourseProgressTracker({
                     "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold",
                     isComplete
                       ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-primary/10 text-primary"
+                      : "bg-primary/10 text-primary",
                   )}
                 >
                   {isComplete ? <Check className="h-4 w-4" /> : mIdx + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">
-                    {module.title}
-                  </p>
+                  <p className="text-sm font-semibold text-foreground truncate">{module.title}</p>
                   <p className="text-xs text-muted-foreground">
                     {done}/{total} lessons • {modulePercent}%
                   </p>
@@ -112,7 +108,7 @@ export function CourseProgressTracker({
                   <div
                     className={cn(
                       "h-full rounded-full transition-all duration-500",
-                      isComplete ? "bg-emerald-400" : "bg-primary"
+                      isComplete ? "bg-emerald-400" : "bg-primary",
                     )}
                     style={{ width: `${modulePercent}%` }}
                   />
@@ -143,7 +139,7 @@ export function CourseProgressTracker({
                             onClick={() => onToggleLesson(mIdx, lIdx)}
                             className={cn(
                               "flex items-center gap-3 w-full py-2.5 px-2 rounded-lg text-left transition-all hover:bg-surface/60",
-                              completed && "opacity-75"
+                              completed && "opacity-75",
                             )}
                           >
                             <div
@@ -151,7 +147,7 @@ export function CourseProgressTracker({
                                 "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
                                 completed
                                   ? "border-emerald-500 bg-emerald-500/20 text-emerald-400"
-                                  : "border-border text-transparent hover:border-primary/50"
+                                  : "border-border text-transparent hover:border-primary/50",
                               )}
                             >
                               {completed && <Check className="h-3 w-3" />}
@@ -161,7 +157,7 @@ export function CourseProgressTracker({
                                 "text-xs font-medium flex-1",
                                 completed
                                   ? "text-muted-foreground line-through"
-                                  : "text-foreground"
+                                  : "text-foreground",
                               )}
                             >
                               {lesson}

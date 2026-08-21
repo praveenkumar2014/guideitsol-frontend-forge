@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowRight, Smartphone } from "lucide-react";
 
+import { AnimatedCard, StaggerContainer } from "@/components/animated-card";
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
-import { Section } from "@/components/section";
+import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
@@ -23,21 +24,12 @@ export const Route = createFileRoute("/mobile-apps")({
   component: MobileApps,
 });
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
-
 function MobileApps() {
-  // Try to find mobile specific courses, otherwise fallback to frontend or general software development
-  const mobileCourses = courses.filter((c) => 
-    c.title.toLowerCase().includes("mobile") || 
-    c.title.toLowerCase().includes("flutter") || 
-    c.title.toLowerCase().includes("react")
+  const mobileCourses = courses.filter(
+    (c) =>
+      c.title.toLowerCase().includes("mobile") ||
+      c.title.toLowerCase().includes("flutter") ||
+      c.title.toLowerCase().includes("react"),
   );
 
   return (
@@ -45,7 +37,7 @@ function MobileApps() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <AnimatedSection>
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               Specialization Track
             </Badge>
@@ -53,23 +45,25 @@ function MobileApps() {
               Mobile App <span className="text-gradient">Development</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              Build fast, beautiful cross-platform applications for iOS and Android using modern frameworks like Flutter and React Native.
+              Build fast, beautiful cross-platform applications for iOS and Android using modern
+              frameworks like Flutter and React Native.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       <Section>
-        <div className="grid gap-8 lg:grid-cols-2">
-          {mobileCourses.slice(0, 4).map((course, i) => (
-            <motion.article
+        <SectionHeading
+          eyebrow="Mobile Dev Tracks"
+          title="Ship apps to both app stores"
+          description="From UI design to CI/CD pipeline setup, our mobile tracks cover the full release lifecycle — not just code."
+          centered
+        />
+        <StaggerContainer className="mt-12 grid gap-8 lg:grid-cols-2">
+          {mobileCourses.slice(0, 4).map((course) => (
+            <AnimatedCard
               key={course.slug}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-colors"
+              className="overflow-hidden hover:border-primary/40 transition-colors"
             >
               <div className="p-6 md:p-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -77,18 +71,22 @@ function MobileApps() {
                     <Smartphone className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <Badge variant="secondary" className="mb-1 text-xs">{course.level}</Badge>
-                    <h2 className="text-2xl font-display font-semibold text-foreground">{course.title}</h2>
+                    <Badge variant="secondary" className="mb-1 text-xs">
+                      {course.level}
+                    </Badge>
+                    <h2 className="text-2xl font-display font-semibold text-foreground">
+                      {course.title}
+                    </h2>
                   </div>
                 </div>
-                
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {course.summary}
-                </p>
+
+                <p className="text-muted-foreground leading-relaxed mb-6">{course.summary}</p>
 
                 <div className="mb-6 flex flex-wrap gap-2">
                   {course.tools.slice(0, 5).map((tool) => (
-                    <Badge key={tool} variant="outline" className="text-xs">{tool}</Badge>
+                    <Badge key={tool} variant="outline" className="text-xs">
+                      {tool}
+                    </Badge>
                   ))}
                 </div>
 
@@ -99,12 +97,15 @@ function MobileApps() {
                   </Link>
                 </Button>
               </div>
-            </motion.article>
+            </AnimatedCard>
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
 
-      <CtaBand title="Start Building Apps" description="Join our next cohort and launch your first app to the App Store and Google Play." />
+      <CtaBand
+        title="Start Building Apps"
+        description="Join our next cohort and launch your first app to the App Store and Google Play."
+      />
     </div>
   );
 }

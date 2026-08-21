@@ -179,7 +179,6 @@ function AuthPageComponent() {
                   );
                 })}
               </div>
-
             </div>
 
             {/* Trust Footer */}
@@ -290,7 +289,9 @@ function AuthPageComponent() {
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   {authMode === "register" && (
                     <div>
-                      <label className="text-xs font-semibold text-foreground">Full Legal Name *</label>
+                      <label className="text-xs font-semibold text-foreground">
+                        Full Legal Name *
+                      </label>
                       <div className="relative mt-1.5">
                         <User className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -335,7 +336,9 @@ function AuthPageComponent() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold text-foreground">Select Platform Role</label>
+                    <label className="text-xs font-semibold text-foreground">
+                      Select Platform Role
+                    </label>
                     <div className="mt-1.5 grid grid-cols-4 gap-2">
                       {(["learner", "instructor", "admin", "partner"] as UserRole[]).map((r) => (
                         <button
@@ -354,9 +357,16 @@ function AuthPageComponent() {
                     </div>
                   </div>
 
-                  <Button type="submit" variant="hero" size="lg" className="w-full mt-2 gap-2 text-sm font-bold">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="lg"
+                    className="w-full mt-2 gap-2 text-sm font-bold"
+                  >
                     <Sparkles className="h-4 w-4" />
-                    {authMode === "signin" ? "Sign In & Enter Dashboard" : "Register & Start Learning"}
+                    {authMode === "signin"
+                      ? "Sign In & Enter Dashboard"
+                      : "Register & Start Learning"}
                   </Button>
                 </form>
               </div>

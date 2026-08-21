@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Check, HelpCircle, Shield } from "lucide-react";
+import { Check, HelpCircle } from "lucide-react";
 
+import { AnimatedCard, StaggerContainer } from "@/components/animated-card";
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
 import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -22,20 +23,12 @@ export const Route = createFileRoute("/pricing")({
   component: Pricing,
 });
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
-
 const pricingPlans = [
   {
     name: "Standard Live",
     price: "₹28,000",
-    description: "Perfect for students who want rigorous live training and hands-on project experience without placement commitments.",
+    description:
+      "Perfect for students who want rigorous live training and hands-on project experience without placement commitments.",
     features: [
       "Live interactive classes (Zoom)",
       "Access to class recordings for 1 year",
@@ -52,7 +45,8 @@ const pricingPlans = [
     name: "Job-Ready Intensive",
     price: "₹42,000",
     badge: "Most Popular",
-    description: "The complete career transformation package with dedicated mentorship and our full 6-stage placement program.",
+    description:
+      "The complete career transformation package with dedicated mentorship and our full 6-stage placement program.",
     features: [
       "Everything in Standard Live, plus:",
       "1-on-1 industry mentorship sessions",
@@ -69,7 +63,8 @@ const pricingPlans = [
   {
     name: "Placement Assurance",
     price: "₹55,000",
-    description: "Our premium tier where we share the risk. If you complete the requirements and don't get placed, we refund your fee.",
+    description:
+      "Our premium tier where we share the risk. If you complete the requirements and don't get placed, we refund your fee.",
     features: [
       "Everything in Job-Ready Intensive, plus:",
       "100% Fee Refund guarantee (if not placed in 6 months)",
@@ -106,34 +101,31 @@ function Pricing() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <AnimatedSection>
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               Transparent Pricing
             </Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Invest in a career,{" "}
-              <span className="text-gradient">not just a certificate.</span>
+              Invest in a career, <span className="text-gradient">not just a certificate.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              Straightforward pricing with zero hidden fees. Choose the level of support you need — from foundational training to guaranteed placement outcomes.
+              Straightforward pricing with zero hidden fees. Choose the level of support you need —
+              from foundational training to guaranteed placement outcomes.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* PRICING CARDS */}
       <Section>
-        <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
-          {pricingPlans.map((plan, i) => (
-            <motion.article
+        <StaggerContainer className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
+          {pricingPlans.map((plan) => (
+            <AnimatedCard
               key={plan.name}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className={`surface-panel rounded-3xl p-8 relative flex flex-col ${
-                plan.featured ? "border-primary/50 shadow-elevated bg-surface/80" : "hover:border-border/80"
+              className={`p-8 relative flex flex-col ${
+                plan.featured
+                  ? "border-primary/50 shadow-elevated bg-surface/80"
+                  : "hover:border-border/80"
               }`}
             >
               {plan.badge && (
@@ -143,12 +135,14 @@ function Pricing() {
                   </Badge>
                 </div>
               )}
-              
+
               <div className="mb-8">
                 <h2 className="text-xl font-display font-semibold text-foreground">{plan.name}</h2>
                 <p className="mt-2 text-sm text-muted-foreground h-10">{plan.description}</p>
                 <div className="mt-6 flex items-baseline gap-2">
-                  <span className="font-display text-4xl font-bold text-foreground">{plan.price}</span>
+                  <span className="font-display text-4xl font-bold text-foreground">
+                    {plan.price}
+                  </span>
                   <span className="text-sm text-muted-foreground">/ course</span>
                 </div>
               </div>
@@ -158,7 +152,9 @@ function Pricing() {
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground">
                       <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                      <span className={idx === 0 && plan.featured ? "font-medium text-foreground" : ""}>
+                      <span
+                        className={idx === 0 && plan.featured ? "font-medium text-foreground" : ""}
+                      >
                         {feature}
                       </span>
                     </li>
@@ -167,45 +163,37 @@ function Pricing() {
               </div>
 
               <div className="mt-8 pt-8 border-t border-border/50">
-                <Button 
-                  asChild 
-                  variant={plan.featured ? "default" : "outline"} 
+                <Button
+                  asChild
+                  variant={plan.featured ? "default" : "outline"}
                   className={`w-full rounded-xl h-12 ${plan.featured ? "bg-primary text-primary-foreground" : ""}`}
                 >
                   <Link to={plan.link}>{plan.cta}</Link>
                 </Button>
               </div>
-            </motion.article>
+            </AnimatedCard>
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
 
       {/* PRICING FAQ */}
       <Section className="bg-surface/30">
-        <SectionHeading 
-          eyebrow="Pricing FAQ" 
-          title="Common questions about fees and payments" 
-          centered 
+        <SectionHeading
+          eyebrow="Pricing FAQ"
+          title="Common questions about fees and payments"
+          centered
         />
-        <div className="mt-12 max-w-3xl mx-auto space-y-6">
+        <StaggerContainer className="mt-12 max-w-3xl mx-auto space-y-6">
           {faqs.map((faq, i) => (
-            <motion.div
-              key={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="surface-panel rounded-2xl p-6 flex gap-4"
-            >
+            <AnimatedCard key={i} className="p-6 flex gap-4">
               <HelpCircle className="h-6 w-6 text-primary shrink-0" />
               <div>
                 <h3 className="font-semibold text-foreground">{faq.q}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
               </div>
-            </motion.div>
+            </AnimatedCard>
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
 
       <CtaBand />

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Award, CheckCircle2, QrCode, Search, ShieldCheck } from "lucide-react";
+import { Search, ShieldCheck } from "lucide-react";
 
+import { AnimatedSection } from "@/components/animated-section";
 import { Section, TrainingHero } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +42,7 @@ function VerifyIndex() {
       />
 
       <Section>
-        <div className="mx-auto max-w-2xl">
+        <AnimatedSection className="mx-auto max-w-2xl">
           <div className="surface-panel rounded-3xl p-8 sm:p-10 shadow-lg border border-border">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <ShieldCheck className="h-7 w-7" />
@@ -97,7 +98,7 @@ function VerifyIndex() {
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
       </Section>
     </>
   );

@@ -50,7 +50,10 @@ export function CertificateDownload({
 
       // Corner decorations
       const corners = [
-        [50, 50], [W - 50, 50], [50, H - 50], [W - 50, H - 50],
+        [50, 50],
+        [W - 50, 50],
+        [50, H - 50],
+        [W - 50, H - 50],
       ];
       corners.forEach(([x, y]) => {
         ctx.fillStyle = "#f59e0b";

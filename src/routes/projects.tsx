@@ -1,19 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  BookOpen,
-  Code2,
-  FileCode2,
-  FolderKanban,
-  Github,
-  LayoutTemplate,
-  MonitorPlay,
-  Server,
-  Star,
-  TerminalSquare,
-} from "lucide-react";
+import { ArrowRight, FolderKanban, Star } from "lucide-react";
 
+import { AnimatedCard, StaggerContainer } from "@/components/animated-card";
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
 import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -35,22 +24,6 @@ export const Route = createFileRoute("/projects")({
   component: Projects,
 });
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
-
-const projectCategories = [
-  { id: "fullstack", label: "Full Stack", icon: LayoutTemplate },
-  { id: "backend", label: "Backend Systems", icon: Server },
-  { id: "data", label: "Data & ML", icon: MonitorPlay },
-  { id: "devops", label: "Cloud & DevOps", icon: TerminalSquare },
-];
-
 function Projects() {
   return (
     <div className="bg-background text-foreground">
@@ -58,41 +31,34 @@ function Projects() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <AnimatedSection>
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               Student Project Portfolio
             </Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Don't just write code.{" "}
-              <span className="text-gradient">Build products.</span>
+              Don't just write code. <span className="text-gradient">Build products.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              At GuideSoft IT, we believe a strong portfolio is your best resume. Explore the production-ready applications our students build to land roles at top tech companies.
+              At GuideSoft IT, we believe a strong portfolio is your best resume. Explore the
+              production-ready applications our students build to land roles at top tech companies.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       <Section>
-        <div className="flex flex-wrap gap-2 mb-10 justify-center">
-          {projectCategories.map((cat) => (
-            <Badge key={cat.id} variant="outline" className="px-4 py-2 text-sm flex items-center gap-2 cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors">
-              <cat.icon className="h-4 w-4" />
-              {cat.label}
-            </Badge>
-          ))}
-        </div>
+        <SectionHeading
+          eyebrow="Capstone Projects"
+          title="What our students build"
+          description="Each project mirrors real-world production systems, combining full-stack development with DevOps, testing, and deployment practices."
+          centered
+        />
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {projects.map((project, i) => (
-            <motion.article
+        <StaggerContainer className="mt-12 grid gap-8 lg:grid-cols-2">
+          {projects.map((project) => (
+            <AnimatedCard
               key={project.title}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="surface-panel rounded-2xl overflow-hidden hover:border-primary/40 transition-all duration-300 hover:shadow-elevated flex flex-col"
+              className="overflow-hidden hover:border-primary/40 transition-all duration-300 hover:shadow-elevated flex flex-col"
             >
               <div className="p-6 border-b border-border bg-surface/50">
                 <div className="flex items-start justify-between gap-4 mb-4">
@@ -104,10 +70,14 @@ function Projects() {
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                         {project.difficulty}
                       </p>
-                      <h2 className="text-xl font-display font-semibold text-foreground mt-0.5">{project.title}</h2>
+                      <h2 className="text-xl font-display font-semibold text-foreground mt-0.5">
+                        {project.title}
+                      </h2>
                     </div>
                   </div>
-                  <Badge variant="secondary" className="shrink-0">{project.technology}</Badge>
+                  <Badge variant="secondary" className="shrink-0">
+                    {project.technology}
+                  </Badge>
                 </div>
                 <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">
                   {project.description}
@@ -121,7 +91,10 @@ function Projects() {
                 </p>
                 <ul className="space-y-2 mb-6 flex-1">
                   {project.outcomes.map((outcome) => (
-                    <li key={outcome} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <li
+                      key={outcome}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
                       <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
                       {outcome}
                     </li>
@@ -129,18 +102,17 @@ function Projects() {
                 </ul>
 
                 <div className="flex items-center gap-3 pt-6 border-t border-border">
-                  <Button variant="outline" className="w-full rounded-xl" size="sm">
-                    <Github className="h-4 w-4 mr-2" />
-                    View Sample Repo
-                  </Button>
                   <Button className="w-full rounded-xl" size="sm" asChild>
-                    <Link to="/courses">Explore Course</Link>
+                    <Link to="/courses">
+                      Explore Course
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
               </div>
-            </motion.article>
+            </AnimatedCard>
           ))}
-        </div>
+        </StaggerContainer>
       </Section>
 
       <CtaBand />

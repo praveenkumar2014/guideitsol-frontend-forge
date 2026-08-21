@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Briefcase, Building, Code, Users } from "lucide-react";
 
+import { AnimatedCard, StaggerContainer } from "@/components/animated-card";
+import { AnimatedSection } from "@/components/animated-section";
 import { CtaBand } from "@/components/cta-band";
 import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
@@ -20,15 +21,6 @@ export const Route = createFileRoute("/services")({
   }),
   component: Services,
 });
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
 
 const services = [
   {
@@ -59,7 +51,7 @@ function Services() {
       <section className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 grid-lines opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <AnimatedSection>
             <Badge className="mb-4 bg-primary/15 text-primary border-primary/30">
               For Enterprises & Startups
             </Badge>
@@ -67,38 +59,39 @@ function Services() {
               Empower your <span className="text-gradient">engineering teams.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-              Partner with GuideSoft IT to train your existing workforce, onboard new hires effectively, or hire day-one ready talent from our rigorous programs.
+              Partner with GuideSoft IT to train your existing workforce, onboard new hires
+              effectively, or hire day-one ready talent from our rigorous programs.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       <Section>
-        <div className="grid gap-8 sm:grid-cols-2">
-          {services.map((service, i) => {
+        <StaggerContainer className="grid gap-8 sm:grid-cols-2">
+          {services.map((service) => {
             const Icon = service.icon;
             return (
-              <motion.div
-                key={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={i}
-                className="surface-panel rounded-2xl p-8 hover:border-primary/40 transition-colors"
+              <AnimatedCard
+                key={service.title}
+                className="p-8 hover:border-primary/40 transition-colors"
               >
                 <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-display font-semibold text-foreground mb-3">{service.title}</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground mb-3">
+                  {service.title}
+                </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{service.desc}</p>
-              </motion.div>
+              </AnimatedCard>
             );
           })}
-        </div>
+        </StaggerContainer>
       </Section>
 
-      <CtaBand title="Discuss Your Requirements" description="Speak with our enterprise partnerships team to design a custom solution." />
+      <CtaBand
+        title="Discuss Your Requirements"
+        description="Speak with our enterprise partnerships team to design a custom solution."
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Clock3, Layers3, Users } from "lucide-react";
 
+import { AnimatedCard } from "@/components/animated-card";
 import { PageHero, Section, SectionHeading } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/data/training";
@@ -25,7 +26,7 @@ export function TrainingHero({
 
 export function CourseCard({ course }: { course: Course }) {
   return (
-    <article className="surface-panel group flex h-full flex-col rounded-2xl p-6 transition-transform hover:-translate-y-1">
+    <AnimatedCard className="group flex h-full flex-col p-6 transition-transform hover:-translate-y-1">
       <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
         <span>{course.category}</span>
         <span>{course.level}</span>
@@ -50,7 +51,7 @@ export function CourseCard({ course }: { course: Course }) {
           </Link>
         </Button>
       </div>
-    </article>
+    </AnimatedCard>
   );
 }
 

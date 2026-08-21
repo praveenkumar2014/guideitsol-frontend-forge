@@ -1,21 +1,12 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  CheckCircle2,
-  Clock,
-  Loader2,
-  Mail,
-  MapPin,
-  MessageSquare,
-  Phone,
-  Send,
-  Sparkles,
-} from "lucide-react";
+import { CheckCircle2, Loader2, Mail, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { AnimatedSection } from "@/components/animated-section";
 import { PageHero, Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,7 +88,7 @@ function Contact() {
       />
       <Section>
         <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-          <div>
+          <AnimatedSection direction="left">
             <h2 className="text-2xl font-semibold">We make learning concrete.</h2>
             <p className="mt-4 leading-relaxed text-muted-foreground">
               You can expect a direct conversation with a technical instructor or career advisor,
@@ -119,9 +110,12 @@ function Contact() {
                 </div>
               </div>
             </dl>
-          </div>
+          </AnimatedSection>
 
-          <div className="surface-panel rounded-3xl p-6 sm:p-10 border border-border shadow-lg">
+          <AnimatedSection
+            direction="right"
+            className="surface-panel rounded-3xl p-6 sm:p-10 border border-border shadow-lg"
+          >
             {!submittedLeadId ? (
               <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
                 <div className="mb-6">
@@ -238,7 +232,7 @@ function Contact() {
                 </div>
               </div>
             )}
-          </div>
+          </AnimatedSection>
         </div>
       </Section>
     </>
