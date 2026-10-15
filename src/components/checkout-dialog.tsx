@@ -79,7 +79,7 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
       console.warn("Gateway unavailable, switching to UPI", err);
       const ref = `GS${Date.now().toString(36).toUpperCase()}`;
       api
-        .createLead({
+        .submitLead({
           name: values.customer_name,
           email: values.customer_email,
           phone: values.customer_phone,
