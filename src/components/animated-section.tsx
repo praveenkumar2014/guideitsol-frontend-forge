@@ -29,7 +29,7 @@ export function AnimatedSection({
       initial={initial}
       whileInView={animate}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" as const }}
       className={cn(className)}
     >
       {children}

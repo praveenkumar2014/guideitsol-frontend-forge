@@ -59,7 +59,7 @@ export function CourseProgressTracker({
             className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" as const }}
           />
         </div>
         <p className="text-xs text-muted-foreground mt-2">
