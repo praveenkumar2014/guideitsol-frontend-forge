@@ -31,7 +31,7 @@ export function AnimatedCard({ children, className }: { children: ReactNode; cla
     <motion.div
       variants={{
         hidden: { opacity: 0, y: 24 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
       }}
       className={cn("surface-panel rounded-2xl transition-colors", className)}
     >

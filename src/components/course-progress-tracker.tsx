@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface Module {
   title: string;
-  lessons: string[];
+  lessons: Array<string | { title: string }>;
 }
 
 interface CourseProgressTrackerProps {
@@ -59,7 +59,7 @@ export function CourseProgressTracker({
             className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" as const }}
           />
         </div>
         <p className="text-xs text-muted-foreground mt-2">
@@ -160,7 +160,7 @@ export function CourseProgressTracker({
                                   : "text-foreground",
                               )}
                             >
-                              {lesson}
+                              {typeof lesson === "string" ? lesson : lesson.title}
                             </span>
                             {completed && (
                               <span className="text-[10px] text-emerald-400 font-semibold">
