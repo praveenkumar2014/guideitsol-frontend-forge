@@ -5,9 +5,9 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
-const VPA = import.meta.env.VITE_UPI_VPA as string | undefined;
-const PAYEE = (import.meta.env.VITE_UPI_PAYEE_NAME as string | undefined) ?? "GuideSoft IT Solutions";
-const MC = import.meta.env.VITE_UPI_MERCHANT_CODE as string | undefined;
+const VPA = import.meta.env["VITE_UPI_VPA"] as string | undefined;
+const PAYEE = (import.meta.env["VITE_UPI_PAYEE_NAME"] as string | undefined) ?? "GuideSoft IT Solutions";
+const MC = import.meta.env["VITE_UPI_MERCHANT_CODE"] as string | undefined;
 
 export function parseAmount(price: string): number {
   const n = Number(price.replace(/[^0-9.]/g, ""));
