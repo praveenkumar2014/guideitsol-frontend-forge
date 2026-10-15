@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface Module {
   title: string;
-  lessons: string[];
+  lessons: Array<string | { title: string }>;
 }
 
 interface CourseProgressTrackerProps {
@@ -160,7 +160,7 @@ export function CourseProgressTracker({
                                   : "text-foreground",
                               )}
                             >
-                              {lesson}
+                              {typeof lesson === "string" ? lesson : lesson.title}
                             </span>
                             {completed && (
                               <span className="text-[10px] text-emerald-400 font-semibold">
