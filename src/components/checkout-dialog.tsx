@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import type { Batch } from "@/data/training";
 import { api } from "@/lib/api";
+import { parseAmount, UpiPayPanel } from "@/components/upi-pay-panel";
 
 const checkoutSchema = z.object({
   customer_name: z.string().min(2, "Please enter your full name."),
@@ -37,6 +38,7 @@ interface CheckoutDialogProps {
 export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: CheckoutDialogProps) {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [upiRef, setUpiRef] = useState<string | null>(null);
 
   const {
     register,
@@ -74,11 +76,19 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
         search: { order_id: order.order_id, status: "PENDING" },
       });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Payment initiation failed";
-      toast.error(msg);
-      toast.info("You can also pay via bank transfer. Contact info@guideitsol.in", {
-        duration: 8000,
-      });
+      console.warn("Gateway unavailable, switching to UPI", err);
+      const ref = `GS${Date.now().toString(36).toUpperCase()}`;
+      api
+        .createLead({
+          name: values.customer_name,
+          email: values.customer_email,
+          phone: values.customer_phone,
+          batch_id: batch.id,
+          source: "upi-checkout",
+          message: `UPI payment initiated for ${courseTitle} (${batch.name}), ref ${ref}, amount ${batch.price}`,
+        })
+        .catch(() => undefined);
+      setUpiRef(ref);
     } finally {
       setIsProcessing(false);
     }
@@ -87,6 +97,7 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
   const handleClose = (newOpen: boolean) => {
     if (!newOpen) {
       reset();
+      setUpiRef(null);
     }
     onOpenChange(newOpen);
   };
@@ -118,6 +129,12 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
           </DialogDescription>
         </DialogHeader>
 
+        {upiRef ? (
+          <div className="py-4">
+            <UpiPayPanel amount={parseAmount(batch.price)} reference={upiRef} note={courseTitle} />
+          </div>
+        ) : (
+        <>
         <div className="py-4">
           <div className="flex justify-between items-center bg-surface/50 p-4 rounded-xl mb-6 border border-border/50">
             <span className="text-sm text-muted-foreground">Total Fee</span>
@@ -199,6 +216,8 @@ export function CheckoutDialog({ open, onOpenChange, batch, courseTitle }: Check
             <ShieldCheck className="h-5 w-5" />
           </div>
         </div>
+        </>
+        )}
       </DialogContent>
     </Dialog>
   );
