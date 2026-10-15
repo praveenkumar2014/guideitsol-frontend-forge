@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "usr_admin_01",
+    "email": "admin@guideitsol.in",
+    "name": "Admin Operations",
+    "role": "admin"
+  },
+  {
+    "user_id": "usr_instructor_01",
+    "email": "aarav.menon@guideitsol.in",
+    "name": "Aarav Menon",
+    "role": "instructor"
+  },
+  {
+    "user_id": "usr_learner_01",
+    "email": "priya.sharma@example.com",
+    "name": "Priya Sharma",
+    "role": "learner"
+  },
+  {
+    "user_id": "usr_partner_01",
+    "email": "rohan.verma@techcorp.in",
+    "name": "Rohan Verma",
+    "role": "partner"
+  }
+]

@@ -1,3 +1,13 @@
+# GUIDESOFT — https://www.guideitsol.com
+# The .in host permanently redirects to the .com canonical domain.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /student-dashboard
+Disallow: /payment-return
+Disallow: /ai-studio
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +20,5 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+Sitemap: https://www.guideitsol.com/sitemap.xml
+Host: https://www.guideitsol.com

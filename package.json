@@ -17,7 +17,10 @@
     "electron:build": "cd electron && npm run electron:build",
     "electron:build:mac": "cd electron && npm run electron:build:mac",
     "electron:build:win": "cd electron && npm run electron:build:win",
-    "electron:build:linux": "cd electron && npm run electron:build:linux"
+    "electron:build:linux": "cd electron && npm run electron:build:linux",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "typecheck": "tsc --noEmit",
+    "test:backend": "cd backend && PYTHONPATH=. pytest tests"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

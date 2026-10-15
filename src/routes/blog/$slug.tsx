@@ -2,12 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, Clock, User } from "lucide-react";
 import { AnimatedSection } from "@/components/animated-section";
 import { Badge } from "@/components/ui/badge";
-import { articles } from "@/data/blog";
+import { articles as seedArticles } from "@/data/blog";
+import { blogQuery, useBlogArticles } from "@/lib/catalog";
 import { site } from "@/data/site";
 
 export const Route = createFileRoute("/blog/$slug")({
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(blogQuery());
+  },
   head: ({ params }) => {
-    const article = articles.find((a) => a.slug === params.slug);
+    const article = seedArticles.find((a) => a.slug === params.slug);
     return {
       meta: [
         { title: article ? `${article.title} | ${site.name}` : `Article | ${site.name}` },
@@ -26,6 +30,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogArticlePage() {
   const { slug } = Route.useParams();
+  const { items: articles } = useBlogArticles();
   const article = articles.find((a) => a.slug === slug);
 
   if (!article) {

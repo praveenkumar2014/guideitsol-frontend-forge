@@ -21,13 +21,20 @@ import { toast } from "sonner";
 import { Section } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { courses } from "@/data/training";
+import { Lock, Unlock } from "lucide-react";
+
+import { coursesQuery, useCourse } from "@/lib/catalog";
+import { useEnrolments } from "@/lib/lms";
 import { site } from "@/data/site";
+import { courses as seedCourses, type Course } from "@/data/training";
 import { api } from "@/lib/api";
 
 export const Route = createFileRoute("/course-player/$slug")({
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(coursesQuery());
+  },
   head: ({ params }) => {
-    const course = courses.find((item) => item.slug === params.slug);
+    const course = seedCourses.find((item) => item.slug === params.slug);
     return {
       meta: [
         {
@@ -43,8 +50,21 @@ export const Route = createFileRoute("/course-player/$slug")({
 
 function CoursePlayer() {
   const { slug } = Route.useParams();
-  const course = courses.find((item) => item.slug === slug);
+  const { course, isFetching } = useCourse(slug);
+  if (!course && isFetching) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
   if (!course) throw notFound();
+  return <CoursePlayerView slug={slug} course={course} />;
+}
+
+function CoursePlayerView({ slug, course }: { slug: string; course: Course }) {
+  const { isEnrolled } = useEnrolments();
+  const enrolled = isEnrolled(slug);
 
   // All lessons flat array for easy sequential navigation
   const allLessons = course.modules.flatMap((m, mIdx) =>
@@ -98,6 +118,10 @@ function CoursePlayer() {
 
   const handleToggleComplete = async () => {
     if (!currentLesson) return;
+    if (!isLessonUnlocked(currentLesson.moduleIndex)) {
+      toast.info("Enrol to track progress on this module");
+      return;
+    }
     const newCompleted = !isCurrentCompleted;
     const updated = { ...completedKeys, [currentLesson.key]: newCompleted };
     setCompletedKeys(updated);
@@ -126,8 +150,26 @@ function CoursePlayer() {
     }
   };
 
+  // Preview mode: learners who have not enrolled yet can open Module 1 only.
+  const isLessonUnlocked = (moduleIndex: number) => enrolled || moduleIndex === 0;
+
+  const handleSelectLesson = (moduleIndex: number, globalIndex: number) => {
+    if (!isLessonUnlocked(moduleIndex)) {
+      toast.info("Enrol to unlock this module", {
+        description: "Your seat is confirmed once admissions verifies the payment reference.",
+      });
+      return;
+    }
+    setCurrentLessonIndex(globalIndex);
+  };
+
   const handleNext = () => {
     if (currentLessonIndex < allLessons.length - 1) {
+      const next = allLessons[currentLessonIndex + 1];
+      if (next && !isLessonUnlocked(next.moduleIndex)) {
+        toast.info("You have reached the end of the free preview");
+        return;
+      }
       setCurrentLessonIndex((idx) => idx + 1);
     }
   };
@@ -180,6 +222,38 @@ function CoursePlayer() {
         </div>
       </div>
 
+      {/* Access status: preview vs. enrolled */}
+      <div
+        className={`border-b ${
+          enrolled
+            ? "border-emerald-500/30 bg-emerald-500/10"
+            : "border-amber-500/30 bg-amber-500/10"
+        }`}
+      >
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
+          <p className="flex items-center gap-2 text-xs font-semibold text-foreground">
+            {enrolled ? (
+              <>
+                <Unlock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                Enrolled — every module is unlocked and your progress syncs to your learner profile.
+              </>
+            ) : (
+              <>
+                <Lock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                Free preview — Module 1 is open. Enrol to unlock all modules and progress tracking.
+              </>
+            )}
+          </p>
+          {!enrolled && (
+            <Button asChild size="sm" variant="hero">
+              <Link to="/courses/$slug" params={{ slug }}>
+                Enrol on this course
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-[1600px] lg:grid-cols-[320px_1fr]">
         {/* Left Sidebar Course Outline */}
         <aside className="border-b border-border bg-background p-5 lg:min-h-[calc(100vh-8rem)] lg:border-b-0 lg:border-r">
@@ -203,21 +277,27 @@ function CoursePlayer() {
                     const key = `${mIdx}:${lIdx}`;
                     const isSelected = currentLesson?.key === key;
                     const isDone = Boolean(completedKeys[key]);
+                    const locked = !isLessonUnlocked(mIdx);
                     const globalIdx = allLessons.findIndex((item) => item.key === key);
 
                     return (
                       <button
                         key={lesson.title}
                         type="button"
-                        onClick={() => setCurrentLessonIndex(globalIdx)}
+                        onClick={() => handleSelectLesson(mIdx, globalIdx)}
+                        aria-disabled={locked}
                         className={`flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left text-xs transition-colors ${
                           isSelected
                             ? "bg-primary/10 text-primary font-semibold border border-primary/30"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                            : locked
+                              ? "text-muted-foreground/60 hover:bg-muted/50"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
                         }`}
                       >
                         <span className="flex items-center gap-2 truncate">
-                          {isDone ? (
+                          {locked ? (
+                            <Lock className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" />
+                          ) : isDone ? (
                             <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                           ) : (
                             <PlayCircle className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />

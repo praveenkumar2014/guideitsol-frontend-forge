@@ -44,11 +44,19 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
-import { batches, courses, type Batch } from "@/data/training";
+import { courses as seedCourses, type Batch, type Course } from "@/data/training";
+import { batchesQuery, coursesQuery, useCourse, useCourseBatches } from "@/lib/catalog";
 
 export const Route = createFileRoute("/courses/$slug")({
+  // Load the catalogue before rendering so CMS-only courses resolve on the server.
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(coursesQuery()),
+      context.queryClient.ensureQueryData(batchesQuery()),
+    ]);
+  },
   head: ({ params }) => {
-    const course = courses.find((item) => item.slug === params.slug);
+    const course = seedCourses.find((item) => item.slug === params.slug);
     return {
       meta: [
         {
@@ -65,14 +73,29 @@ export const Route = createFileRoute("/courses/$slug")({
 
 function CourseDetail() {
   const { slug } = Route.useParams();
-  const course = courses.find((item) => item.slug === slug);
+  const { course, isFetching } = useCourse(slug);
+  const courseBatches = useCourseBatches(slug);
+  // A course that only exists in the CMS is not in the seed catalogue, so wait
+  // for the first catalogue fetch before declaring it missing.
+  if (!course && isFetching) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-4">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <p className="mt-4 text-sm text-muted-foreground">Loading course from the catalogue…</p>
+        </div>
+      </div>
+    );
+  }
   if (!course) throw notFound();
+  return <CourseDetailView course={course} courseBatches={courseBatches} />;
+}
 
+function CourseDetailView({ course, courseBatches }: { course: Course; courseBatches: Batch[] }) {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState<Batch | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
-  const courseBatches = batches.filter((batch) => batch.courseSlug === course.slug);
   const rating = course.rating || 4.9;
   const enrolledCount = course.enrolledCount || "14,800+ learners";
   const reviewsCount = course.reviewsCount || 2480;

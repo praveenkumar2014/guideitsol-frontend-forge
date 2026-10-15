@@ -17,7 +17,9 @@ test.describe("Navigation & Course Catalogue", () => {
     const nextBtn = page.locator('button[aria-label="Next Slide"]');
     await expect(nextBtn).toBeVisible();
     await nextBtn.click();
-    await expect(page.getByRole("heading", { name: "Python, GenAI & Agentic Systems" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Python, GenAI & Agentic Systems" }),
+    ).toBeVisible();
   });
 
   test("toggles dark and light mode theme seamlessly", async ({ page }) => {
@@ -68,7 +70,9 @@ test.describe("Navigation & Course Catalogue", () => {
     await page.goto("/courses/java-full-stack-development");
     await page.waitForLoadState("domcontentloaded");
 
-    await expect(page.getByRole("heading", { name: "Java Full Stack Development", exact: true })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Java Full Stack Development", exact: true }),
+    ).toBeVisible();
     await expect(page.locator("#download-syllabus-btn")).toBeVisible();
 
     // Verify curriculum accordion is present

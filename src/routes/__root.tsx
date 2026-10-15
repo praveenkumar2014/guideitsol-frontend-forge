@@ -91,16 +91,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: site.name },
       { property: "og:description", content: site.tagline },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://guideitsol.in/og-image.png" },
+      { property: "og:site_name", content: site.name },
+      { property: "og:url", content: site.url },
+      { property: "og:image", content: `${site.url}/og-image.png` },
+      { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@guideitsol" },
-      { name: "twitter:image", content: "https://guideitsol.in/og-image.png" },
+      { name: "twitter:image", content: `${site.url}/og-image.png` },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "theme-color", content: "#111827" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      // Canonical host: every page points at the production domain, never at a
+      // preview/staging URL.
+      { rel: "canonical", href: site.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

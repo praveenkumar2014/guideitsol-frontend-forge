@@ -4,10 +4,14 @@ import { useState } from "react";
 import { StaggerContainer } from "@/components/animated-card";
 import { CourseCard, Section, SectionHeading, TrainingHero } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
-import { courseCategories, courses } from "@/data/training";
+import { CourseAdvisorButton } from "@/components/course-advisor";
+import { coursesQuery, useCourseCategories, useCourses } from "@/lib/catalog";
 import { site } from "@/data/site";
 
 export const Route = createFileRoute("/courses/")({
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(coursesQuery());
+  },
   head: () => ({
     meta: [
       { title: `Courses | ${site.name}` },
@@ -24,6 +28,8 @@ export const Route = createFileRoute("/courses/")({
 function Courses() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const { items: courses, isLive } = useCourses();
+  const courseCategories = useCourseCategories();
 
   const filtered = courses.filter(
     (course) =>
@@ -43,8 +49,19 @@ function Courses() {
         <div className="flex flex-col gap-4 border-b border-border pb-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <SectionHeading eyebrow="Learn by doing" title="Find your next course" />
+            <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <span
+                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                  isLive ? "bg-emerald-500" : "bg-amber-500"
+                }`}
+              />
+              {isLive
+                ? `Catalogue synced from the admin panel · ${courses.length} courses`
+                : "Showing the built-in catalogue — it will sync automatically once the server is online"}
+            </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
+            <CourseAdvisorButton size="sm" label="Not sure? Ask the advisor" className="sm:mr-2" />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}

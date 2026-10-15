@@ -7,7 +7,7 @@ import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 function formatSlug(slug: string) {
   if (slug === "software-development") return "Software Development";
@@ -49,6 +49,7 @@ const fadeUp = {
 
 function SubCategoryBrowse() {
   const { category: categorySlug, subcategory: subcategorySlug } = Route.useParams();
+  const { items: courses } = useCourses();
 
   const categoryName = formatSlug(categorySlug);
   const subcategoryName = formatSlug(subcategorySlug);

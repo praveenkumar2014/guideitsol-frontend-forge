@@ -19,7 +19,10 @@ import { AnimatedSection } from "@/components/animated-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { RequireRole } from "@/components/require-role";
 import { site } from "@/data/site";
+import { API_BASE as apiBase } from "@/lib/api";
+import { getAuthToken, LEGACY_ADMIN_KEY_STORAGE } from "@/lib/auth";
 
 export const Route = createFileRoute("/ai-studio")({
   head: () => ({
@@ -31,14 +34,35 @@ export const Route = createFileRoute("/ai-studio")({
       },
     ],
   }),
-  component: AIStudio,
+  component: AIStudioRoute,
 });
 
-const API_BASE = (
-  import.meta.env.VITE_PUBLIC_API_BASE_URL ||
-  import.meta.env.PUBLIC_API_BASE_URL ||
-  "http://localhost:8000"
-).replace(/\/$/, "");
+/** Instructor/admin authoring tool — role-guarded on the client and the API. */
+function AIStudioRoute() {
+  return (
+    <RequireRole
+      roles={["admin", "instructor"]}
+      permission="review_curriculum"
+      title="AI Studio is for faculty and admins"
+      description="Course content generation is limited to instructor and administrator accounts."
+    >
+      <AIStudio />
+    </RequireRole>
+  );
+}
+
+async function aiStudioHeaders(): Promise<Record<string, string>> {
+  const token = await getAuthToken();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const legacyKey =
+    typeof window !== "undefined" ? localStorage.getItem(LEGACY_ADMIN_KEY_STORAGE) : null;
+  if (legacyKey) headers["X-Admin-Key"] = legacyKey;
+  return headers;
+}
+
+// Shared resolution: same-origin in the browser, absolute during SSR.
+const API_BASE = apiBase;
 
 const CONTENT_TYPES = [
   { value: "course_outline", label: "Course Outline", icon: LayoutList },
@@ -83,7 +107,7 @@ function AIStudio() {
     try {
       const res = await fetch(`${API_BASE}/api/ai/generate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: await aiStudioHeaders(),
         body: JSON.stringify({
           content_type: contentType,
           topic: topic.trim(),
@@ -118,7 +142,9 @@ function AIStudio() {
     setCourseResult(null);
     try {
       const params = new URLSearchParams({ topic: courseTopic.trim(), level: courseLevel });
-      const res = await fetch(`${API_BASE}/api/ai/generate-course?${params.toString()}`);
+      const res = await fetch(`${API_BASE}/api/ai/generate-course?${params.toString()}`, {
+        headers: await aiStudioHeaders(),
+      });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: "Generation failed" }));
         throw new Error(err.detail || "Generation failed");
@@ -143,7 +169,9 @@ function AIStudio() {
     setResearchResults([]);
     try {
       const params = new URLSearchParams({ topic: researchTopic.trim(), num_results: "5" });
-      const res = await fetch(`${API_BASE}/api/ai/research?${params.toString()}`);
+      const res = await fetch(`${API_BASE}/api/ai/research?${params.toString()}`, {
+        headers: await aiStudioHeaders(),
+      });
       if (!res.ok) throw new Error("Research failed");
       const data = await res.json();
       setResearchResults(data.results || []);

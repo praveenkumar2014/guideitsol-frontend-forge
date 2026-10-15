@@ -88,13 +88,69 @@ create table if not exists public.payment_orders (
   customer_phone text not null,
   amount numeric(12,2) not null,
   payment_session_id text,
+  payment_method text not null default 'gateway',
+  reference text,
   status text not null default 'pending',
+  verified_by text,
+  verified_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 create index if not exists payment_orders_email_idx on public.payment_orders (customer_email);
 create index if not exists payment_orders_status_idx on public.payment_orders (status);
+create index if not exists payment_orders_reference_idx on public.payment_orders (reference);
+
+-- Upgrades for databases created before UPI reconciliation existed.
+alter table public.payment_orders add column if not exists payment_method text not null default 'gateway';
+alter table public.payment_orders add column if not exists reference text;
+alter table public.payment_orders add column if not exists verified_by text;
+alter table public.payment_orders add column if not exists verified_at timestamptz;
+
+-- ---------------------------------------------------------------------------
+-- Blog posts (headless CMS collection)
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  title text not null,
+  excerpt text not null default '',
+  author text not null default 'GUIDESOFT Editorial',
+  published_on date not null default current_date,
+  read_time text not null default '5 min read',
+  category text not null default 'Industry Insights',
+  image text not null default '',
+  content jsonb not null default '[]'::jsonb,
+  published boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists blog_posts_slug_idx on public.blog_posts (slug);
+create index if not exists blog_posts_published_idx on public.blog_posts (published);
+
+-- ---------------------------------------------------------------------------
+-- User roles (universal permission matrix)
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.user_profiles (
+  user_id text primary key,
+  email text not null,
+  name text,
+  role text not null default 'learner' check (role in ('learner', 'instructor', 'admin', 'partner')),
+  permissions jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists user_profiles_role_idx on public.user_profiles (role);
+
+alter table public.blog_posts enable row level security;
+alter table public.user_profiles enable row level security;
+
+create policy "published posts are public" on public.blog_posts for select using (published = true);
+create policy "users read own profile" on public.user_profiles for select using (auth.uid()::text = user_id);
 
 -- ---------------------------------------------------------------------------
 -- Certificates

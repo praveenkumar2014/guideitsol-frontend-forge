@@ -1,9 +1,25 @@
+/**
+ * Canonical production host. Override per environment with VITE_SITE_URL /
+ * VITE_SITE_DOMAIN so staging and preview deployments never leak production
+ * canonical tags.
+ */
+const SITE_URL = (
+  (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://www.guideitsol.com"
+).replace(/\/$/, "");
+const SITE_DOMAIN =
+  (import.meta.env.VITE_SITE_DOMAIN as string | undefined) ??
+  SITE_URL.replace(/^https?:\/\//, "").replace(/^www\./, "");
+// Secondary host that permanently redirects to the canonical domain.
+const SITE_ALTERNATE_URL =
+  (import.meta.env.VITE_SITE_ALTERNATE_URL as string | undefined) ?? "https://www.guideitsol.in";
+
 export const site = {
   name: "GUIDESOFT",
   legalName: "GuideSoft IT Solutions",
   short: "GUIDESOFT",
-  domain: "guideitsol.in",
-  url: "https://www.guideitsol.in",
+  domain: SITE_DOMAIN,
+  url: SITE_URL,
+  alternateUrl: SITE_ALTERNATE_URL,
   tagline: "Learn real technology. Build real skills. Launch your career.",
   email: "info@guideitsol.in",
 } as const;

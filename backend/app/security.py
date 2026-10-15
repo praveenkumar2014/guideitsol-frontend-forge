@@ -25,6 +25,106 @@ def require_admin_key(x_admin_key: str | None = Header(default=None)) -> None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Admin credentials required")
 
 
+# ---------------------------------------------------------------------------
+# Universal role / permission matrix
+# ---------------------------------------------------------------------------
+
+ROLE_PERMISSIONS: dict[str, list[str]] = {
+    "learner": [
+        "view_materials",
+        "submit_assignments",
+        "track_progress",
+        "view_credentials",
+    ],
+    "instructor": [
+        "view_materials",
+        "submit_assignments",
+        "track_progress",
+        "view_credentials",
+        "grade_assignments",
+        "manage_cohorts",
+        "review_curriculum",
+        "manage_catalog",
+    ],
+    "admin": [
+        "view_materials",
+        "submit_assignments",
+        "track_progress",
+        "view_credentials",
+        "grade_assignments",
+        "manage_cohorts",
+        "review_curriculum",
+        "manage_catalog",
+        "manage_leads",
+        "issue_certificates",
+        "view_analytics",
+        "reconcile_payments",
+        "manage_system",
+    ],
+    "partner": [
+        "view_candidates",
+        "view_credentials",
+        "post_internships",
+        "schedule_interviews",
+    ],
+}
+
+ROLE_HIERARCHY: dict[str, int] = {"learner": 1, "partner": 1, "instructor": 2, "admin": 3}
+
+
+def role_grants(role: str, permission: str) -> bool:
+    return permission in ROLE_PERMISSIONS.get(role, [])
+
+
+def resolve_token_role(payload: dict[str, Any]) -> str:
+    """Extract the user's role from a verified Supabase JWT payload."""
+    app_meta = payload.get("app_metadata") or {}
+    role = app_meta.get("role") or payload.get("role") or "learner"
+    if isinstance(role, list):
+        role = role[0] if role else "learner"
+    return str(role) if str(role) in ROLE_PERMISSIONS else "learner"
+
+
+def require_role(*allowed_roles: str, permission: str | None = None) -> Any:
+    """Build a FastAPI dependency enforcing a role and/or permission.
+
+    Accepts either a verified Supabase JWT (Authorization header) or the
+    legacy X-Admin-Key service credential, so automation keeps working while
+    real user sessions gain token-based role verification.
+
+    Implemented as a closure (not a class) so FastAPI can resolve the
+    annotations in this module's namespace.
+    """
+    allowed = set(allowed_roles) or {"admin"}
+    required_permission = permission
+
+    async def _checker(
+        request: Request,
+        authorization: str | None = Header(default=None, alias="Authorization"),
+        x_admin_key: str | None = Header(default=None),
+    ) -> dict[str, Any]:
+        settings = get_settings()
+        if settings.admin_api_key and x_admin_key:
+            if hmac.compare_digest(settings.admin_api_key, x_admin_key):
+                return {
+                    "sub": "service",
+                    "role": "admin",
+                    "email": "service@guideitsol.local",
+                    "auth": "admin_key",
+                }
+        payload = await verify_supabase_token(authorization)
+        role = resolve_token_role(payload)
+        granted = required_permission is None or role_grants(role, required_permission)
+        if role not in allowed or not granted:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to perform this action",
+            )
+        return {**payload, "role": role, "auth": "jwt"}
+
+    return _checker
+
+
 class SlidingWindowLimiter:
     """Simple in-memory sliding-window rate limiter keyed by client IP."""
 

@@ -30,7 +30,7 @@ import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { nav, site } from "@/data/site";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
@@ -46,6 +46,7 @@ export function SiteHeader() {
   const [mounted, setMounted] = useState(false);
   const { user, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { items: courses } = useCourses();
 
   useEffect(() => {
     setMounted(true);

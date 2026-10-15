@@ -10,10 +10,17 @@ import { Section, SectionHeading, TrainingHero } from "@/components/training-ui"
 import { Button } from "@/components/ui/button";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { CheckoutDialog } from "@/components/checkout-dialog";
-import { batches, courses, type Batch } from "@/data/training";
+import type { Batch } from "@/data/training";
+import { batchesQuery, coursesQuery, useBatches, useCourses } from "@/lib/catalog";
 import { site } from "@/data/site";
 
 export const Route = createFileRoute("/live-batches")({
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(batchesQuery()),
+      context.queryClient.ensureQueryData(coursesQuery()),
+    ]);
+  },
   head: () => ({
     meta: [
       { title: `Live Batches | ${site.name}` },
@@ -32,6 +39,9 @@ function LiveBatches() {
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [selectedBatchForCheckout, setSelectedBatchForCheckout] = useState<Batch | null>(null);
+
+  const { items: batches, isLive } = useBatches();
+  const { items: courses } = useCourses();
 
   const handleEnquiry = (batch: Batch) => {
     setSelectedBatchForEnquiry(batch);

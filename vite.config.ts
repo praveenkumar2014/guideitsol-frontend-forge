@@ -12,4 +12,30 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      // Bind every interface so sandbox/preview proxies can reach the dev server.
+      host: "0.0.0.0",
+      // Accept proxied preview hosts (e.g. *.e2b.app) and custom dev tunnels.
+      allowedHosts: true,
+      // The browser talks to this dev server only; /api/* is forwarded to the
+      // FastAPI backend so no client code ever calls localhost directly.
+      proxy: {
+        "/api": {
+          target: process.env.VITE_API_PROXY_TARGET || "http://localhost:8000",
+          changeOrigin: true,
+        },
+      },
+    },
+    preview: {
+      host: "0.0.0.0",
+      allowedHosts: true,
+      proxy: {
+        "/api": {
+          target: process.env.VITE_API_PROXY_TARGET || "http://localhost:8000",
+          changeOrigin: true,
+        },
+      },
+    },
+  },
 });

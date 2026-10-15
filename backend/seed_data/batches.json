@@ -16,7 +16,7 @@
   },
   {
     "id": "python-sep-26",
-    "course_slug": "python-full-stack-development",
+    "course_slug": "python-full-stack-and-generative-ai",
     "name": "Python Full Stack · Weekend Cohort",
     "start_date": "2026-09-05",
     "end_date": "2027-02-06",
@@ -31,7 +31,7 @@
   },
   {
     "id": "data-sep-26",
-    "course_slug": "data-science-with-python",
+    "course_slug": "data-science-and-machine-learning",
     "name": "Data Science · Applied Track",
     "start_date": "2026-09-12",
     "end_date": "2027-01-16",
@@ -46,7 +46,7 @@
   },
   {
     "id": "aws-oct-26",
-    "course_slug": "aws-cloud-devops",
+    "course_slug": "aws-cloud-and-devops",
     "name": "AWS Cloud & DevOps · Lab Track",
     "start_date": "2026-10-03",
     "end_date": "2027-01-23",
@@ -61,7 +61,7 @@
   },
   {
     "id": "uiux-sep-26",
-    "course_slug": "ui-ux-design",
+    "course_slug": "ui-ux-product-design",
     "name": "UI/UX Design · Studio Cohort",
     "start_date": "2026-09-19",
     "end_date": "2026-12-12",

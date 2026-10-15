@@ -7,7 +7,7 @@ import { Section } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 export const Route = createFileRoute("/browse/$category")({
   head: ({ params }) => {
@@ -64,6 +64,7 @@ function formatCategoryName(slug: string) {
 function CategoryBrowse() {
   const { category: categorySlug } = Route.useParams();
   const categoryName = formatCategoryName(categorySlug);
+  const { items: courses } = useCourses();
 
   // Filter courses by category
   // Handle edge cases where category strings might have slightly different formatting

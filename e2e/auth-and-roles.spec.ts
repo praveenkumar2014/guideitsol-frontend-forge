@@ -58,7 +58,9 @@ test.describe("Multi-Role Authentication & Session Management", () => {
     await page.waitForLoadState("networkidle");
 
     // Verify /auth Left & Right Split Layout
-    await expect(page.getByRole("heading", { name: "Enterprise-Grade Learning Portal" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Enterprise-Grade Learning Portal" }),
+    ).toBeVisible();
     await expect(page.locator("#page-google-auth-btn")).toBeVisible();
 
     // Sign in with Google on the page

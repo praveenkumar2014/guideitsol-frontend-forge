@@ -1,13 +1,13 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const trainingTsPath = path.join(__dirname, '../src/data/training.ts');
-const coursesJsonPath = path.join(__dirname, 'scraped_courses.json');
+const trainingTsPath = path.join(__dirname, "../src/data/training.ts");
+const coursesJsonPath = path.join(__dirname, "scraped_courses.json");
 
-const coursesData = JSON.parse(fs.readFileSync(coursesJsonPath, 'utf8'));
+const coursesData = JSON.parse(fs.readFileSync(coursesJsonPath, "utf8"));
 
 // Format courses data into TS string
-let coursesTsString = 'export const courses: Course[] = [\n';
+let coursesTsString = "export const courses: Course[] = [\n";
 
 for (const course of coursesData) {
   coursesTsString += `  {
@@ -25,10 +25,10 @@ for (const course of coursesData) {
     tools: ${JSON.stringify(course.tools)},
     prerequisites: ${JSON.stringify(course.prerequisites || [])},
     outcomes: ${JSON.stringify(course.outcomes || [])},
-    instructor: "${course.instructor || 'Rajesh Kumar'}",
+    instructor: "${course.instructor || "Rajesh Kumar"}",
     rating: ${course.rating || 4.8},
     reviewsCount: ${course.reviewsCount || 1024},
-    enrolledCount: "${course.enrolledCount || '10,000+'}",
+    enrolledCount: "${course.enrolledCount || "10,000+"}",
     modules: [
       module("Foundation & Core Concepts", "Understanding the basic principles and environment setup.", "Setup local environment and run first program."),
       module("Deep Dive & Best Practices", "Advanced techniques and industry standard patterns.", "Refactor previous code to use advanced patterns."),
@@ -38,13 +38,13 @@ for (const course of coursesData) {
   },\n`;
 }
 
-coursesTsString += '];';
+coursesTsString += "];";
 
-let currentTs = fs.readFileSync(trainingTsPath, 'utf8');
+let currentTs = fs.readFileSync(trainingTsPath, "utf8");
 
 // Replace the export const courses: Course[] = [ ... ];
 const regex = /export const courses: Course\[\] = \[[\s\S]*?\];/;
 currentTs = currentTs.replace(regex, coursesTsString);
 
 fs.writeFileSync(trainingTsPath, currentTs);
-console.log('Successfully updated src/data/training.ts with scraped data.');
+console.log("Successfully updated src/data/training.ts with scraped data.");

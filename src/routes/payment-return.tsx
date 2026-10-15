@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import {
   ArrowRight,
   CheckCircle2,
-  Download,
   HelpCircle,
+  Hourglass,
   Loader2,
+  RefreshCw,
   ShieldCheck,
   XCircle,
 } from "lucide-react";
@@ -13,12 +14,14 @@ import { z } from "zod";
 
 import { Section } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { api, type OrderDetails } from "@/lib/api";
+import { addLocalEnrolment } from "@/lib/lms";
 import { site } from "@/data/site";
 
 const searchSchema = z.object({
   order_id: z.string().optional(),
   status: z.string().optional(),
+  ref: z.string().optional(),
 });
 
 export const Route = createFileRoute("/payment-return")({
@@ -35,36 +38,93 @@ export const Route = createFileRoute("/payment-return")({
   component: PaymentReturn,
 });
 
+const PENDING_STATES = new Set([
+  "pending",
+  "upi_pending",
+  "awaiting_verification",
+  "awaiting",
+  "initiated",
+]);
+
 function PaymentReturn() {
   const search = useSearch({ from: "/payment-return" });
   const [loading, setLoading] = useState(true);
-  const [orderDetails, setOrderDetails] = useState<import("@/lib/api").OrderDetails | null>(null);
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+  const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const pollRef = useRef<number | null>(null);
 
-  const orderId = search.order_id || "gs_order_placeholder";
-  const searchStatus = (search.status || "SUCCESS").toUpperCase();
+  const orderId = search.order_id;
+  const searchStatus = (search.status || "").toUpperCase();
+
+  const loadOrder = useCallback(async () => {
+    if (!orderId) return null;
+    try {
+      const data = await api.getPaymentOrder(orderId);
+      setOrderDetails(data);
+      setLastChecked(new Date());
+      return data;
+    } catch {
+      setLastChecked(new Date());
+      return null;
+    }
+  }, [orderId]);
 
   useEffect(() => {
-    async function loadOrder() {
-      if (!search.order_id) {
-        setLoading(false);
-        return;
-      }
-      try {
-        const data = await api.getPaymentOrder(search.order_id);
-        setOrderDetails(data);
-      } catch (err: unknown) {
-        console.warn("Could not load payment order from server:", err);
-      } finally {
-        setLoading(false);
-      }
+    let cancelled = false;
+    async function initial() {
+      await loadOrder();
+      if (!cancelled) setLoading(false);
     }
-    void loadOrder();
-  }, [search.order_id]);
+    void initial();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadOrder]);
 
-  const isSuccess =
-    searchStatus === "SUCCESS" ||
-    orderDetails?.status === "success" ||
-    orderDetails?.status === "SUCCESS";
+  const status = (orderDetails?.status || "").toLowerCase();
+  const isSuccess = status === "success" || searchStatus === "SUCCESS";
+
+  // Verified payment unlocks the course immediately in the learner workspace.
+  useEffect(() => {
+    if (isSuccess && orderDetails?.course_slug) {
+      addLocalEnrolment(orderDetails.course_slug);
+    }
+  }, [isSuccess, orderDetails?.course_slug]);
+  const isFailure =
+    status === "failed" || searchStatus === "FAILED" || searchStatus === "CANCELLED";
+  const isPending =
+    !isSuccess &&
+    !isFailure &&
+    (PENDING_STATES.has(status) ||
+      PENDING_STATES.has(searchStatus.toLowerCase()) ||
+      Boolean(searchStatus && !searchStatus.length) ||
+      !orderDetails);
+
+  // While the payment is awaiting verification, poll so the screen flips to
+  // success the moment admissions verifies the credit (no page reload needed).
+  useEffect(() => {
+    if (!isPending || loading || !orderId) return;
+    let attempts = 0;
+    pollRef.current = window.setInterval(async () => {
+      attempts += 1;
+      const data = await loadOrder();
+      if (data?.status === "success" || attempts >= 24) {
+        if (pollRef.current) window.clearInterval(pollRef.current);
+      }
+    }, 5000);
+    return () => {
+      if (pollRef.current) window.clearInterval(pollRef.current);
+    };
+  }, [isPending, loading, orderId, loadOrder]);
+
+  const handleManualRefresh = async () => {
+    setRefreshing(true);
+    await loadOrder();
+    setRefreshing(false);
+  };
+
+  const reference = search.ref || orderDetails?.payment_session_id || orderId || "—";
 
   return (
     <div className="min-h-[70vh] bg-surface/30 py-12 sm:py-20">
@@ -91,8 +151,8 @@ function PaymentReturn() {
                   Payment Successful!
                 </h1>
                 <p className="mt-3 text-base text-muted-foreground">
-                  Welcome to GUIDESOFT. Your course enrolment is active and your seat has been
-                  reserved.
+                  Your seat is allotted, your course modules are unlocked and your learner
+                  notification is waiting in the dashboard.
                 </p>
 
                 <div className="mt-8 rounded-2xl border border-border bg-muted/40 p-6 text-left text-sm space-y-3">
@@ -106,12 +166,14 @@ function PaymentReturn() {
                       <ShieldCheck className="h-4 w-4" /> Paid & Verified
                     </span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-border pb-3">
-                    <span className="text-muted-foreground">Customer Email</span>
-                    <span className="font-medium text-foreground">
-                      {orderDetails?.customer_email || "learner@example.com"}
-                    </span>
-                  </div>
+                  {orderDetails?.customer_email && (
+                    <div className="flex justify-between items-center border-b border-border pb-3">
+                      <span className="text-muted-foreground">Customer Email</span>
+                      <span className="font-medium text-foreground">
+                        {orderDetails.customer_email}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center pt-1">
                     <span className="text-muted-foreground">Receipt</span>
                     <span className="text-xs text-primary font-semibold">Sent to email inbox</span>
@@ -129,7 +191,7 @@ function PaymentReturn() {
                   </Button>
                 </div>
               </>
-            ) : (
+            ) : isFailure ? (
               <>
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-destructive/10 text-destructive">
                   <XCircle className="h-12 w-12" />
@@ -152,6 +214,75 @@ function PaymentReturn() {
                     </Link>
                   </Button>
                 </div>
+              </>
+            ) : (
+              <>
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                  <Hourglass className="h-12 w-12" />
+                </div>
+                <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                  Awaiting Verification
+                </p>
+                <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                  Payment verification in progress
+                </h1>
+                <p className="mt-3 text-base text-muted-foreground">
+                  We have logged your UPI payment reference. Admissions verifies the bank credit and
+                  confirms your seat — this screen updates automatically, and you will receive an
+                  email receipt.
+                </p>
+
+                <div className="mt-8 rounded-2xl border border-border bg-muted/40 p-6 text-left text-sm space-y-3">
+                  <div className="flex justify-between items-center border-b border-border pb-3">
+                    <span className="text-muted-foreground">Payment Reference</span>
+                    <span className="font-mono font-semibold text-foreground">{reference}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-border pb-3">
+                    <span className="text-muted-foreground">Status</span>
+                    <span className="inline-flex items-center gap-1.5 font-semibold text-amber-600 dark:text-amber-400">
+                      <Hourglass className="h-4 w-4" /> Awaiting bank confirmation
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-border pb-3">
+                    <span className="text-muted-foreground">Amount</span>
+                    <span className="font-medium text-foreground">
+                      {orderDetails?.amount
+                        ? `₹${orderDetails.amount.toLocaleString("en-IN")}`
+                        : "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center pt-1">
+                    <span className="text-muted-foreground">Typical confirmation time</span>
+                    <span className="text-xs text-primary font-semibold">Within a few hours</span>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                  <Button
+                    variant="hero"
+                    size="xl"
+                    onClick={handleManualRefresh}
+                    disabled={refreshing}
+                  >
+                    {refreshing ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="mr-2 h-4 w-4" />
+                    )}
+                    Check status again
+                  </Button>
+                  <Button asChild variant="subtle" size="xl">
+                    <Link to="/contact">
+                      <HelpCircle className="mr-2 h-4 w-4" />
+                      Send the reference to admissions
+                    </Link>
+                  </Button>
+                </div>
+                <p className="mt-4 text-xs text-muted-foreground">
+                  {lastChecked
+                    ? `Last checked ${lastChecked.toLocaleTimeString("en-IN")}. This page refreshes automatically.`
+                    : "This page refreshes automatically while we verify."}
+                </p>
               </>
             )}
           </div>

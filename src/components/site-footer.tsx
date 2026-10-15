@@ -150,12 +150,12 @@ export function SiteFooter() {
               ))}
               <li>
                 <a
-                  href="https://www.guideitsol.in"
+                  href={site.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
                 >
-                  guideitsol.in
+                  {site.domain}
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </li>

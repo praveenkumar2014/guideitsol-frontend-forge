@@ -43,16 +43,14 @@ import { AnimatedSection } from "@/components/animated-section";
 import { StaggerContainer, staggerItem } from "@/components/stagger-container";
 
 import { AnimatedBackground } from "@/components/animated-background";
-import { CtaBand } from "@/components/cta-band";
+import { CourseAdvisorButton } from "@/components/course-advisor";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { HeroSlider } from "@/components/hero-slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
 import {
-  batches,
   certificationExams,
-  courses,
   degreePrograms,
   exploreCategories,
   professionalCertificates,
@@ -60,8 +58,16 @@ import {
   roadmaps,
   trendingSkills,
 } from "@/data/training";
+import { batchesQuery, coursesQuery, useBatches, useCourses } from "@/lib/catalog";
 
 export const Route = createFileRoute("/")({
+  // Prefetch the catalogue during SSR so course cards render server-side.
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(coursesQuery()),
+      context.queryClient.ensureQueryData(batchesQuery()),
+    ]);
+  },
   head: () => ({
     meta: [
       { title: `${site.name} | India's Premier IT Training & Career Forge` },
@@ -104,6 +110,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 function Home() {
+  const { items: courses, isLive: catalogueIsLive } = useCourses();
+  const { items: batches } = useBatches();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedCertCategory, setSelectedCertCategory] = useState<string>(
     professionalCertificates[0].name,
@@ -313,6 +321,50 @@ function Home() {
               </motion.div>
             ))}
           </StaggerContainer>
+        </AnimatedSection>
+
+        {/* ========================================================================= */}
+        {/* AI COURSE & BATCH ADVISOR                                                 */}
+        {/* ========================================================================= */}
+        <AnimatedSection direction="up">
+          <section className="py-16 sm:py-20">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="surface-panel hero-surface glow-elevated relative overflow-hidden rounded-3xl px-6 py-12 sm:px-14">
+                <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="max-w-2xl">
+                    <Badge
+                      variant="outline"
+                      className="border-primary/40 bg-primary/10 text-primary"
+                    >
+                      <Sparkles className="mr-1 h-3.5 w-3.5" /> AI Course & Batch Advisor
+                    </Badge>
+                    <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                      Not sure where to start? Get matched in under a minute.
+                    </h2>
+                    <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+                      Answer four quick questions about your goal, experience and schedule. The
+                      advisor scores every course and upcoming cohort, then explains exactly why
+                      each match fits you — including which batches still have seats.
+                    </p>
+                    <ul className="mt-5 grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
+                      <li>✓ Goal & skill-level matching</li>
+                      <li>✓ Live seat availability</li>
+                      <li>✓ Instant enrolment or advisor call</li>
+                    </ul>
+                  </div>
+                  <div className="flex w-full flex-col gap-3 sm:w-auto">
+                    <CourseAdvisorButton size="xl" label="Find my best-fit course" />
+                    <Link
+                      to="/courses"
+                      className="text-center text-xs font-semibold text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                    >
+                      Or browse the full catalogue ({courses.length} courses)
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </AnimatedSection>
       </section>
 

@@ -98,11 +98,130 @@ export interface AdminLeadsResponse {
   page_size: number;
 }
 
-const API_BASE = (
-  import.meta.env.VITE_PUBLIC_API_BASE_URL ||
-  import.meta.env.PUBLIC_API_BASE_URL ||
-  "http://localhost:8000"
-).replace(/\/$/, "");
+export interface UpiIntentPayload {
+  batch_id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  note?: string;
+}
+
+export interface UpiIntentResponse {
+  order_id: string;
+  reference: string;
+  amount: number;
+  course_title: string;
+  status: string;
+}
+
+export interface CatalogCourseRow {
+  slug: string;
+  title: string;
+  category: string;
+  level: string;
+  duration: string;
+  format: string;
+  price: number | string;
+  summary: string;
+  overview: string;
+  curriculum?: Array<Record<string, unknown>>;
+  tools?: string[];
+  published?: boolean;
+  updated_at?: string;
+}
+
+export interface CatalogBatchRow {
+  id: string;
+  course_slug: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  days: string;
+  time: string;
+  seats: number;
+  available: number;
+  mode: string;
+  instructor: string;
+  status: string;
+  price: number | string;
+  updated_at?: string;
+  courses?: { title?: string } | null;
+}
+
+export interface BlogPostRow {
+  slug: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  published_on: string;
+  read_time: string;
+  category: string;
+  image: string;
+  content: string[] | unknown;
+  published?: boolean;
+}
+
+export interface AdminPaymentRow {
+  order_id: string;
+  course_slug: string;
+  batch_id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone?: string;
+  amount: number;
+  payment_method?: string;
+  reference?: string | null;
+  status: string;
+  verified_by?: string | null;
+  verified_at?: string | null;
+  created_at?: string;
+}
+
+export interface SchemaTable {
+  name: string;
+  rows: number;
+}
+
+/**
+ * API base URL resolution.
+ *
+ * - In the browser: same-origin relative paths ("") by default, so the host
+ *   that served the page proxies /api/* to the FastAPI service. A configured
+ *   VITE_PUBLIC_API_BASE_URL is honoured unless it points at localhost (which
+ *   would break every visitor's browser).
+ * - During SSR: fetch needs an absolute URL. Use VITE_PUBLIC_API_BASE_URL when
+ *   it is absolute, otherwise VITE_SSR_API_BASE_URL, otherwise the local API.
+ */
+const CONFIGURED_API_BASE =
+  (import.meta.env.VITE_PUBLIC_API_BASE_URL as string | undefined) ||
+  (import.meta.env.PUBLIC_API_BASE_URL as string | undefined) ||
+  "";
+const SSR_API_BASE =
+  (import.meta.env.VITE_SSR_API_BASE_URL as string | undefined) || "http://localhost:8000";
+
+function resolveApiBase(): string {
+  if (typeof window === "undefined") {
+    return (CONFIGURED_API_BASE || SSR_API_BASE).replace(/\/$/, "");
+  }
+  const usable = /^https?:\/\/(localhost|127\.0\.0\.1)/.test(CONFIGURED_API_BASE)
+    ? ""
+    : CONFIGURED_API_BASE;
+  return usable.replace(/\/$/, "");
+}
+
+export const API_BASE = resolveApiBase();
+
+function adminHeaders(adminKey?: string, token?: string): Record<string, string> {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (adminKey) headers["X-Admin-Key"] = adminKey;
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  return headers;
+}
+
+async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, init);
+  return await handleResponse<T>(res);
+}
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -243,5 +362,182 @@ export const api = {
       headers: { "X-Admin-Key": adminKey },
     });
     await handleResponse<void>(res);
+  },
+
+  // -------------------------------------------------------------------------
+  // Dynamic catalogue hydration (headless CMS)
+  // -------------------------------------------------------------------------
+  async getCourses(): Promise<CatalogCourseRow[]> {
+    return await fetchJson<CatalogCourseRow[]>("/api/courses");
+  },
+
+  async getBatches(): Promise<CatalogBatchRow[]> {
+    return await fetchJson<CatalogBatchRow[]>("/api/batches");
+  },
+
+  async getBlogPosts(): Promise<BlogPostRow[]> {
+    return await fetchJson<BlogPostRow[]>("/api/blog");
+  },
+
+  // -------------------------------------------------------------------------
+  // UPI / GPay direct payment intents
+  // -------------------------------------------------------------------------
+  async createUpiIntent(payload: UpiIntentPayload): Promise<UpiIntentResponse> {
+    const res = await fetch(`${API_BASE}/api/payments/upi-intents`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await handleResponse<UpiIntentResponse>(res);
+  },
+
+  // -------------------------------------------------------------------------
+  // Admin: payment reconciliation
+  // -------------------------------------------------------------------------
+  async getAdminPayments(
+    adminKey: string,
+    options: { status?: string; search?: string; page?: number } = {},
+    token?: string,
+  ): Promise<{ items: AdminPaymentRow[]; total: number; page: number; page_size: number }> {
+    const params = new URLSearchParams({ page: String(options.page ?? 1), page_size: "25" });
+    if (options.status && options.status !== "all") params.append("payment_status", options.status);
+    if (options.search) params.append("search", options.search);
+    return await fetchJson(`/api/admin/payments?${params.toString()}`, {
+      headers: adminHeaders(adminKey, token),
+    });
+  },
+
+  async verifyAdminPayment(
+    adminKey: string,
+    orderId: string,
+    token?: string,
+  ): Promise<AdminPaymentRow> {
+    return await fetchJson<AdminPaymentRow>(`/api/admin/payments/${orderId}/verify`, {
+      method: "POST",
+      headers: adminHeaders(adminKey, token),
+    });
+  },
+
+  async rejectAdminPayment(
+    adminKey: string,
+    orderId: string,
+    token?: string,
+  ): Promise<AdminPaymentRow> {
+    return await fetchJson<AdminPaymentRow>(`/api/admin/payments/${orderId}/reject`, {
+      method: "POST",
+      headers: adminHeaders(adminKey, token),
+    });
+  },
+
+  // -------------------------------------------------------------------------
+  // Admin: live catalogue CRUD
+  // -------------------------------------------------------------------------
+  async upsertCourse(
+    adminKey: string,
+    course: Partial<CatalogCourseRow> & { slug: string; title: string; category: string },
+    token?: string,
+  ): Promise<CatalogCourseRow> {
+    return await fetchJson<CatalogCourseRow>("/api/admin/courses", {
+      method: "POST",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(course),
+    });
+  },
+
+  async updateCourse(
+    adminKey: string,
+    slug: string,
+    updates: Record<string, unknown>,
+    token?: string,
+  ): Promise<CatalogCourseRow> {
+    return await fetchJson<CatalogCourseRow>(`/api/admin/courses/${slug}`, {
+      method: "PATCH",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async deleteCourse(adminKey: string, slug: string, token?: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/api/admin/courses/${slug}`, {
+      method: "DELETE",
+      headers: adminHeaders(adminKey, token),
+    });
+    await handleResponse<void>(res);
+  },
+
+  async upsertBatch(
+    adminKey: string,
+    batch: Record<string, unknown> & { id: string; course_slug: string; name: string },
+    token?: string,
+  ): Promise<CatalogBatchRow> {
+    return await fetchJson<CatalogBatchRow>("/api/admin/batches", {
+      method: "POST",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(batch),
+    });
+  },
+
+  async updateBatch(
+    adminKey: string,
+    batchId: string,
+    updates: Record<string, unknown>,
+    token?: string,
+  ): Promise<CatalogBatchRow> {
+    return await fetchJson<CatalogBatchRow>(`/api/admin/batches/${batchId}`, {
+      method: "PATCH",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async deleteBatch(adminKey: string, batchId: string, token?: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/api/admin/batches/${batchId}`, {
+      method: "DELETE",
+      headers: adminHeaders(adminKey, token),
+    });
+    await handleResponse<void>(res);
+  },
+
+  async upsertBlogPost(
+    adminKey: string,
+    post: Record<string, unknown> & { slug: string; title: string },
+    token?: string,
+  ): Promise<BlogPostRow> {
+    return await fetchJson<BlogPostRow>("/api/admin/blog", {
+      method: "POST",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(post),
+    });
+  },
+
+  async updateBlogPost(
+    adminKey: string,
+    slug: string,
+    updates: Record<string, unknown>,
+    token?: string,
+  ): Promise<BlogPostRow> {
+    return await fetchJson<BlogPostRow>(`/api/admin/blog/${slug}`, {
+      method: "PATCH",
+      headers: adminHeaders(adminKey, token),
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async deleteBlogPost(adminKey: string, slug: string, token?: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/api/admin/blog/${slug}`, {
+      method: "DELETE",
+      headers: adminHeaders(adminKey, token),
+    });
+    await handleResponse<void>(res);
+  },
+
+  // -------------------------------------------------------------------------
+  // Admin: schema & role viewer
+  // -------------------------------------------------------------------------
+  async getAdminSchema(
+    adminKey: string,
+    token?: string,
+  ): Promise<{ tables: SchemaTable[]; role_permissions: Record<string, string[]> }> {
+    return await fetchJson("/api/admin/schema", { headers: adminHeaders(adminKey, token) });
   },
 };

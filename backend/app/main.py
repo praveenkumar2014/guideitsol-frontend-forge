@@ -10,14 +10,39 @@ from typing import Any
 import httpx
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr, Field
 
 from .emailer import notify_new_lead, send_enquiry_confirmation, send_payment_receipt
-from .security import client_ip, lead_limiter, order_limiter, require_admin_key, verify_supabase_token
+from .security import (
+    ROLE_PERMISSIONS,
+    client_ip,
+    lead_limiter,
+    order_limiter,
+    require_role,
+    role_grants,
+    verify_supabase_token,
+)
 from .settings import get_settings
 from .supabase import SupabaseError, supabase_request
 
 app = FastAPI(title="GUIDESOFT API", version="1.0.0")
+
+
+@app.exception_handler(SupabaseError)
+async def supabase_error_handler(request: Request, exc: SupabaseError) -> JSONResponse:
+    """Degrade gracefully when the database is unreachable or not configured.
+
+    The frontend treats this as "database offline" and falls back to its static
+    catalogue / UPI flow instead of showing a stack trace.
+    """
+    return JSONResponse(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        content={
+            "detail": "The database is not reachable right now. Please try again shortly.",
+            "code": "database_unavailable",
+        },
+    )
 
 
 def _cors_origins() -> list[str]:
@@ -60,6 +85,65 @@ class ProgressCreate(BaseModel):
     completed: bool = True
 
 
+class UpiIntentCreate(BaseModel):
+    batch_id: str = Field(min_length=2, max_length=120)
+    customer_name: str = Field(min_length=2, max_length=120)
+    customer_email: EmailStr
+    customer_phone: str = Field(min_length=8, max_length=30)
+    note: str = Field(default="", max_length=500)
+
+
+class BlogPostUpsert(BaseModel):
+    slug: str = Field(min_length=2, max_length=160)
+    title: str = Field(min_length=3, max_length=240)
+    excerpt: str = Field(default="", max_length=1000)
+    author: str = Field(default="GUIDESOFT Editorial", max_length=120)
+    published_on: str | None = Field(default=None, max_length=20)
+    read_time: str = Field(default="5 min read", max_length=40)
+    category: str = Field(default="Industry Insights", max_length=80)
+    image: str = Field(default="", max_length=500)
+    content: list[str] = Field(default_factory=list, max_length=200)
+    published: bool = True
+
+
+class CourseUpsert(BaseModel):
+    slug: str = Field(min_length=2, max_length=160)
+    title: str = Field(min_length=3, max_length=240)
+    category: str = Field(min_length=2, max_length=120)
+    level: str = Field(default="Intermediate", max_length=40)
+    duration: str = Field(default="12 weeks", max_length=60)
+    format: str = Field(default="Live online", max_length=60)
+    price: float = Field(default=0, ge=0)
+    summary: str = Field(default="", max_length=2000)
+    overview: str = Field(default="", max_length=8000)
+    curriculum: list[Any] = Field(default_factory=list)
+    tools: list[str] = Field(default_factory=list)
+    published: bool = True
+
+
+class BatchUpsert(BaseModel):
+    id: str = Field(min_length=2, max_length=120)
+    course_slug: str = Field(min_length=2, max_length=160)
+    name: str = Field(min_length=3, max_length=200)
+    start_date: str = Field(max_length=20)
+    end_date: str = Field(max_length=20)
+    days: str = Field(default="Mon, Wed, Fri", max_length=80)
+    time: str = Field(default="7:30–9:00 PM", max_length=80)
+    seats: int = Field(default=0, ge=0)
+    available: int = Field(default=0, ge=0)
+    mode: str = Field(default="Live online", max_length=60)
+    instructor: str = Field(default="GUIDESOFT Faculty", max_length=120)
+    status: str = Field(default="Open for enrolment", max_length=80)
+    price: float = Field(default=0, ge=0)
+
+
+# Role-scoped admin dependencies (also accept the legacy X-Admin-Key service key).
+require_admin = require_role("admin", permission="manage_system")
+require_lead_manager = require_role("admin", permission="manage_leads")
+require_payment_manager = require_role("admin", permission="reconcile_payments")
+require_catalog_manager = require_role("admin", "instructor", permission="manage_catalog")
+
+
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok", "service": "guidesoft-api"}
@@ -97,6 +181,28 @@ async def get_batch(batch_id: str) -> Any:
     result = await supabase_request("GET", "batches", query=f"id=eq.{batch_id}&select=*,courses(title)")
     if not result:
         raise HTTPException(status_code=404, detail="Batch not found")
+    return result[0]
+
+
+# ---------------------------------------------------------------------------
+# Blog (headless CMS collection)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/blog")
+async def list_blog_posts() -> Any:
+    return await supabase_request(
+        "GET", "blog_posts", query="published=eq.true&select=*&order=published_on.desc"
+    )
+
+
+@app.get("/api/blog/{slug}")
+async def get_blog_post(slug: str) -> Any:
+    result = await supabase_request(
+        "GET", "blog_posts", query=f"slug=eq.{slug}&published=eq.true&select=*"
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Blog post not found")
     return result[0]
 
 
@@ -141,6 +247,86 @@ async def verify_certificate(certificate_id: str) -> Any:
 # ---------------------------------------------------------------------------
 # Payments
 # ---------------------------------------------------------------------------
+
+
+async def finalize_paid_order(order: dict[str, Any], *, verified_by: str | None = None) -> None:
+    """Idempotent post-payment engine shared by gateway webhooks and manual UPI
+    verification.
+
+    On a successful transaction this:
+      1. marks the payment order paid (with verifier attribution),
+      2. decrements the batch seat counter (automated seat allotment),
+      3. creates the learner enrolment (unique per email + batch),
+      4. drops a learner notification and emails the receipt.
+    """
+    order_id = order.get("order_id") or ""
+    now = datetime.now(timezone.utc).isoformat()
+    await supabase_request(
+        "PATCH",
+        f"payment_orders?order_id=eq.{order_id}",
+        {
+            "status": "success",
+            "verified_by": verified_by,
+            "verified_at": now,
+            "updated_at": now,
+        },
+    )
+
+    batch_id = order.get("batch_id")
+    if batch_id:
+        try:
+            rows = await supabase_request(
+                "GET", "batches", query=f"id=eq.{batch_id}&select=id,available"
+            )
+            if rows and isinstance(rows, list) and isinstance(rows[0], dict):
+                available = int(rows[0].get("available") or 0)
+                if available > 0:
+                    await supabase_request(
+                        "PATCH",
+                        f"batches?id=eq.{batch_id}",
+                        {"available": available - 1, "updated_at": now},
+                    )
+        except SupabaseError:
+            pass  # seat counter is best-effort; enrolment still proceeds
+
+    try:
+        await supabase_request(
+            "POST",
+            "enrolments",
+            {
+                "user_email": order.get("customer_email"),
+                "batch_id": batch_id,
+                "course_slug": order.get("course_slug"),
+                "payment_order_id": order_id,
+                "amount": order.get("amount"),
+                "status": "active",
+                "updated_at": now,
+            },
+        )
+    except SupabaseError:
+        pass  # already enrolled (unique user_email + batch_id)
+
+    try:
+        await supabase_request(
+            "POST",
+            "notifications",
+            {
+                "user_email": order.get("customer_email"),
+                "title": "Enrolment confirmed",
+                "body": f"Your payment for {order.get('course_slug', 'your course')} is verified. Course access is unlocked.",
+                "read": False,
+            },
+        )
+    except SupabaseError:
+        pass
+
+    send_payment_receipt(
+        order.get("customer_email", ""),
+        order.get("customer_name", "there"),
+        order_id,
+        order.get("course_slug", "your course"),
+        f"₹{order.get('amount', 0)}",
+    )
 
 
 @app.post("/api/payments/orders", status_code=status.HTTP_201_CREATED)
@@ -259,36 +445,102 @@ async def cashfree_webhook(
         # Idempotency: duplicate delivery of the same event.
         return {"status": "accepted"}
 
-    updated = await supabase_request(
-        "PATCH",
-        f"payment_orders?order_id=eq.{order_id}",
-        {"status": payment_status, "updated_at": datetime.now(timezone.utc).isoformat()},
-    )
+    existing_rec = existing[0] if existing and isinstance(existing, list) and existing else {}
 
     if payment_status == "success":
-        existing_rec = existing[0] if existing and isinstance(existing, list) and existing else {}
-        updated_rec = updated[0] if updated and isinstance(updated, list) and updated else {}
-        record = {**existing_rec, **updated_rec}
+        record = {**existing_rec, "order_id": order_id}
+        await finalize_paid_order(record, verified_by="cashfree-webhook")
+    else:
         await supabase_request(
-            "POST",
-            "enrolments",
-            {
-                "user_email": record.get("customer_email"),
-                "batch_id": record.get("batch_id"),
-                "course_slug": record.get("course_slug"),
-                "payment_order_id": order_id,
-                "amount": record.get("amount"),
-                "status": "active",
-            },
-        )
-        send_payment_receipt(
-            record.get("customer_email", ""),
-            record.get("customer_name", "there"),
-            order_id,
-            record.get("course_slug", "your course"),
-            f"₹{record.get('amount', 0)}",
+            "PATCH",
+            f"payment_orders?order_id=eq.{order_id}",
+            {"status": payment_status, "updated_at": datetime.now(timezone.utc).isoformat()},
         )
     return {"status": "accepted"}
+
+
+# ---------------------------------------------------------------------------
+# UPI / GPay direct intents (manual verification workflow)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/payments/upi-intents", status_code=status.HTTP_201_CREATED)
+async def create_upi_intent(intent: UpiIntentCreate, request: Request) -> dict[str, Any]:
+    """Record a direct UPI/GPay payment intent against a batch.
+
+    UPI apps cannot notify the site automatically, so every intent is stored in
+    SQL with a unique transaction reference and surfaced in the admin payment
+    reconciliation tab. Admissions verifies the bank credit and marks the order
+    paid, which triggers automatic seat allotment and enrolment.
+    """
+    if not order_limiter.allow(client_ip(request)):
+        raise HTTPException(status_code=429, detail="Too many payment attempts. Please try again later.")
+
+    batch_result = await supabase_request(
+        "GET", "batches", query=f"id=eq.{intent.batch_id}&select=*,courses(title)"
+    )
+    if not batch_result:
+        raise HTTPException(status_code=404, detail="Batch not found")
+    batch = batch_result[0]
+    course_title = batch.get("courses", {}).get("title") or batch.get("course_slug", "course")
+    amount = float(batch.get("price") or 0)
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="This batch is not available for online payment")
+
+    reference = f"GS{uuid.uuid4().hex[:10].upper()}"
+    order_id = f"gs_upi_{uuid.uuid4().hex}"
+    now = datetime.now(timezone.utc).isoformat()
+    row = {
+        "order_id": order_id,
+        "course_slug": batch.get("course_slug"),
+        "batch_id": intent.batch_id,
+        "customer_name": intent.customer_name,
+        "customer_email": intent.customer_email,
+        "customer_phone": intent.customer_phone,
+        "amount": amount,
+        "payment_session_id": None,
+        "payment_method": "upi",
+        "reference": reference,
+        "status": "awaiting_verification",
+        "created_at": now,
+        "updated_at": now,
+    }
+    try:
+        await supabase_request("POST", "payment_orders", row)
+    except SupabaseError as exc:
+        raise HTTPException(status_code=502, detail="Unable to record the UPI payment request. Please try again.") from exc
+
+    # Mirror the intent into the admin enquiry list (lead CRM) so admissions
+    # can reconcile the reference against the bank statement.
+    try:
+        await supabase_request(
+            "POST",
+            "leads",
+            {
+                "name": intent.customer_name,
+                "email": intent.customer_email,
+                "phone": intent.customer_phone,
+                "course_slug": batch.get("course_slug"),
+                "batch_id": intent.batch_id,
+                "source": "upi-checkout",
+                "message": (
+                    f"UPI payment initiated for {course_title} "
+                    f"({batch.get('name', intent.batch_id)}), ref {reference}, amount ₹{amount:g}"
+                    + (f". Note: {intent.note}" if intent.note else "")
+                ),
+                "status": "new",
+            },
+        )
+    except SupabaseError:
+        pass
+
+    return {
+        "order_id": order_id,
+        "reference": reference,
+        "amount": amount,
+        "course_title": course_title,
+        "status": "awaiting_verification",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -359,13 +611,13 @@ async def set_progress(
 
 
 # ---------------------------------------------------------------------------
-# Admin (X-Admin-Key header)
+# Admin (role-verified JWT or X-Admin-Key service credential)
 # ---------------------------------------------------------------------------
 
 
 @app.get("/api/admin/leads")
 async def admin_list_leads(
-    _: None = Depends(require_admin_key),
+    _: dict[str, Any] = Depends(require_lead_manager),
     search: str | None = None,
     lead_status: str | None = None,
     page: int = 1,
@@ -397,7 +649,7 @@ async def admin_list_leads(
 
 
 @app.get("/api/admin/stats")
-async def admin_stats(_: None = Depends(require_admin_key)) -> dict[str, Any]:
+async def admin_stats(_: dict[str, Any] = Depends(require_lead_manager)) -> dict[str, Any]:
     lead_rows = await supabase_request("GET", "leads", query="select=status")
     leads = lead_rows or []
     by_status: dict[str, int] = {}
@@ -425,7 +677,7 @@ async def admin_stats(_: None = Depends(require_admin_key)) -> dict[str, Any]:
 async def admin_update_lead(
     lead_id: str,
     body: dict[str, Any],
-    _: None = Depends(require_admin_key),
+    _: dict[str, Any] = Depends(require_lead_manager),
 ) -> Any:
     allowed = {"status", "assigned_counsellor", "follow_up_at", "notes"}
     updates = {key: value for key, value in body.items() if key in allowed}
@@ -440,9 +692,242 @@ async def admin_update_lead(
 
 
 @app.delete("/api/admin/leads/{lead_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
-async def admin_delete_lead(lead_id: str, _: None = Depends(require_admin_key)) -> Response:
+async def admin_delete_lead(lead_id: str, _: dict[str, Any] = Depends(require_lead_manager)) -> Response:
     await supabase_request("DELETE", f"leads?id=eq.{lead_id}")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# ---------------------------------------------------------------------------
+# Admin · payment reconciliation (UPI & gateway)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/admin/payments")
+async def admin_list_payments(
+    _: dict[str, Any] = Depends(require_payment_manager),
+    payment_status: str | None = None,
+    search: str | None = None,
+    page: int = 1,
+    page_size: int = 20,
+) -> dict[str, Any]:
+    page = max(page, 1)
+    page_size = min(max(page_size, 1), 100)
+    offset = (page - 1) * page_size
+    filters = []
+    if payment_status:
+        filters.append(f"status=eq.{payment_status}")
+    filters.append("order=created_at.desc")
+    filters.append(f"range={offset}.{offset + page_size - 1}")
+    query = "&".join(filters) + "&select=*"
+    rows = await supabase_request("GET", "payment_orders", query=query)
+    total_result = await supabase_request("GET", "payment_orders", query="select=count")
+    total = (
+        total_result[0].get("count")
+        if (total_result and isinstance(total_result[0], dict) and "count" in total_result[0])
+        else len(rows or [])
+    )
+    items = rows or []
+    if search:
+        needle = search.lower()
+        items = [
+            row
+            for row in items
+            if needle in (row.get("customer_name") or "").lower()
+            or needle in (row.get("customer_email") or "").lower()
+            or needle in (row.get("order_id") or "").lower()
+            or needle in (row.get("reference") or "").lower()
+        ]
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
+
+
+@app.post("/api/admin/payments/{order_id}/verify")
+async def admin_verify_payment(
+    order_id: str,
+    actor: dict[str, Any] = Depends(require_payment_manager),
+) -> Any:
+    """Mark a payment as received (bank/UPI verified) and run the allotment engine."""
+    result = await supabase_request("GET", "payment_orders", query=f"order_id=eq.{order_id}&select=*")
+    if not result:
+        raise HTTPException(status_code=404, detail="Order not found")
+    order = result[0]
+    if order.get("status") == "success":
+        return order
+    verifier = actor.get("email") or actor.get("sub") or "admin"
+    await finalize_paid_order(order, verified_by=str(verifier))
+    updated = await supabase_request("GET", "payment_orders", query=f"order_id=eq.{order_id}&select=*")
+    return updated[0] if updated else {**order, "status": "success"}
+
+
+@app.post("/api/admin/payments/{order_id}/reject")
+async def admin_reject_payment(
+    order_id: str,
+    actor: dict[str, Any] = Depends(require_payment_manager),
+) -> Any:
+    result = await supabase_request("GET", "payment_orders", query=f"order_id=eq.{order_id}&select=*")
+    if not result:
+        raise HTTPException(status_code=404, detail="Order not found")
+    if result[0].get("status") == "success":
+        raise HTTPException(status_code=409, detail="A verified payment cannot be rejected")
+    verifier = actor.get("email") or actor.get("sub") or "admin"
+    now = datetime.now(timezone.utc).isoformat()
+    updated = await supabase_request(
+        "PATCH",
+        f"payment_orders?order_id=eq.{order_id}",
+        {
+            "status": "failed",
+            "verified_by": str(verifier),
+            "verified_at": now,
+            "updated_at": now,
+        },
+    )
+    return updated[0] if updated and isinstance(updated, list) and updated else result[0]
+
+
+# ---------------------------------------------------------------------------
+# Admin · live catalogue CRUD (headless CMS)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/admin/courses", status_code=status.HTTP_201_CREATED)
+async def admin_upsert_course(
+    course: CourseUpsert,
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    payload = {**course.model_dump(mode="json"), "updated_at": datetime.now(timezone.utc).isoformat()}
+    created = await supabase_request("POST", "courses?on_conflict=slug", payload)
+    return created[0] if isinstance(created, list) and created else payload
+
+
+@app.patch("/api/admin/courses/{slug}")
+async def admin_update_course(
+    slug: str,
+    body: dict[str, Any],
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    allowed = {
+        "title", "category", "level", "duration", "format", "price",
+        "summary", "overview", "curriculum", "tools", "published",
+    }
+    updates = {key: value for key, value in body.items() if key in allowed}
+    if not updates:
+        raise HTTPException(status_code=422, detail="No updatable fields provided")
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await supabase_request("PATCH", f"courses?slug=eq.{slug}", updates)
+    if not result:
+        raise HTTPException(status_code=404, detail="Course not found")
+    return result[0]
+
+
+@app.delete("/api/admin/courses/{slug}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def admin_delete_course(slug: str, _: dict[str, Any] = Depends(require_catalog_manager)) -> Response:
+    await supabase_request("DELETE", f"courses?slug=eq.{slug}")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.post("/api/admin/batches", status_code=status.HTTP_201_CREATED)
+async def admin_upsert_batch(
+    batch: BatchUpsert,
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    payload = {**batch.model_dump(mode="json"), "updated_at": datetime.now(timezone.utc).isoformat()}
+    created = await supabase_request("POST", "batches?on_conflict=id", payload)
+    return created[0] if isinstance(created, list) and created else payload
+
+
+@app.patch("/api/admin/batches/{batch_id}")
+async def admin_update_batch(
+    batch_id: str,
+    body: dict[str, Any],
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    allowed = {
+        "course_slug", "name", "start_date", "end_date", "days", "time",
+        "seats", "available", "mode", "instructor", "status", "price",
+    }
+    updates = {key: value for key, value in body.items() if key in allowed}
+    if not updates:
+        raise HTTPException(status_code=422, detail="No updatable fields provided")
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await supabase_request("PATCH", f"batches?id=eq.{batch_id}", updates)
+    if not result:
+        raise HTTPException(status_code=404, detail="Batch not found")
+    return result[0]
+
+
+@app.delete("/api/admin/batches/{batch_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def admin_delete_batch(batch_id: str, _: dict[str, Any] = Depends(require_catalog_manager)) -> Response:
+    await supabase_request("DELETE", f"batches?id=eq.{batch_id}")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.post("/api/admin/blog", status_code=status.HTTP_201_CREATED)
+async def admin_upsert_blog_post(
+    post: BlogPostUpsert,
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    payload = post.model_dump(mode="json")
+    if not payload.get("published_on"):
+        payload["published_on"] = datetime.now(timezone.utc).date().isoformat()
+    payload["updated_at"] = datetime.now(timezone.utc).isoformat()
+    created = await supabase_request("POST", "blog_posts?on_conflict=slug", payload)
+    return created[0] if isinstance(created, list) and created else payload
+
+
+@app.patch("/api/admin/blog/{slug}")
+async def admin_update_blog_post(
+    slug: str,
+    body: dict[str, Any],
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
+    allowed = {
+        "title", "excerpt", "author", "published_on", "read_time",
+        "category", "image", "content", "published",
+    }
+    updates = {key: value for key, value in body.items() if key in allowed}
+    if not updates:
+        raise HTTPException(status_code=422, detail="No updatable fields provided")
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await supabase_request("PATCH", f"blog_posts?slug=eq.{slug}", updates)
+    if not result:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    return result[0]
+
+
+@app.delete("/api/admin/blog/{slug}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def admin_delete_blog_post(slug: str, _: dict[str, Any] = Depends(require_catalog_manager)) -> Response:
+    await supabase_request("DELETE", f"blog_posts?slug=eq.{slug}")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get("/api/admin/schema")
+async def admin_schema_viewer(_: dict[str, Any] = Depends(require_admin)) -> dict[str, Any]:
+    """Schema/query viewer: table list with live row counts and role grants."""
+    tables = [
+        "courses", "batches", "leads", "payment_orders", "certificates",
+        "enrolments", "course_progress", "notifications", "blog_posts",
+        "user_profiles",
+    ]
+    result = []
+    for name in tables:
+        count = 0
+        try:
+            rows = await supabase_request("GET", name, query="select=count")
+            if rows and isinstance(rows, list) and isinstance(rows[0], dict):
+                count = int(rows[0].get("count") or 0)
+        except SupabaseError:
+            count = -1  # table missing or unreachable
+        result.append({"name": name, "rows": count})
+    return {"tables": result, "role_permissions": ROLE_PERMISSIONS}
+
+
+@app.get("/api/admin/roles")
+async def admin_role_matrix(_: dict[str, Any] = Depends(require_admin)) -> dict[str, Any]:
+    return {
+        "roles": {
+            role: {"permissions": perms, "grants": {perm: role_grants(role, perm) for perm in perms}}
+            for role, perms in ROLE_PERMISSIONS.items()
+        }
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -463,7 +948,10 @@ class ContentGenerateRequest(BaseModel):
 
 
 @app.post("/api/ai/generate")
-async def ai_generate_content(req: ContentGenerateRequest) -> Any:
+async def ai_generate_content(
+    req: ContentGenerateRequest,
+    _: dict[str, Any] = Depends(require_catalog_manager),
+) -> Any:
     """Generate educational content using AI."""
     request = ContentRequest(
         content_type=req.content_type,
@@ -486,6 +974,7 @@ async def ai_generate_content(req: ContentGenerateRequest) -> Any:
 async def ai_generate_full_course(
     topic: str = Query(..., min_length=3),
     level: str = Query(default="intermediate"),
+    _: dict[str, Any] = Depends(require_catalog_manager),
 ) -> Any:
     """Generate a complete course package: outline + quizzes + video scripts."""
     result = await generate_full_course(topic, level)
@@ -496,6 +985,7 @@ async def ai_generate_full_course(
 async def ai_research_topic(
     topic: str = Query(..., min_length=3),
     num_results: int = Query(default=5, ge=1, le=20),
+    _: dict[str, Any] = Depends(require_catalog_manager),
 ) -> Any:
     """Research course topics from the web."""
     results = await research_course_topics(topic, num_results)

@@ -77,8 +77,66 @@ export const TEST_ACCOUNTS: Record<UserRole, UserProfile> = {
   },
 };
 
+/**
+ * Universal permission matrix. Mirrors backend/app/security.py ROLE_PERMISSIONS
+ * so the UI and the API agree on what each role may do.
+ */
+export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
+  learner: ["view_materials", "submit_assignments", "track_progress", "view_credentials"],
+  instructor: [
+    "view_materials",
+    "submit_assignments",
+    "track_progress",
+    "view_credentials",
+    "grade_assignments",
+    "manage_cohorts",
+    "review_curriculum",
+    "manage_catalog",
+  ],
+  admin: [
+    "view_materials",
+    "submit_assignments",
+    "track_progress",
+    "view_credentials",
+    "grade_assignments",
+    "manage_cohorts",
+    "review_curriculum",
+    "manage_catalog",
+    "manage_leads",
+    "issue_certificates",
+    "view_analytics",
+    "reconcile_payments",
+    "manage_system",
+  ],
+  partner: ["view_candidates", "view_credentials", "post_internships", "schedule_interviews"],
+};
+
+export function hasPermission(user: UserProfile | null | undefined, permission: string): boolean {
+  if (!user) return false;
+  if (user.permissions?.includes(permission)) return true;
+  return ROLE_PERMISSIONS[user.role]?.includes(permission) ?? false;
+}
+
+export function hasRole(user: UserProfile | null | undefined, roles: UserRole[]): boolean {
+  if (!user) return false;
+  return roles.includes(user.role);
+}
+
+/** Access token for authenticated backend calls (Supabase session when live). */
+export async function getAuthToken(): Promise<string | null> {
+  if (typeof window === "undefined") return null;
+  try {
+    const session = await getSession();
+    return session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
 const AUTH_STORAGE_KEY = "guideitsol_auth_session";
 const AUTH_EVENT_NAME = "guideitsol_auth_change";
+export const LEGACY_ADMIN_AUTH_KEY = "guidesoft_admin_auth";
+export const LEGACY_ADMIN_KEY_STORAGE = "guidesoft_admin_key";
 
 function getStoredUser(): UserProfile | null {
   if (typeof window === "undefined") return null;
@@ -189,6 +247,42 @@ export async function logout(): Promise<void> {
   }
 }
 
+export const ADMIN_AUTH_EVENT = "guidesoft_admin_auth_change";
+
+/** Legacy shared-key admin session (used until Cloud logins are connected). */
+export function hasLegacyAdminSession(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(LEGACY_ADMIN_AUTH_KEY) === "true";
+}
+
+export function setLegacyAdminSession(authenticated: boolean, key?: string): void {
+  if (typeof window === "undefined") return;
+  if (authenticated) {
+    localStorage.setItem(LEGACY_ADMIN_AUTH_KEY, "true");
+    if (key) localStorage.setItem(LEGACY_ADMIN_KEY_STORAGE, key);
+  } else {
+    localStorage.removeItem(LEGACY_ADMIN_AUTH_KEY);
+  }
+  window.dispatchEvent(new CustomEvent(ADMIN_AUTH_EVENT, { detail: authenticated }));
+}
+
+/** Reactive read of the legacy admin-key session. */
+export function useLegacyAdminSession(): boolean {
+  const [authenticated, setAuthenticated] = useState<boolean>(() => hasLegacyAdminSession());
+  useEffect(() => {
+    setAuthenticated(hasLegacyAdminSession());
+    const handler = (event: Event) => {
+      setAuthenticated(Boolean((event as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener(ADMIN_AUTH_EVENT, handler);
+    window.addEventListener(AUTH_EVENT_NAME, () => setAuthenticated(hasLegacyAdminSession()));
+    return () => {
+      window.removeEventListener(ADMIN_AUTH_EVENT, handler);
+    };
+  }, []);
+  return authenticated;
+}
+
 export function useAuth() {
   const [user, setUser] = useState<UserProfile | null>(() => getStoredUser());
 
@@ -212,6 +306,8 @@ export function useAuth() {
     loginWithCredentials,
     loginWithGoogle,
     logout,
-    hasPermission: (permission: string) => !!user?.permissions.includes(permission),
+    hasPermission: (permission: string) => hasPermission(user, permission),
+    hasRole: (roles: UserRole[]) => hasRole(user, roles),
+    getToken: getAuthToken,
   };
 }
