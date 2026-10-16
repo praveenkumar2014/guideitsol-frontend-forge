@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 import { AuthModal, GoogleLogoIcon } from "@/components/auth-modal";
+import { CourseAdvisorButton } from "@/components/ai-course-advisor-dialog";
 import { CourseSearchDialog } from "@/components/course-search-dialog";
 import { EnquiryDialog } from "@/components/enquiry-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -213,6 +214,16 @@ export function SiteHeader() {
             </button>
           )}
 
+          {/* AI Course & Batch Advisor trigger */}
+          <div className="hidden lg:block">
+            <CourseAdvisorButton
+              variant="subtle"
+              size="sm"
+              label="AI Advisor"
+              className="gap-1.5 border border-border"
+            />
+          </div>
+
           {/* Quick Enquire CTA */}
           <div className="hidden sm:block">
             <Button
@@ -303,6 +314,13 @@ export function SiteHeader() {
               <span>Search all courses & specializations...</span>
             </button>
           </div>
+
+          <CourseAdvisorButton
+            variant="hero"
+            size="sm"
+            label="Find my best-fit course"
+            className="w-full"
+          />
 
           <nav className="grid grid-cols-2 gap-1.5">
             {nav.map((item) => (

@@ -5,6 +5,7 @@ import { CalendarDays, Clock3, CreditCard, MessageSquare, Sparkles, Users } from
 import { motion } from "framer-motion";
 
 import { AnimatedSection } from "@/components/animated-section";
+import { CourseAdvisorButton } from "@/components/ai-course-advisor-dialog";
 import { StaggerContainer, staggerItem } from "@/components/stagger-container";
 import { Section, SectionHeading, TrainingHero } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,13 @@ function LiveBatches() {
       <AnimatedSection direction="up">
         <Section>
           <SectionHeading eyebrow="Upcoming schedules" title="Choose a rhythm that fits." />
+          <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-surface/40 px-5 py-4">
+            <p className="flex-1 text-sm text-muted-foreground">
+              Not sure which schedule fits your week? The AI advisor matches your goal, experience
+              and time commitment to the cohorts with open seats.
+            </p>
+            <CourseAdvisorButton size="sm" label="Match me to a batch" />
+          </div>
           <StaggerContainer className="mt-10 space-y-4">
             {batches.map((batch) => {
               const course = courses.find((item) => item.slug === batch.courseSlug);
