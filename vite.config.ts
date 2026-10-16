@@ -11,6 +11,14 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    importProtection: {
+      client: {
+        // `src/server/*.functions.ts` files hold createServerFn RPC stubs — they
+        // are designed to be imported by client code (the handler body runs on
+        // the server only). Everything else under **/server/** stays protected.
+        excludeFiles: ["**/server/**/*.functions.ts"],
+      },
+    },
   },
   vite: {
     server: {

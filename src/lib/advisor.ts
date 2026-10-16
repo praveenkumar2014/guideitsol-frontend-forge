@@ -31,12 +31,65 @@ export interface AdvisorAnswers {
   mode: LearningMode | "Any";
 }
 
+/**
+ * Compact catalogue projection sent to the AI Gateway server function
+ * (`src/server/ai-advisor.functions.ts`). Everything is required and
+ * JSON-serializable so TanStack Start's strict server-fn validation passes.
+ */
+export type AdvisorCatalogCourse = {
+  slug: string;
+  title: string;
+  category: string;
+  level: string;
+  duration: string;
+  format: string;
+  price: string;
+  summary: string;
+  prerequisites: string[];
+  skills: string[];
+  rating: number | null;
+};
+
+export type AdvisorCatalogBatch = {
+  id: string;
+  courseSlug: string;
+  name: string;
+  start: string;
+  end: string;
+  days: string;
+  time: string;
+  mode: string;
+  instructor: string;
+  available: number;
+  price: string;
+};
+
+export type AiAdvisorMatch = {
+  courseSlug: string;
+  matchScore: number;
+  reasons: string[];
+  timeline: string;
+  batchId: string | null;
+};
+
+export type AiAdvisorResult = {
+  ok: boolean;
+  source: "ai" | "unavailable";
+  model: string | null;
+  matches: AiAdvisorMatch[];
+  trajectory: string[];
+  readiness: string;
+  error: string | null;
+};
+
 export interface Recommendation {
   course: Course;
   batch?: Batch;
   /** 0–100 match score. */
   score: number;
   reasons: string[];
+  /** Estimated time to job readiness (AI-enhanced results only). */
+  timeline?: string;
 }
 
 export const GOAL_OPTIONS: { id: AdvisorGoal; label: string; hint: string }[] = [
@@ -103,7 +156,8 @@ function parseWeeks(duration: string): number {
   return 12;
 }
 
-function upcomingBatchFor(courseSlug: string, batches: Batch[]): Batch | undefined {
+/** Next batch with open seats (earliest first), else the earliest batch. */
+export function nextOpenBatch(courseSlug: string, batches: Batch[]): Batch | undefined {
   const candidates = batches
     .filter((batch) => batch.courseSlug === courseSlug && batch.available > 0)
     .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
@@ -192,7 +246,7 @@ export function recommendCourses(
       score += 6;
       reasons.push(`Rated ${course.rating} by past learners`);
     }
-    const batch = upcomingBatchFor(course.slug, batches);
+    const batch = nextOpenBatch(course.slug, batches);
     if (batch && batch.available > 0) {
       score += 12;
       reasons.push(`${batch.available} seats open for the ${batch.start} cohort`);
@@ -212,4 +266,85 @@ export function recommendCourses(
 export function describeProfile(answers: AdvisorAnswers): string {
   const goal = GOAL_OPTIONS.find((option) => option.id === answers.goal)?.label ?? "your goal";
   return `${goal} · ${answers.level} · ${answers.commitment} · ${answers.mode}`;
+}
+
+/** Project a catalogue course onto the compact shape sent to the AI Gateway. */
+export function toAdvisorCatalogCourse(course: Course): AdvisorCatalogCourse {
+  return {
+    slug: course.slug,
+    title: course.title,
+    category: course.category,
+    level: course.level,
+    duration: course.duration,
+    format: course.format,
+    price: course.price,
+    summary: course.summary,
+    prerequisites: course.prerequisites ?? [],
+    skills: course.skillsLearned ?? [],
+    rating: course.rating ?? null,
+  };
+}
+
+/** Project a batch onto the compact shape sent to the AI Gateway. */
+export function toAdvisorCatalogBatch(batch: Batch): AdvisorCatalogBatch {
+  return {
+    id: batch.id,
+    courseSlug: batch.courseSlug,
+    name: batch.name,
+    start: batch.start,
+    end: batch.end,
+    days: batch.days,
+    time: batch.time,
+    mode: batch.mode,
+    instructor: batch.instructor,
+    available: batch.available,
+    price: batch.price,
+  };
+}
+
+/**
+ * Join AI Gateway matches back onto live catalogue objects. Unknown slugs are
+ * dropped; missing batches fall back to the next open cohort; any leftover
+ * slots are topped up with deterministic matches so the learner always sees a
+ * full set of actionable cards.
+ */
+export function hydrateAiMatches(
+  result: AiAdvisorResult,
+  answers: AdvisorAnswers,
+  courses: Course[],
+  batches: Batch[],
+  limit = 3,
+): Recommendation[] {
+  const out: Recommendation[] = [];
+  const seen = new Set<string>();
+
+  for (const match of result.matches) {
+    if (out.length >= limit) break;
+    const course = courses.find((item) => item.slug === match.courseSlug);
+    if (!course || seen.has(course.slug)) continue;
+    seen.add(course.slug);
+
+    const requested =
+      match.batchId !== null
+        ? batches.find((item) => item.id === match.batchId && item.courseSlug === course.slug)
+        : undefined;
+    const batch = requested ?? nextOpenBatch(course.slug, batches);
+
+    out.push({
+      course,
+      ...(batch ? { batch } : {}),
+      score: Math.max(0, Math.min(100, Math.round(match.matchScore))),
+      reasons: match.reasons.slice(0, 4),
+      ...(match.timeline ? { timeline: match.timeline } : {}),
+    });
+  }
+
+  for (const fallback of recommendCourses(answers, courses, batches, limit)) {
+    if (out.length >= limit) break;
+    if (seen.has(fallback.course.slug)) continue;
+    seen.add(fallback.course.slug);
+    out.push(fallback);
+  }
+
+  return out;
 }
