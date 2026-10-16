@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 const enquirySchema = z.object({
   name: z.string().min(2, "Please enter your name."),
@@ -46,6 +46,7 @@ export function EnquiryDialog({
   title = "Talk to a Career Advisor",
   description = "Get syllabus details, fee structure, batch schedules and personalized guidance.",
 }: EnquiryDialogProps) {
+  const { items: courses } = useCourses();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedLeadId, setSubmittedLeadId] = useState<string | null>(null);

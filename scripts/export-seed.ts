@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { batches, courses } from "../src/data/training.ts";
+import { articles } from "../src/data/blog.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "backend", "seed_data");
@@ -112,9 +113,63 @@ const certificateRows = [
   },
 ];
 
+const toIsoDate = (value: string): string => {
+  const parsed = new Date(value);
+  if (!Number.isNaN(parsed.getTime())) return parsed.toISOString().slice(0, 10);
+  const parsedWithDay = new Date(`${value} 1`);
+  return Number.isNaN(parsedWithDay.getTime())
+    ? new Date().toISOString().slice(0, 10)
+    : parsedWithDay.toISOString().slice(0, 10);
+};
+
+const blogRows = articles.map((article) => ({
+  slug: article.slug,
+  title: article.title,
+  excerpt: article.excerpt,
+  author: article.author,
+  published_on: toIsoDate(article.date),
+  read_time: article.readTime,
+  category: article.category,
+  image: article.image,
+  content: article.content,
+  published: true,
+}));
+
+// Universal role matrix seed: one demo account per role so RBAC can be tested
+// end to end before Cloud logins are connected.
+const roleRows = [
+  {
+    user_id: "usr_admin_01",
+    email: "admin@guideitsol.in",
+    name: "Admin Operations",
+    role: "admin",
+  },
+  {
+    user_id: "usr_instructor_01",
+    email: "aarav.menon@guideitsol.in",
+    name: "Aarav Menon",
+    role: "instructor",
+  },
+  {
+    user_id: "usr_learner_01",
+    email: "priya.sharma@example.com",
+    name: "Priya Sharma",
+    role: "learner",
+  },
+  {
+    user_id: "usr_partner_01",
+    email: "rohan.verma@techcorp.in",
+    name: "Rohan Verma",
+    role: "partner",
+  },
+];
+
 writeFileSync(join(outDir, "courses.json"), JSON.stringify(courseRows, null, 2));
 writeFileSync(join(outDir, "batches.json"), JSON.stringify(batchRows, null, 2));
 writeFileSync(join(outDir, "certificates.json"), JSON.stringify(certificateRows, null, 2));
+writeFileSync(join(outDir, "blog.json"), JSON.stringify(blogRows, null, 2));
+writeFileSync(join(outDir, "roles.json"), JSON.stringify(roleRows, null, 2));
 console.log(
-  `Wrote ${courseRows.length} courses, ${batchRows.length} batches, ${certificateRows.length} certificates to ${outDir}`,
+  `Wrote ${courseRows.length} courses, ${batchRows.length} batches, ${certificateRows.length} certificates, ` +
+    `${blogRows.length} blog posts, ${roleRows.length} role profiles to ${outDir}`,
 );

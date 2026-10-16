@@ -17,12 +17,15 @@ import {
 import { toast } from "sonner";
 
 import { api, type LearnerProfile, type LearnerProgressRecord } from "@/lib/api";
+import { AuthModal } from "@/components/auth-modal";
 import { CertificateDownload } from "@/components/certificate-download";
 import { CourseProgressTracker } from "@/components/course-progress-tracker";
 import { Skeleton, TableSkeleton } from "@/components/skeleton";
 import { Section, SectionHeading } from "@/components/training-ui";
 import { Button } from "@/components/ui/button";
-import { courses, learnerDashboard } from "@/data/training";
+import { learnerDashboard } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
+import { useEnrolments } from "@/lib/lms";
 import { site } from "@/data/site";
 import { useAuth } from "@/lib/auth";
 
@@ -42,6 +45,7 @@ export const Route = createFileRoute("/student-dashboard")({
 
 function StudentDashboard() {
   const { user } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "courses" | "assignments" | "certificates" | "profile"
   >("overview");
@@ -98,8 +102,19 @@ function StudentDashboard() {
 
   const liveCourseSlug = (apiProfile?.enrolments?.[0] as Record<string, unknown> | undefined)
     ?.course_slug as string | undefined;
-  const currentCourseSlug = liveCourseSlug || learnerDashboard.currentCourse;
-  const course = courses.find((item) => item.slug === currentCourseSlug) || courses[0];
+  const { items: courses } = useCourses();
+  const { enrolments } = useEnrolments();
+  const enrolledSlugs = new Set([
+    ...(apiProfile?.enrolments ?? [])
+      .map((row) => (row as Record<string, unknown>).course_slug)
+      .filter((slug): slug is string => typeof slug === "string"),
+    ...enrolments.map((entry) => entry.course_slug),
+  ]);
+  const enrolledCourses = courses.filter((item) => enrolledSlugs.has(item.slug));
+  const currentCourseSlug =
+    liveCourseSlug || enrolledCourses[0]?.slug || learnerDashboard.currentCourse;
+  const course =
+    courses.find((item) => item.slug === currentCourseSlug) || enrolledCourses[0] || courses[0];
   const learnerDisplayName = apiProfile?.name || user?.name || learnerDashboard.learner;
 
   const assignmentsList = [
@@ -146,6 +161,7 @@ function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-surface/30 pb-20">
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
       {/* Header Banner */}
       <section className="hero-surface border-b border-border bg-background">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -181,6 +197,19 @@ function StudentDashboard() {
               </Button>
             </div>
           </div>
+
+          {/* Guest preview notice — real data requires a learner session */}
+          {!user && (
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-4 py-3">
+              <p className="text-xs text-muted-foreground">
+                You are viewing a demo workspace. Sign in to see your real enrolments, synced
+                progress, notifications and certificates.
+              </p>
+              <Button size="sm" variant="hero" onClick={() => setAuthOpen(true)}>
+                Sign in to sync my learning
+              </Button>
+            </div>
+          )}
 
           {/* Navigation Sub-Tabs */}
           <div className="mt-8 flex flex-wrap gap-2 border-t border-border pt-4">
@@ -408,45 +437,54 @@ function StudentDashboard() {
           <div className="space-y-6">
             <SectionHeading eyebrow="Enrolled Catalogue" title="Your Active Learning Programs" />
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="surface-panel rounded-3xl p-6 border border-border shadow-sm">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <span className="text-xs font-bold text-primary uppercase">
-                      {course.category}
-                    </span>
-                    <h3 className="text-xl font-bold mt-1">{course.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Instructor: {course.instructor}
-                    </p>
-                  </div>
-                  <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full">
-                    Active Cohort
-                  </span>
-                </div>
+              {(enrolledCourses.length > 0 ? enrolledCourses : [course]).map((enrolledCourse) => {
+                const isProgressCourse = enrolledCourse.slug === currentCourseSlug;
+                const progressValue = isProgressCourse ? savedProgress : 0;
+                return (
+                  <div
+                    key={enrolledCourse.slug}
+                    className="surface-panel rounded-3xl p-6 border border-border shadow-sm"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <span className="text-xs font-bold text-primary uppercase">
+                          {enrolledCourse.category}
+                        </span>
+                        <h3 className="text-xl font-bold mt-1">{enrolledCourse.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Instructor: {enrolledCourse.instructor}
+                        </p>
+                      </div>
+                      <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        {enrolledCourses.length > 0 ? "Enrolled" : "Active Cohort"}
+                      </span>
+                    </div>
 
-                <div className="mt-6 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">Progress</span>
-                    <span className="font-semibold">{savedProgress}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div className="h-full bg-primary" style={{ width: `${savedProgress}%` }} />
-                  </div>
-                </div>
+                    <div className="mt-6 space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Progress</span>
+                        <span className="font-semibold">{progressValue}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full bg-primary" style={{ width: `${progressValue}%` }} />
+                      </div>
+                    </div>
 
-                <div className="mt-6 flex gap-2">
-                  <Button asChild variant="hero" size="sm">
-                    <Link to="/course-player/$slug" params={{ slug: course.slug }}>
-                      <PlayCircle className="mr-1.5 h-4 w-4" /> Open Player
-                    </Link>
-                  </Button>
-                  <Button asChild variant="subtle" size="sm">
-                    <Link to="/courses/$slug" params={{ slug: course.slug }}>
-                      View Details
-                    </Link>
-                  </Button>
-                </div>
-              </div>
+                    <div className="mt-6 flex gap-2">
+                      <Button asChild variant="hero" size="sm">
+                        <Link to="/course-player/$slug" params={{ slug: enrolledCourse.slug }}>
+                          <PlayCircle className="mr-1.5 h-4 w-4" /> Open Player
+                        </Link>
+                      </Button>
+                      <Button asChild variant="subtle" size="sm">
+                        <Link to="/courses/$slug" params={{ slug: enrolledCourse.slug }}>
+                          View Details
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
 
               {/* Browse More Card */}
               <div className="surface-panel rounded-3xl p-6 border border-dashed border-border flex flex-col justify-center items-center text-center">

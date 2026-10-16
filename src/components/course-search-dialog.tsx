@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Clock, Search, Sparkles, Star, Trophy, X } from "
 
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 interface CourseSearchDialogProps {
   open: boolean;
@@ -13,6 +13,7 @@ interface CourseSearchDialogProps {
 
 export function CourseSearchDialog({ open, onOpenChange }: CourseSearchDialogProps) {
   const [query, setQuery] = useState("");
+  const { items: courses } = useCourses();
 
   const filteredCourses = courses.filter((c) => {
     const q = query.toLowerCase();

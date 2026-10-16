@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
+import { CourseAdvisorButton } from "@/components/course-advisor";
 import { Button } from "@/components/ui/button";
 
 export function CtaBand({
@@ -16,6 +17,7 @@ export function CtaBand({
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold sm:text-4xl">{title}</h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">{description}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <CourseAdvisorButton size="lg" label="Get my AI course match" />
             <Button asChild variant="hero" size="xl">
               <Link to="/contact">Talk to a career advisor</Link>
             </Button>

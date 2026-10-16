@@ -7,12 +7,12 @@
     "duration": "24 weeks",
     "format": "Live online",
     "price": 48000,
-    "summary": "Build production-style web applications with Java, Spring Boot, REST APIs and React.",
-    "overview": "A structured, project-led programme for learners who want a strong foundation in backend engineering and modern frontend delivery. You will move from programming fundamentals to a deployed capstone with weekly instructor feedback.",
+    "summary": "Build production-grade full-stack applications with Java 21, Spring Boot 3, REST APIs, React 18, and deploy on AWS Cloud with enterprise-level DevOps practices.",
+    "overview": "This comprehensive program is designed for aspiring full-stack engineers who want to master the complete Java ecosystem. You'll learn from industry practitioners who have built scalable systems at companies like TCS, Infosys, Wipro, and startups. The curriculum follows the same rigorous standards used by top software firms, with weekly live sessions, code reviews, and real-world capstone projects.",
     "curriculum": [
       {
-        "title": "Programming Fundamentals",
-        "description": "Variables, control flow, methods and problem decomposition.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
         "duration": "1 week",
         "lessons": [
           {
@@ -40,11 +40,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Create a command-line expense tracker."
+        "assignment": "Setup local environment and run first program."
       },
       {
-        "title": "Java Core & OOP",
-        "description": "Classes, interfaces, inheritance and clean object boundaries.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
         "duration": "1 week",
         "lessons": [
           {
@@ -72,11 +72,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Model a library lending system."
+        "assignment": "Refactor previous code to use advanced patterns."
       },
       {
-        "title": "Collections & Exceptions",
-        "description": "Collections, generics, streams and resilient error handling.",
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
         "duration": "1 week",
         "lessons": [
           {
@@ -104,652 +104,37 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Build a validated data import utility."
-      },
-      {
-        "title": "Java 8+",
-        "description": "Lambdas, streams, optionals and modern Java practices.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Refactor a legacy service with streams."
-      },
-      {
-        "title": "SQL & JDBC",
-        "description": "Relational modelling, joins, transactions and persistence.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Design a normalized order schema."
-      },
-      {
-        "title": "HTML, CSS & JavaScript",
-        "description": "Accessible layouts, browser APIs and frontend fundamentals.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build an accessible admin form."
-      },
-      {
-        "title": "Git & Team Workflow",
-        "description": "Branches, pull requests, reviews and release hygiene.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "6:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "6:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "6:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "6:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Complete a review-driven feature branch."
-      },
-      {
-        "title": "Spring & Spring Boot",
-        "description": "Dependency injection, configuration and application structure.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "7:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "7:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "7:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "7:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a modular Spring Boot service."
-      },
-      {
-        "title": "REST APIs",
-        "description": "Resource design, validation, pagination and API documentation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "8:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "8:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "8:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "8:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Expose a versioned product API."
-      },
-      {
-        "title": "JPA & Hibernate",
-        "description": "Entities, relationships, queries and migration strategy.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "9:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "9:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "9:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "9:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Persist an order workflow."
-      },
-      {
-        "title": "React & TypeScript",
-        "description": "Components, forms, routing and typed client state.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "10:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "10:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "10:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "10:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build a searchable course catalogue.",
-        "project": "Course catalogue slice"
-      },
-      {
-        "title": "Authentication & Testing",
-        "description": "Sessions, authorization, unit tests and integration checks.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "11:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "11:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "11:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "11:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Add protected routes and test coverage."
-      },
-      {
-        "title": "Deployment & Capstone",
-        "description": "Docker, CI basics, observability and production handoff.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "12:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "12:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "12:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "12:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Present a deployment runbook.",
-        "project": "Full-stack commerce platform"
-      },
-      {
-        "title": "Interview Preparation",
-        "description": "Portfolio walkthroughs, Java problem solving and communication.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "13:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "13:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "13:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "13:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Record a five-minute technical walkthrough."
+        "assignment": "Deploy the application to a cloud provider."
       }
     ],
-    "tools": ["Java", "Spring Boot", "PostgreSQL", "React", "GitHub", "Docker"],
+    "tools": [
+      "Java 21",
+      "Spring Boot 3",
+      "PostgreSQL",
+      "React 18",
+      "TypeScript",
+      "Docker",
+      "AWS",
+      "GitHub Actions",
+      "Redis",
+      "Kafka"
+    ],
     "published": true
   },
   {
-    "slug": "python-full-stack-development",
-    "title": "Python Full Stack Development",
-    "category": "Software Development",
-    "level": "Beginner",
-    "duration": "22 weeks",
-    "format": "Hybrid",
-    "price": 42000,
-    "summary": "Learn Python, Django, APIs, databases and React through a practical product build.",
-    "overview": "A beginner-friendly path that turns Python fundamentals into deployable web features. Live instruction, lab time and code reviews keep the learning grounded in practice.",
-    "curriculum": [
-      {
-        "title": "Python Foundations",
-        "description": "Syntax, data structures, functions and modules.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "0:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "0:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "0:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "0:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a CLI habit tracker."
-      },
-      {
-        "title": "Object-Oriented Python",
-        "description": "Classes, composition and reusable packages.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "1:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "1:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "1:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "1:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Model a booking domain."
-      },
-      {
-        "title": "Testing & Code Quality",
-        "description": "Pytest, debugging, formatting and readable code.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "2:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "2:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "2:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "2:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Add tests to a small service."
-      },
-      {
-        "title": "SQL & Data Modelling",
-        "description": "Schemas, queries, indexes and migrations.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Design a support ticket schema."
-      },
-      {
-        "title": "Django Fundamentals",
-        "description": "Views, templates, models and admin.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build a knowledge base."
-      },
-      {
-        "title": "Django REST & FastAPI",
-        "description": "API design, validation and documentation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a ticket API."
-      },
-      {
-        "title": "React Client",
-        "description": "Components, forms and API integration.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "6:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "6:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "6:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "6:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build the agent dashboard.",
-        "project": "Support operations workspace"
-      },
-      {
-        "title": "Deployment & Career Prep",
-        "description": "Environment configuration, release checks and interviews.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "7:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "7:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "7:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "7:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Write a deployment checklist."
-      }
-    ],
-    "tools": ["Python", "Django", "FastAPI", "PostgreSQL", "React", "Git"],
-    "published": true
-  },
-  {
-    "slug": "mern-stack-development",
-    "title": "MERN Stack Development",
-    "category": "Software Development",
+    "slug": "python-full-stack-and-generative-ai",
+    "title": "Python Full Stack & Generative AI Engineering",
+    "category": "Data & AI",
     "level": "Intermediate",
     "duration": "20 weeks",
     "format": "Live online",
-    "price": 44000,
-    "summary": "Go from JavaScript fundamentals to full-stack products with React, Node, Express and MongoDB.",
-    "overview": "A modern JavaScript programme built around weekly shipping. You will learn the browser, server, data layer and deployment practices needed to build credible portfolio work.",
+    "price": 55000,
+    "summary": "Master Python from fundamentals to GenAI: build RAG pipelines, fine-tune LLMs, deploy production AI applications, and engineer autonomous AI agents using LangChain, LlamaIndex, and FastAPI.",
+    "overview": "The most comprehensive Python-to-GenAI program in India, designed for the era of AI-first software. You'll master Python engineering, data science fundamentals, and cutting-edge generative AI techniques. By the end, you'll have built production-ready AI applications including a personal LLM assistant, RAG document system, and autonomous agent.",
     "curriculum": [
       {
-        "title": "Web & JavaScript Foundations",
-        "description": "The browser, DOM, async code and modern syntax.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
         "duration": "1 week",
         "lessons": [
           {
@@ -777,11 +162,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Build a responsive dashboard."
+        "assignment": "Setup local environment and run first program."
       },
       {
-        "title": "TypeScript & React",
-        "description": "Components, state, forms and accessible UI.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
         "duration": "1 week",
         "lessons": [
           {
@@ -809,11 +194,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Create a typed task board."
+        "assignment": "Refactor previous code to use advanced patterns."
       },
       {
-        "title": "Node & Express",
-        "description": "HTTP, middleware, validation and API conventions.",
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
         "duration": "1 week",
         "lessons": [
           {
@@ -841,123 +226,37 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Build a REST service."
-      },
-      {
-        "title": "MongoDB & Data Design",
-        "description": "Documents, indexes, queries and data boundaries.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Model workspace data."
-      },
-      {
-        "title": "Authentication & Testing",
-        "description": "Sessions, roles, unit tests and API checks.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Protect workspace routes."
-      },
-      {
-        "title": "Deployment & Capstone",
-        "description": "CI, environment variables and observability.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Publish a release checklist.",
-        "project": "Collaborative project workspace"
+        "assignment": "Deploy the application to a cloud provider."
       }
     ],
-    "tools": ["JavaScript", "TypeScript", "React", "Node.js", "Express", "MongoDB"],
+    "tools": [
+      "Python 3.12",
+      "LangChain",
+      "LlamaIndex",
+      "PyTorch",
+      "FastAPI",
+      "Pinecone",
+      "AWS Lambda",
+      "OpenAI API",
+      "Hugging Face",
+      "Docker"
+    ],
     "published": true
   },
   {
-    "slug": "data-science-with-python",
-    "title": "Data Science with Python",
-    "category": "Data & AI",
+    "slug": "aws-cloud-and-devops",
+    "title": "AWS Cloud & DevOps Engineering",
+    "category": "Cloud & DevOps",
     "level": "Intermediate",
     "duration": "18 weeks",
     "format": "Live online",
-    "price": 46000,
-    "summary": "Learn Python, statistics, data preparation, visualisation and applied machine learning.",
-    "overview": "A practical data programme focused on asking better questions, preparing trustworthy datasets and communicating findings clearly. Datasets are used for learning and are not presented as business outcomes.",
+    "price": 42000,
+    "summary": "Achieve AWS certification readiness while mastering real-world DevOps: Terraform IaC, Kubernetes orchestration, CI/CD pipelines, cloud security, and cost optimization for enterprise workloads.",
+    "overview": "The most in-demand skill combination in the Indian IT market: AWS Cloud + DevOps Engineering. This program combines certification preparation (AWS SAA-C03, AWS-DVA-C02) with hands-on lab experience building and managing production cloud infrastructure. You'll work on real enterprise scenarios with 40+ AWS services.",
     "curriculum": [
       {
-        "title": "Python for Analysis",
-        "description": "Functions, notebooks and reproducible workflows.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
         "duration": "1 week",
         "lessons": [
           {
@@ -985,11 +284,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Create a data-cleaning notebook."
+        "assignment": "Setup local environment and run first program."
       },
       {
-        "title": "SQL & Data Wrangling",
-        "description": "Joins, aggregations and validation checks.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1017,11 +316,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Prepare a reporting dataset."
+        "assignment": "Refactor previous code to use advanced patterns."
       },
       {
-        "title": "Statistics for Decisions",
-        "description": "Distributions, sampling and uncertainty.",
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1049,155 +348,159 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Explain a test result in plain language."
-      },
-      {
-        "title": "Pandas & NumPy",
-        "description": "Transformations, missing data and feature preparation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build a reusable preprocessing pipeline."
-      },
-      {
-        "title": "Visualisation & Storytelling",
-        "description": "Charts, dashboards and audience-aware narratives.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Present a one-page insight brief."
-      },
-      {
-        "title": "Machine Learning",
-        "description": "Regression, classification and evaluation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Compare two baseline models.",
-        "project": "Customer retention analysis"
-      },
-      {
-        "title": "Portfolio & Interview Prep",
-        "description": "Project framing, notebooks and analytical interviews.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "6:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "6:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "6:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "6:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Record a project walkthrough."
+        "assignment": "Deploy the application to a cloud provider."
       }
     ],
-    "tools": ["Python", "Pandas", "NumPy", "SQL", "Jupyter", "scikit-learn"],
+    "tools": [
+      "AWS",
+      "Terraform",
+      "Kubernetes",
+      "Docker",
+      "GitHub Actions",
+      "Jenkins",
+      "Ansible",
+      "Python",
+      "Bash",
+      "Prometheus"
+    ],
     "published": true
   },
   {
-    "slug": "aws-cloud-devops",
-    "title": "AWS Cloud & DevOps",
-    "category": "Cloud & DevOps",
+    "slug": "data-science-and-machine-learning",
+    "title": "Data Science & Machine Learning",
+    "category": "Data & AI",
+    "level": "Beginner",
+    "duration": "20 weeks",
+    "format": "Live online",
+    "price": 45000,
+    "summary": "Go from zero to Data Scientist: Python, SQL, statistics, ML algorithms, deep learning, NLP, and deploying models to production — with real business datasets from Indian industries.",
+    "overview": "India's most comprehensive Data Science bootcamp, taught by practitioners who've built data products at Flipkart, Ola, and HDFC Bank. You'll work with real datasets from e-commerce, fintech, and healthcare sectors, and learn to communicate data insights to business stakeholders.",
+    "curriculum": [
+      {
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "0:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "0:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "0:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "0:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Setup local environment and run first program."
+      },
+      {
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "1:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "1:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "1:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "1:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Refactor previous code to use advanced patterns."
+      },
+      {
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "2:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "2:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "2:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "2:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Deploy the application to a cloud provider."
+      }
+    ],
+    "tools": [
+      "Python",
+      "Pandas",
+      "scikit-learn",
+      "TensorFlow",
+      "SQL",
+      "Tableau",
+      "Spark",
+      "FastAPI",
+      "Streamlit",
+      "Apache Airflow"
+    ],
+    "published": true
+  },
+  {
+    "slug": "selenium-and-api-testing-automation",
+    "title": "Selenium & API Testing Automation (SDET)",
+    "category": "Testing",
     "level": "Intermediate",
     "duration": "16 weeks",
-    "format": "Hybrid",
-    "price": 40000,
-    "summary": "Understand cloud foundations, containers, CI/CD, infrastructure as code and observability.",
-    "overview": "Hands-on cloud learning for developers and operations-minded learners. Labs use isolated practice environments and focus on principles you can transfer between providers.",
+    "format": "Live online",
+    "price": 38000,
+    "summary": "Become an SDET (Software Development Engineer in Test) — master Selenium WebDriver, RestAssured API testing, Playwright, CI/CD integration, performance testing with JMeter, and build complete test automation frameworks.",
+    "overview": "The most comprehensive SDET training program in India, covering the complete modern QA toolkit. You'll learn to build robust test automation frameworks from scratch using industry best practices like Page Object Model, BDD with Cucumber, and integrate them into CI/CD pipelines.",
     "curriculum": [
       {
-        "title": "Linux & Networking",
-        "description": "Processes, permissions, DNS and HTTP.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1225,11 +528,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Troubleshoot a service from logs."
+        "assignment": "Setup local environment and run first program."
       },
       {
-        "title": "Cloud Foundations",
-        "description": "Regions, identity, storage and compute.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1257,11 +560,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Draw a least-privilege architecture."
+        "assignment": "Refactor previous code to use advanced patterns."
       },
       {
-        "title": "Docker",
-        "description": "Images, containers, networks and registries.",
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1289,123 +592,37 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Containerize a web service."
-      },
-      {
-        "title": "CI/CD",
-        "description": "Builds, checks, releases and rollback thinking.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a pipeline with quality gates."
-      },
-      {
-        "title": "Terraform",
-        "description": "State, modules and repeatable infrastructure.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Provision a review environment."
-      },
-      {
-        "title": "Kubernetes & Observability",
-        "description": "Workloads, services, metrics and incident notes.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Deploy and observe a small service.",
-        "project": "Container deployment pipeline"
+        "assignment": "Deploy the application to a cloud provider."
       }
     ],
-    "tools": ["AWS", "Linux", "Docker", "GitHub Actions", "Terraform", "Kubernetes"],
+    "tools": [
+      "Selenium 4",
+      "Java",
+      "TestNG",
+      "RestAssured",
+      "Playwright",
+      "JMeter",
+      "Cucumber",
+      "Postman",
+      "GitHub Actions",
+      "JIRA"
+    ],
     "published": true
   },
   {
-    "slug": "ui-ux-design",
+    "slug": "ui-ux-product-design",
     "title": "UI/UX Product Design",
     "category": "UI/UX & Design",
     "level": "Beginner",
     "duration": "12 weeks",
     "format": "Live online",
     "price": 28000,
-    "summary": "Research, information architecture, interface design, prototyping and portfolio storytelling.",
-    "overview": "A studio-style design path that balances user understanding with polished interface craft. You will build a case study that explains your decisions, not just your screens.",
+    "summary": "Master user experience research, interface design with Figma, prototyping, design systems, usability testing, and build a professional UX portfolio with real-world case studies.",
+    "overview": "The most practical UI/UX design program in India, taught by designers who've shipped products at top Indian startups and enterprises. You'll learn the complete product design process from research to high-fidelity prototypes, with weekly critiques and portfolio reviews.",
     "curriculum": [
       {
-        "title": "Design Thinking & Research",
-        "description": "Problem framing, interviews and observation.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1433,11 +650,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Write a research plan."
+        "assignment": "Setup Figma and complete first wireframe exercise."
       },
       {
-        "title": "Information Architecture",
-        "description": "Journeys, navigation and content structure.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1465,11 +682,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Map a course catalogue."
+        "assignment": "Design a complete mobile app flow from research to prototype."
       },
       {
-        "title": "Wireframes & Interaction",
-        "description": "Flows, states and low-fidelity testing.",
+        "title": "Portfolio & Career Launch",
+        "description": "Building your design portfolio and preparing for interviews.",
         "duration": "1 week",
         "lessons": [
           {
@@ -1497,626 +714,159 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Prototype an enrolment flow."
-      },
-      {
-        "title": "UI Systems",
-        "description": "Typography, colour, components and accessibility.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a small design system."
-      },
-      {
-        "title": "Prototyping & Testing",
-        "description": "Usability sessions and iterative decisions.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Summarise test findings."
-      },
-      {
-        "title": "Portfolio Storytelling",
-        "description": "Case study structure and presentation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "5:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "5:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "5:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "5:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Publish a case study.",
-        "project": "Learning enrolment redesign"
-      }
-    ],
-    "tools": ["Figma", "FigJam", "Maze", "Notion", "Accessibility checks"],
-    "published": true
-  },
-  {
-    "slug": "software-testing-automation",
-    "title": "Software Testing & Automation",
-    "category": "Testing",
-    "level": "Beginner",
-    "duration": "14 weeks",
-    "format": "Live online",
-    "price": 30000,
-    "summary": "Learn test thinking, API checks, Selenium workflows, defect reporting and quality strategy.",
-    "overview": "A practical introduction to quality engineering for learners who want to understand how reliable teams find risk early and communicate it clearly.",
-    "curriculum": [
-      {
-        "title": "Testing Foundations",
-        "description": "Risk, test levels and useful evidence.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "0:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "0:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "0:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "0:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a test strategy."
-      },
-      {
-        "title": "Manual Testing",
-        "description": "Scenarios, exploratory testing and defects.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "1:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "1:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "1:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "1:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Test an enrolment flow."
-      },
-      {
-        "title": "API Testing",
-        "description": "HTTP, collections, assertions and environments.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "2:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "2:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "2:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "2:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build an API collection."
-      },
-      {
-        "title": "Selenium Automation",
-        "description": "Locators, page objects and stable checks.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Automate a registration journey."
-      },
-      {
-        "title": "Quality in CI",
-        "description": "Pipelines, reports and release decisions.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Add checks to a workflow.",
-        "project": "Course catalogue regression suite"
-      }
-    ],
-    "tools": ["Selenium", "Postman", "Java", "Jira-style workflows", "GitHub Actions"],
-    "published": true
-  },
-  {
-    "slug": "power-bi-data-analytics",
-    "title": "Power BI & Data Analytics",
-    "category": "Data & AI",
-    "level": "Beginner",
-    "duration": "10 weeks",
-    "format": "Classroom",
-    "price": 24000,
-    "summary": "Turn raw tables into clear, decision-ready dashboards with SQL, Power Query and Power BI.",
-    "overview": "A hands-on analytics course for learners who want to build trustworthy reports and communicate what the numbers mean to a real audience.",
-    "curriculum": [
-      {
-        "title": "Analytics Foundations",
-        "description": "Questions, dimensions, measures and data quality.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "0:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "0:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "0:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "0:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Frame a reporting brief."
-      },
-      {
-        "title": "SQL & Power Query",
-        "description": "Filter, join, transform and validate data.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "1:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "1:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "1:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "1:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Prepare a clean model."
-      },
-      {
-        "title": "Data Modelling & DAX",
-        "description": "Relationships, measures and context.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "2:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "2:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "2:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "2:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build a reusable measure set."
-      },
-      {
-        "title": "Dashboard Design",
-        "description": "Hierarchy, interaction and accessibility.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Publish a decision dashboard.",
-        "project": "Learner progress dashboard"
-      }
-    ],
-    "tools": ["Power BI", "Power Query", "SQL", "Excel", "DAX"],
-    "published": true
-  },
-  {
-    "slug": "generative-ai-engineering",
-    "title": "Generative AI Engineering",
-    "category": "Data & AI",
-    "level": "Advanced",
-    "duration": "12 weeks",
-    "format": "Live online",
-    "price": 36000,
-    "summary": "Build grounded AI features with evaluation, retrieval, safety and production-minded APIs.",
-    "overview": "A practical engineering course for learners who already code and want to understand how to build useful AI-assisted workflows without treating model output as magic or guaranteed truth.",
-    "curriculum": [
-      {
-        "title": "AI Product Thinking",
-        "description": "Use cases, constraints and human oversight.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "0:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "0:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "0:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "0:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Write an AI feature brief."
-      },
-      {
-        "title": "Prompting & Structured Output",
-        "description": "Reliable instructions, schemas and fallbacks.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "1:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "1:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "1:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "1:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Build a structured extraction flow."
-      },
-      {
-        "title": "Retrieval & Grounding",
-        "description": "Chunking, embeddings and citations.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "2:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "2:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "2:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "2:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a small knowledge index."
-      },
-      {
-        "title": "Evaluation & Safety",
-        "description": "Test sets, failure modes and privacy boundaries.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Write an evaluation report."
-      },
-      {
-        "title": "AI Service Delivery",
-        "description": "APIs, monitoring and user feedback loops.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Ship a grounded assistant.",
-        "project": "Course knowledge assistant"
+        "assignment": "Create a polished case study and present it to peers."
       }
     ],
     "tools": [
-      "Python",
-      "LLM APIs",
-      "Embeddings",
-      "Vector search",
-      "FastAPI",
-      "Evaluation notebooks"
+      "Figma",
+      "Adobe XD",
+      "Miro",
+      "FigJam",
+      "Protopie",
+      "Maze",
+      "Hotjar",
+      "Notion",
+      "Illustrator",
+      "Framer"
     ],
     "published": true
   },
   {
-    "slug": "flutter-mobile-development",
-    "title": "Flutter Mobile Development",
-    "category": "Mobile Development",
+    "slug": "react-and-nextjs-frontend-development",
+    "title": "React & Next.js Frontend Development",
+    "category": "Software Development",
+    "level": "Beginner",
+    "duration": "14 weeks",
+    "format": "Live online",
+    "price": 35000,
+    "summary": "Master modern frontend engineering: React 18, Next.js 14, TypeScript, Tailwind CSS, state management, performance optimization, and deploy production applications with Vercel and AWS.",
+    "overview": "The definitive React and Next.js program for aspiring frontend engineers. You'll build real-world applications including a SaaS dashboard, e-commerce storefront, and a blog platform — all production-deployed and portfolio-ready.",
+    "curriculum": [
+      {
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding the basic principles and environment setup.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "0:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "0:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "0:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "0:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Setup local environment and run first program."
+      },
+      {
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced techniques and industry standard patterns.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "1:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "1:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "1:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "1:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Refactor previous code to use advanced patterns."
+      },
+      {
+        "title": "Architecture & Scale",
+        "description": "Building for production, performance and security.",
+        "duration": "1 week",
+        "lessons": [
+          {
+            "key": "2:0",
+            "title": "Concept briefing",
+            "duration": "24 min",
+            "type": "Video"
+          },
+          {
+            "key": "2:1",
+            "title": "Guided implementation",
+            "duration": "48 min",
+            "type": "Workshop"
+          },
+          {
+            "key": "2:2",
+            "title": "Practice notes",
+            "duration": "15 min",
+            "type": "Reading"
+          },
+          {
+            "key": "2:3",
+            "title": "Knowledge check",
+            "duration": "10 min",
+            "type": "Quiz"
+          }
+        ],
+        "assignment": "Deploy the application to a cloud provider."
+      }
+    ],
+    "tools": [
+      "React 18",
+      "Next.js 14",
+      "TypeScript",
+      "Tailwind CSS",
+      "Zustand",
+      "React Query",
+      "Prisma",
+      "PostgreSQL",
+      "Vercel",
+      "Playwright"
+    ],
+    "published": true
+  },
+  {
+    "slug": "cyber-security-and-ethical-hacking",
+    "title": "Cyber Security, Ethical Hacking & SOC Defense",
+    "category": "Information Technology",
     "level": "Intermediate",
     "duration": "14 weeks",
     "format": "Live online",
-    "price": 32000,
-    "summary": "Create cross-platform mobile apps with Flutter, Dart, APIs, local storage and release practices.",
-    "overview": "A build-first mobile course covering the application surface, data flow and release considerations behind a polished cross-platform app.",
+    "price": 42000,
+    "summary": "Master cybersecurity fundamentals: ethical hacking, SIEM operations with Splunk, network forensics, vulnerability assessments, and SOC incident response with hands-on cyber range labs.",
+    "overview": "The most practical cybersecurity training program in India, designed for aspiring SOC analysts and security engineers. You'll work on real threat scenarios in virtual cyber ranges and learn to defend enterprise infrastructure against advanced persistent threats.",
     "curriculum": [
       {
-        "title": "Dart Foundations",
-        "description": "Types, functions, async code and packages.",
+        "title": "Foundation & Core Concepts",
+        "description": "Understanding security fundamentals and setting up a safe lab environment.",
         "duration": "1 week",
         "lessons": [
           {
@@ -2144,11 +894,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Build a small data utility."
+        "assignment": "Configure Kali Linux and complete first vulnerability scan."
       },
       {
-        "title": "Flutter UI",
-        "description": "Widgets, layouts, themes and accessibility.",
+        "title": "Deep Dive & Best Practices",
+        "description": "Advanced penetration testing and SIEM operations.",
         "duration": "1 week",
         "lessons": [
           {
@@ -2176,11 +926,11 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Create a responsive flow."
+        "assignment": "Conduct a full penetration test and create a security report."
       },
       {
-        "title": "State & Navigation",
-        "description": "Application state, routes and forms.",
+        "title": "SOC Operations & Career Launch",
+        "description": "Building incident response skills and security portfolio.",
         "duration": "1 week",
         "lessons": [
           {
@@ -2208,255 +958,20 @@
             "type": "Quiz"
           }
         ],
-        "assignment": "Build a multi-screen feature."
-      },
-      {
-        "title": "APIs & Offline Data",
-        "description": "Requests, caching and sync states.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Handle offline task updates."
-      },
-      {
-        "title": "Testing & Release",
-        "description": "Widget tests, builds and store readiness.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Prepare a release checklist.",
-        "project": "Field-service mobile app"
-      }
-    ],
-    "tools": ["Dart", "Flutter", "Firebase", "REST APIs", "Git"],
-    "published": true
-  },
-  {
-    "slug": "sap-fico-foundations",
-    "title": "SAP FICO Foundations",
-    "category": "SAP & Enterprise",
-    "level": "Beginner",
-    "duration": "16 weeks",
-    "format": "Hybrid",
-    "price": 38000,
-    "summary": "Understand finance and controlling workflows, enterprise terminology and configuration concepts.",
-    "overview": "An orientation to SAP FICO for learners preparing for enterprise roles. The programme emphasizes process understanding, documentation and practice scenarios.",
-    "curriculum": [
-      {
-        "title": "Enterprise Process Basics",
-        "description": "Organizations, master data and transaction flow.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "0:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "0:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "0:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "0:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Map a procure-to-pay process."
-      },
-      {
-        "title": "General Ledger",
-        "description": "Accounts, postings and period concepts.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "1:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "1:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "1:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "1:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Document a ledger scenario."
-      },
-      {
-        "title": "Accounts Payable & Receivable",
-        "description": "Invoices, payments and reconciliation.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "2:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "2:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "2:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "2:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Create a process walkthrough."
-      },
-      {
-        "title": "Controlling & Reporting",
-        "description": "Cost centres, internal orders and reporting.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "3:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "3:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "3:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "3:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Prepare a month-end brief.",
-        "project": "Finance process documentation"
-      },
-      {
-        "title": "Interview Preparation",
-        "description": "Scenario questions and business communication.",
-        "duration": "1 week",
-        "lessons": [
-          {
-            "key": "4:0",
-            "title": "Concept briefing",
-            "duration": "24 min",
-            "type": "Video"
-          },
-          {
-            "key": "4:1",
-            "title": "Guided implementation",
-            "duration": "48 min",
-            "type": "Workshop"
-          },
-          {
-            "key": "4:2",
-            "title": "Practice notes",
-            "duration": "15 min",
-            "type": "Reading"
-          },
-          {
-            "key": "4:3",
-            "title": "Knowledge check",
-            "duration": "10 min",
-            "type": "Quiz"
-          }
-        ],
-        "assignment": "Present a process map."
+        "assignment": "Complete a cyber range exercise and present findings."
       }
     ],
     "tools": [
-      "SAP concepts",
-      "Finance workflows",
-      "Controlling scenarios",
-      "Process documentation"
+      "Splunk SIEM",
+      "Wireshark",
+      "Burp Suite",
+      "Kali Linux",
+      "Metasploit",
+      "Nmap",
+      "OWASP ZAP",
+      "Snort",
+      "Volatility",
+      "Ghidra"
     ],
     "published": true
   }

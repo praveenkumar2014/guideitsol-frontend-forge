@@ -8,7 +8,7 @@ import { Section, SectionHeading } from "@/components/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/site";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 export const Route = createFileRoute("/mobile-apps")({
   head: () => ({
@@ -25,6 +25,7 @@ export const Route = createFileRoute("/mobile-apps")({
 });
 
 function MobileApps() {
+  const { items: courses } = useCourses();
   const mobileCourses = courses.filter(
     (c) =>
       c.title.toLowerCase().includes("mobile") ||

@@ -385,3 +385,191 @@ def test_settings_defaults():
     settings = get_settings()
     assert settings.cashfree_mode == "sandbox"
     assert "https://frontend.test" in settings.cors_origin_list
+
+# ---------------------------------------------------------------------------
+# Blog (headless CMS)
+# ---------------------------------------------------------------------------
+
+
+def test_list_blog_posts(client, mock_supabase):
+    mock_supabase.results["GET"] = [{"slug": "post-1", "title": "Hello", "published": True}]
+    response = client.get("/api/blog")
+    assert response.status_code == 200
+    assert response.json()[0]["slug"] == "post-1"
+
+
+def test_get_blog_post_not_found(client, mock_supabase):
+    mock_supabase.results["GET"] = []
+    assert client.get("/api/blog/missing").status_code == 404
+
+
+def test_admin_create_blog_post(client, mock_supabase):
+    response = client.post(
+        "/api/admin/blog",
+        headers={"X-Admin-Key": "test-admin-key"},
+        json={"slug": "new-post", "title": "New Post", "content": ["A", "B"]},
+    )
+    assert response.status_code == 201
+    call = mock_supabase.calls[-1]
+    assert call["path"] == "blog_posts?on_conflict=slug"
+    assert call["payload"]["slug"] == "new-post"
+    assert call["payload"]["published_on"]  # server fills a default date
+
+
+# ---------------------------------------------------------------------------
+# UPI intents & payment reconciliation
+# ---------------------------------------------------------------------------
+
+
+def _upi_payload() -> dict:
+    return {
+        "batch_id": "java-aug-26",
+        "customer_name": "Kiran Kumar",
+        "customer_email": "kiran@example.com",
+        "customer_phone": "9876500112",
+    }
+
+
+def test_upi_intent_records_order_and_lead(client, mock_supabase):
+    mock_supabase.results["GET"] = [
+        {"id": "java-aug-26", "course_slug": "java-full-stack-development", "price": 48000, "courses": {"title": "Java Full Stack"}}
+    ]
+    response = client.post("/api/payments/upi-intents", json=_upi_payload())
+    assert response.status_code == 201
+    body = response.json()
+    assert body["reference"].startswith("GS")
+    assert body["status"] == "awaiting_verification"
+    assert body["amount"] == 48000
+
+    paths = [call["path"] for call in mock_supabase.calls]
+    assert "payment_orders" in paths
+    assert "leads" in paths
+    order = next(call["payload"] for call in mock_supabase.calls if call["path"] == "payment_orders")
+    assert order["payment_method"] == "upi"
+    assert order["status"] == "awaiting_verification"
+    assert order["reference"] == body["reference"]
+    lead = next(call["payload"] for call in mock_supabase.calls if call["path"] == "leads")
+    assert lead["source"] == "upi-checkout"
+    assert body["reference"] in lead["message"]
+
+
+def test_upi_intent_batch_not_found(client, mock_supabase):
+    mock_supabase.results["GET"] = []
+    assert client.post("/api/payments/upi-intents", json=_upi_payload()).status_code == 404
+
+
+def test_admin_verify_payment_allots_seat_and_enrols(client, mock_supabase, monkeypatch):
+    monkeypatch.setattr("app.main.send_payment_receipt", lambda *a, **k: None)
+    order = {
+        "order_id": "gs_upi_1",
+        "status": "awaiting_verification",
+        "batch_id": "java-aug-26",
+        "course_slug": "java-full-stack-development",
+        "customer_email": "kiran@example.com",
+        "customer_name": "Kiran Kumar",
+        "amount": 48000,
+    }
+    batch = {"id": "java-aug-26", "available": 5}
+
+    async def handler(method, path, payload=None, query=None):
+        mock_supabase.calls.append({"method": method, "path": path, "payload": payload, "query": query})
+        if method == "GET" and path == "batches":
+            return [batch]
+        if method == "GET":
+            return [order]
+        return [{"id": "x"}]
+
+    monkeypatch.setattr("app.main.supabase_request", handler)
+
+    response = client.post("/api/admin/payments/gs_upi_1/verify", headers={"X-Admin-Key": "test-admin-key"})
+    assert response.status_code == 200
+
+    paths = [call["path"] for call in mock_supabase.calls]
+    assert "payment_orders?order_id=eq.gs_upi_1" in paths
+    assert "batches?id=eq.java-aug-26" in paths
+    assert "enrolments" in paths
+    assert "notifications" in paths
+    seat_update = next(call["payload"] for call in mock_supabase.calls if call["path"] == "batches?id=eq.java-aug-26")
+    assert seat_update["available"] == 4
+    enrolment = next(call["payload"] for call in mock_supabase.calls if call["path"] == "enrolments")
+    assert enrolment["user_email"] == "kiran@example.com"
+    assert enrolment["status"] == "active"
+
+
+def test_admin_verify_payment_requires_credentials(client):
+    assert client.post("/api/admin/payments/gs_1/verify").status_code == 401
+
+
+def test_admin_verify_payment_idempotent(client, monkeypatch):
+    mock_calls: list[str] = []
+
+    async def handler(method, path, payload=None, query=None):
+        mock_calls.append(path)
+        return [{"order_id": "gs_upi_1", "status": "success"}]
+
+    monkeypatch.setattr("app.main.supabase_request", handler)
+    response = client.post("/api/admin/payments/gs_upi_1/verify", headers={"X-Admin-Key": "test-admin-key"})
+    assert response.status_code == 200
+    assert "enrolments" not in mock_calls
+
+
+def test_admin_list_payments(client, mock_supabase):
+    mock_supabase.results["GET"] = [{"order_id": "gs_1", "reference": "GSABC", "status": "awaiting_verification"}]
+    response = client.get("/api/admin/payments", headers={"X-Admin-Key": "test-admin-key"})
+    assert response.status_code == 200
+    assert response.json()["items"][0]["reference"] == "GSABC"
+
+
+def test_admin_schema_viewer(client, mock_supabase):
+    mock_supabase.results["GET"] = [{"count": 7}]
+    response = client.get("/api/admin/schema", headers={"X-Admin-Key": "test-admin-key"})
+    assert response.status_code == 200
+    tables = response.json()["tables"]
+    assert any(table["name"] == "blog_posts" and table["rows"] == 7 for table in tables)
+    assert "admin" in response.json()["role_permissions"]
+
+
+# ---------------------------------------------------------------------------
+# Role-based access control
+# ---------------------------------------------------------------------------
+
+
+def test_role_matrix_grants():
+    from app.security import ROLE_PERMISSIONS, role_grants
+
+    assert role_grants("admin", "reconcile_payments")
+    assert role_grants("instructor", "manage_catalog")
+    assert not role_grants("instructor", "manage_leads")
+    assert not role_grants("learner", "manage_catalog")
+    assert set(ROLE_PERMISSIONS) == {"learner", "instructor", "admin", "partner"}
+
+
+def test_instructor_jwt_can_manage_catalog_but_not_leads(client, mock_supabase, monkeypatch):
+    async def fake_verify(authorization=None):
+        return {"sub": "u-1", "email": "faculty@guideitsol.in", "app_metadata": {"role": "instructor"}}
+
+    monkeypatch.setattr("app.security.verify_supabase_token", fake_verify)
+    mock_supabase.results["POST"] = [{"slug": "new-course"}]
+
+    authorized = client.post(
+        "/api/admin/courses",
+        headers={"Authorization": "Bearer token"},
+        json={"slug": "new-course", "title": "New Course", "category": "Data & AI"},
+    )
+    assert authorized.status_code == 201
+
+    forbidden = client.get("/api/admin/leads", headers={"Authorization": "Bearer token"})
+    assert forbidden.status_code == 403
+
+
+def test_learner_jwt_cannot_manage_catalog(client, mock_supabase, monkeypatch):
+    async def fake_verify(authorization=None):
+        return {"sub": "u-2", "email": "learner@example.com", "app_metadata": {"role": "learner"}}
+
+    monkeypatch.setattr("app.security.verify_supabase_token", fake_verify)
+    response = client.post(
+        "/api/admin/courses",
+        headers={"Authorization": "Bearer token"},
+        json={"slug": "hack", "title": "Hack Course", "category": "Data & AI"},
+    )
+    assert response.status_code == 403

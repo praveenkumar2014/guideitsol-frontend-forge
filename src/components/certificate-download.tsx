@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Download, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { site } from "@/data/site";
 import { toast } from "sonner";
 
 interface CertificateDownloadProps {
@@ -164,7 +165,7 @@ export function CertificateDownload({
       // Verification footer
       ctx.fillStyle = "#475569";
       ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("Verify this certificate at guideitsol.in/verify", W / 2, 610);
+      ctx.fillText(`Verify this certificate at ${site.domain}/verify`, W / 2, 610);
       ctx.fillText("This certificate is issued by GuideSoft IT Solutions", W / 2, 630);
 
       // Download

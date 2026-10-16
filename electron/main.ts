@@ -50,9 +50,21 @@ function createWindow() {
     {
       label: "View",
       submenu: [
-        { label: "Home", accelerator: "CmdOrCtrl+Shift+H", click: () => mainWindow?.loadURL(VITE_DEV_SERVER_URL || PROD_URL) },
-        { label: "Courses", accelerator: "CmdOrCtrl+Shift+C", click: () => mainWindow?.loadURL(`${VITE_DEV_SERVER_URL || PROD_URL}/courses`) },
-        { label: "Live Batches", accelerator: "CmdOrCtrl+Shift+L", click: () => mainWindow?.loadURL(`${VITE_DEV_SERVER_URL || PROD_URL}/live-batches`) },
+        {
+          label: "Home",
+          accelerator: "CmdOrCtrl+Shift+H",
+          click: () => mainWindow?.loadURL(VITE_DEV_SERVER_URL || PROD_URL),
+        },
+        {
+          label: "Courses",
+          accelerator: "CmdOrCtrl+Shift+C",
+          click: () => mainWindow?.loadURL(`${VITE_DEV_SERVER_URL || PROD_URL}/courses`),
+        },
+        {
+          label: "Live Batches",
+          accelerator: "CmdOrCtrl+Shift+L",
+          click: () => mainWindow?.loadURL(`${VITE_DEV_SERVER_URL || PROD_URL}/live-batches`),
+        },
         { type: "separator" },
         { label: "Reload", role: "reload" },
         { label: "Force Reload", role: "forceReload" },
@@ -89,4 +101,4 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-ipcMain.handle("get-theme", () => nativeTheme.shouldUseDarkColors ? "dark" : "light");
+ipcMain.handle("get-theme", () => (nativeTheme.shouldUseDarkColors ? "dark" : "light"));

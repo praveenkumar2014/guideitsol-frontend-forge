@@ -8,10 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { articles, CATEGORIES, type Article } from "@/data/blog";
+import { CATEGORIES, type Article } from "@/data/blog";
+import { blogQuery, useBlogArticles } from "@/lib/catalog";
 import { site } from "@/data/site";
 
 export const Route = createFileRoute("/blog")({
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(blogQuery());
+  },
   head: () => ({
     meta: [
       { title: `Blog & Articles | ${site.name}` },
@@ -28,6 +32,7 @@ export const Route = createFileRoute("/blog")({
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const { items: articles } = useBlogArticles();
 
   const filteredArticles = articles.filter((article) => {
     const matchesCategory = activeCategory === "All" || article.category === activeCategory;

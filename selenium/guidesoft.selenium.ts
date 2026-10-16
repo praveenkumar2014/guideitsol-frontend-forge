@@ -109,10 +109,7 @@ await runTest("Course detail: /courses/java-full-stack-development", async (d) =
     TIMEOUT,
   );
   assert.ok(await syllabusSection.isDisplayed(), "Syllabus section heading should be visible");
-  const downloadBtn = await d.wait(
-    until.elementLocated(By.id("download-syllabus-btn")),
-    TIMEOUT,
-  );
+  const downloadBtn = await d.wait(until.elementLocated(By.id("download-syllabus-btn")), TIMEOUT);
   assert.ok(await downloadBtn.isDisplayed(), "Download Syllabus button should be visible");
 });
 
@@ -154,13 +151,9 @@ await runTest("Contact page enquiry form submits with validation", async (d) => 
   await nameInput.sendKeys("Selenium Test User");
   const emailInput = await d.findElement(By.xpath("//input[@placeholder='you@example.com']"));
   await emailInput.sendKeys("selenium@guideitsol.in");
-  const phoneInput = await d.findElement(
-    By.xpath("//input[@placeholder='+91 9876543210']"),
-  );
+  const phoneInput = await d.findElement(By.xpath("//input[@placeholder='+91 9876543210']"));
   await phoneInput.sendKeys("9876543210");
-  const submitBtn = await d.findElement(
-    By.xpath("//button[contains(text(),'Submit Enquiry')]"),
-  );
+  const submitBtn = await d.findElement(By.xpath("//button[contains(text(),'Submit Enquiry')]"));
   await submitBtn.click();
   await d.sleep(3000);
   const successText = await d.wait(
@@ -174,10 +167,7 @@ await runTest("Contact page enquiry form submits with validation", async (d) => 
 await runTest("Live Batches page loads with batch cards", async (d) => {
   await d.get(`${BASE_URL}/live-batches`);
   await d.sleep(2000);
-  const pageHeading = await d.wait(
-    until.elementLocated(By.xpath("//h1")),
-    TIMEOUT,
-  );
+  const pageHeading = await d.wait(until.elementLocated(By.xpath("//h1")), TIMEOUT);
   assert.ok(await pageHeading.isDisplayed(), "Live Batches h1 should be visible");
 });
 
@@ -192,9 +182,7 @@ await runTest("Certificate verify page accepts certificate ID and shows result",
   assert.ok(await input.isDisplayed(), "Certificate search input should be visible");
   await input.sendKeys("GS-2024-JAVA-0001");
   await d.sleep(1000);
-  const verifyBtn = await d.findElement(
-    By.xpath("//button[contains(text(),'Verify')]"),
-  );
+  const verifyBtn = await d.findElement(By.xpath("//button[contains(text(),'Verify')]"));
   await verifyBtn.click();
   await d.sleep(2000);
 });
@@ -209,17 +197,18 @@ await runTest("Right-click context menu is blocked on main content", async (d) =
   const contextMenuExists = await d
     .executeScript("return document.querySelector('[role=\"menu\"]') !== null")
     .catch(() => false);
-  assert.strictEqual(contextMenuExists, false, "No context menu should appear — right-click blocked");
+  assert.strictEqual(
+    contextMenuExists,
+    false,
+    "No context menu should appear — right-click blocked",
+  );
 });
 
 // ── TEST 12: Student dashboard role login ─────────────────────────────────────
 await runTest("Student Dashboard: 1-click test role login and redirect", async (d) => {
   await d.get(`${BASE_URL}/auth`);
   await d.sleep(2000);
-  const testLoginBtn = await d.wait(
-    until.elementLocated(By.id("auth-role-btn")),
-    TIMEOUT,
-  );
+  const testLoginBtn = await d.wait(until.elementLocated(By.id("auth-role-btn")), TIMEOUT);
   assert.ok(await testLoginBtn.isDisplayed(), "1-click test login button should be visible");
   await testLoginBtn.click();
   await d.sleep(2000);
@@ -238,10 +227,7 @@ await runTest("Search command palette opens on button click", async (d) => {
   assert.ok(await searchBtn.isDisplayed(), "Header search button should be visible");
   await searchBtn.click();
   await d.sleep(1000);
-  const searchInput = await d.wait(
-    until.elementLocated(By.id("course-search-input")),
-    TIMEOUT,
-  );
+  const searchInput = await d.wait(until.elementLocated(By.id("course-search-input")), TIMEOUT);
   assert.ok(await searchInput.isDisplayed(), "Course search input should appear in dialog");
   await searchInput.sendKeys("DevOps");
   await d.sleep(1000);
@@ -274,20 +260,35 @@ await runTest("Enquiry dialog opens from course page Ask Counsellor button", asy
 await runTest("Admin console requires admin key and shows CRM data", async (d) => {
   await d.get(`${BASE_URL}/admin`);
   await d.sleep(2000);
-  const adminKeyInput = await d.findElement(
-    By.xpath("//input[@type='password' or contains(@placeholder,'key') or contains(@placeholder,'Key')]"),
-  ).catch(() => null);
+  const adminKeyInput = await d
+    .findElement(
+      By.xpath(
+        "//input[@type='password' or contains(@placeholder,'key') or contains(@placeholder,'Key')]",
+      ),
+    )
+    .catch(() => null);
   if (adminKeyInput) {
     await adminKeyInput.sendKeys("GS_ADMIN_2025");
-    const loginBtn = await d.findElement(By.xpath("//button[contains(text(),'Access') or contains(text(),'Login') or contains(text(),'Enter')]"));
+    const loginBtn = await d.findElement(
+      By.xpath(
+        "//button[contains(text(),'Access') or contains(text(),'Login') or contains(text(),'Enter')]",
+      ),
+    );
     await loginBtn.click();
     await d.sleep(2000);
   }
   const adminContent = await d.wait(
-    until.elementLocated(By.xpath("//*[contains(text(),'Admin') or contains(text(),'Lead') or contains(text(),'CRM')]")),
+    until.elementLocated(
+      By.xpath(
+        "//*[contains(text(),'Admin') or contains(text(),'Lead') or contains(text(),'CRM')]",
+      ),
+    ),
     TIMEOUT,
   );
-  assert.ok(await adminContent.isDisplayed(), "Admin content should be visible after authentication");
+  assert.ok(
+    await adminContent.isDisplayed(),
+    "Admin content should be visible after authentication",
+  );
 });
 
 console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
 import { site } from "@/data/site";
-import { courses } from "@/data/training";
+import { useCourses } from "@/lib/catalog";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
@@ -41,6 +41,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
+  const { items: courses } = useCourses();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedLeadId, setSubmittedLeadId] = useState<string | null>(null);
 
